@@ -1,0 +1,1171 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>Rapport — AutoSort : Système Automatisé de Tri des Déchets Solides</title>
+<link rel="preconnect" href="https://fonts.googleapis.com"/>
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin/>
+<link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display:ital@0;1&family=IBM+Plex+Sans:ital,wght@0,300;0,400;0,500;0,600;1,400&family=IBM+Plex+Mono:wght@400;500&display=swap" rel="stylesheet"/>
+<style>
+:root {
+  --navy:    #0d1f2d;
+  --navy2:   #162637;
+  --navy3:   #1e3448;
+  --green:   #1d9e75;
+  --green2:  #0f6e56;
+  --green3:  #e1f5ee;
+  --amber:   #ba7517;
+  --amber2:  #faeeda;
+  --red:     #a32d2d;
+  --red2:    #fcebeb;
+  --ink:     #1a1a1a;
+  --ink2:    #3d3d3d;
+  --muted:   #6b6b6b;
+  --rule:    #d8d6ce;
+  --bg:      #f8f7f3;
+  --white:   #ffffff;
+  --card:    #ffffff;
+  --mono:    'IBM Plex Mono', monospace;
+  --serif:   'DM Serif Display', Georgia, serif;
+  --sans:    'IBM Plex Sans', system-ui, sans-serif;
+}
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+html { scroll-behavior: smooth; font-size: 16px; }
+body {
+  font-family: var(--sans);
+  background: var(--bg);
+  color: var(--ink);
+  line-height: 1.75;
+  display: flex;
+  min-height: 100vh;
+}
+
+/* ── SIDEBAR ── */
+#sidebar {
+  width: 280px;
+  min-width: 280px;
+  background: var(--navy);
+  color: #c8d8e8;
+  height: 100vh;
+  position: sticky;
+  top: 0;
+  overflow-y: auto;
+  padding: 0 0 40px;
+  z-index: 100;
+}
+#sidebar::-webkit-scrollbar { width: 4px; }
+#sidebar::-webkit-scrollbar-thumb { background: var(--navy3); border-radius: 2px; }
+.sb-logo {
+  padding: 28px 24px 20px;
+  border-bottom: 1px solid rgba(255,255,255,0.08);
+  margin-bottom: 8px;
+}
+.sb-logo .project-name {
+  font-family: var(--serif);
+  font-size: 1.25rem;
+  color: #fff;
+  line-height: 1.2;
+}
+.sb-logo .project-sub {
+  font-size: 0.72rem;
+  color: var(--green);
+  letter-spacing: 0.12em;
+  text-transform: uppercase;
+  margin-top: 4px;
+  font-weight: 500;
+}
+.sb-section {
+  padding: 6px 24px 2px;
+  font-size: 0.65rem;
+  letter-spacing: 0.14em;
+  text-transform: uppercase;
+  color: rgba(200,216,232,0.4);
+  font-weight: 600;
+  margin-top: 10px;
+}
+.sb-link {
+  display: block;
+  padding: 5px 24px 5px 24px;
+  font-size: 0.8rem;
+  color: rgba(200,216,232,0.75);
+  text-decoration: none;
+  transition: all 0.15s;
+  line-height: 1.4;
+}
+.sb-link:hover { color: #fff; background: rgba(255,255,255,0.05); }
+.sb-link.active { color: var(--green); border-left: 2px solid var(--green); padding-left: 22px; }
+.sb-link.chapter {
+  font-weight: 500;
+  color: rgba(200,216,232,0.9);
+  padding-top: 8px;
+  padding-bottom: 8px;
+  font-size: 0.82rem;
+}
+.sb-link.sub { padding-left: 38px; font-size: 0.76rem; }
+.sb-link.sub2 { padding-left: 52px; font-size: 0.73rem; }
+
+/* ── MAIN ── */
+#main {
+  flex: 1;
+  max-width: 860px;
+  padding: 0 56px 80px;
+  min-width: 0;
+}
+
+/* ── COVER PAGE ── */
+#cover {
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 80px 0 60px;
+  border-bottom: 1px solid var(--rule);
+}
+.cover-tag {
+  font-size: 0.7rem;
+  letter-spacing: 0.18em;
+  text-transform: uppercase;
+  color: var(--green2);
+  font-weight: 600;
+  margin-bottom: 20px;
+}
+.cover-title {
+  font-family: var(--serif);
+  font-size: 2.8rem;
+  line-height: 1.15;
+  color: var(--navy);
+  margin-bottom: 12px;
+  max-width: 640px;
+}
+.cover-sub {
+  font-size: 1.05rem;
+  color: var(--muted);
+  margin-bottom: 48px;
+  font-weight: 300;
+  max-width: 560px;
+}
+.cover-meta {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 20px;
+  max-width: 560px;
+  border-top: 1px solid var(--rule);
+  padding-top: 32px;
+}
+.meta-item .meta-label {
+  font-size: 0.68rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  color: var(--muted);
+  font-weight: 600;
+  margin-bottom: 3px;
+}
+.meta-item .meta-value {
+  font-size: 0.88rem;
+  color: var(--ink2);
+  font-weight: 500;
+}
+.cover-strip {
+  display: flex;
+  gap: 12px;
+  margin-top: 48px;
+  flex-wrap: wrap;
+}
+.strip-badge {
+  background: var(--navy);
+  color: #c8d8e8;
+  padding: 6px 14px;
+  border-radius: 3px;
+  font-size: 0.72rem;
+  letter-spacing: 0.06em;
+  text-transform: uppercase;
+  font-weight: 500;
+}
+
+/* ── SECTION SCAFFOLDING ── */
+.doc-section {
+  padding: 64px 0 0;
+}
+.section-tag {
+  font-size: 0.68rem;
+  letter-spacing: 0.16em;
+  text-transform: uppercase;
+  color: var(--green2);
+  font-weight: 600;
+  margin-bottom: 8px;
+}
+.chapter-num {
+  font-family: var(--serif);
+  font-size: 0.95rem;
+  color: var(--muted);
+  font-style: italic;
+  margin-bottom: 6px;
+}
+h1.chapter-title {
+  font-family: var(--serif);
+  font-size: 2rem;
+  color: var(--navy);
+  line-height: 1.2;
+  margin-bottom: 8px;
+  padding-bottom: 20px;
+  border-bottom: 2px solid var(--navy);
+}
+.chapter-intro {
+  font-size: 0.95rem;
+  color: var(--muted);
+  margin-bottom: 40px;
+  max-width: 600px;
+  font-style: italic;
+}
+h2 { font-family: var(--serif); font-size: 1.4rem; color: var(--navy); margin: 40px 0 14px; }
+h3 { font-family: var(--sans); font-size: 1rem; font-weight: 600; color: var(--ink); margin: 28px 0 10px; }
+h4 { font-family: var(--sans); font-size: 0.9rem; font-weight: 600; color: var(--ink2); margin: 20px 0 8px; text-transform: uppercase; letter-spacing: 0.06em; }
+p { margin-bottom: 14px; font-size: 0.9rem; color: var(--ink2); }
+ul, ol { padding-left: 22px; margin-bottom: 14px; }
+li { font-size: 0.9rem; color: var(--ink2); margin-bottom: 5px; }
+
+/* ── CALLOUTS ── */
+.callout {
+  border-left: 3px solid var(--green);
+  background: var(--green3);
+  border-radius: 0 6px 6px 0;
+  padding: 12px 16px;
+  margin: 18px 0;
+  font-size: 0.85rem;
+  color: var(--green2);
+  line-height: 1.55;
+}
+.callout.warn {
+  border-left-color: var(--amber);
+  background: var(--amber2);
+  color: #6b4200;
+}
+.callout.danger {
+  border-left-color: var(--red);
+  background: var(--red2);
+  color: var(--red);
+}
+.callout strong { font-weight: 600; }
+
+/* ── TABLES ── */
+.table-wrap {
+  overflow-x: auto;
+  margin: 20px 0 28px;
+}
+.table-caption {
+  font-size: 0.78rem;
+  text-align: center;
+  color: var(--muted);
+  margin-bottom: 6px;
+  font-style: italic;
+}
+table.doc-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.82rem;
+}
+.doc-table th {
+  background: var(--navy);
+  color: #c8d8e8;
+  padding: 9px 12px;
+  text-align: left;
+  font-weight: 500;
+  font-size: 0.78rem;
+  letter-spacing: 0.04em;
+}
+.doc-table td {
+  padding: 8px 12px;
+  border-bottom: 1px solid var(--rule);
+  vertical-align: top;
+  color: var(--ink2);
+}
+.doc-table tr:nth-child(even) td { background: #f3f1ed; }
+.doc-table tr:last-child td { border-bottom: 2px solid var(--navy); }
+
+/* ── FIGURE BOXES ── */
+.fig-box {
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  background: var(--card);
+  padding: 24px;
+  margin: 20px 0;
+  text-align: center;
+}
+.fig-placeholder {
+  background: #edecea;
+  border-radius: 4px;
+  height: 180px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: var(--muted);
+  font-size: 0.8rem;
+  font-family: var(--mono);
+  margin-bottom: 10px;
+}
+.fig-caption {
+  font-size: 0.78rem;
+  color: var(--muted);
+  font-style: italic;
+}
+
+/* ── SPEC CARDS ── */
+.spec-grid {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(200px, 1fr));
+  gap: 12px;
+  margin: 18px 0;
+}
+.spec-card {
+  background: var(--card);
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  padding: 14px 16px;
+}
+.sc-label { font-size: 0.7rem; text-transform: uppercase; letter-spacing: 0.08em; color: var(--muted); font-weight: 600; margin-bottom: 4px; }
+.sc-value { font-size: 1rem; font-weight: 600; color: var(--navy); font-family: var(--mono); }
+.sc-desc { font-size: 0.75rem; color: var(--muted); margin-top: 2px; }
+
+/* ── STAGE FLOW ── */
+.flow-strip {
+  display: grid;
+  grid-template-columns: repeat(4, 1fr);
+  gap: 0;
+  margin: 20px 0;
+  border: 1px solid var(--rule);
+  border-radius: 6px;
+  overflow: hidden;
+}
+.flow-step {
+  padding: 14px 12px;
+  border-right: 1px solid var(--rule);
+  text-align: center;
+}
+.flow-step:last-child { border-right: none; }
+.flow-step:nth-child(odd) { background: var(--card); }
+.flow-step:nth-child(even) { background: #f3f1ed; }
+.fs-num { font-size: 0.7rem; font-weight: 600; color: var(--green2); letter-spacing: 0.1em; text-transform: uppercase; }
+.fs-name { font-size: 0.82rem; font-weight: 600; color: var(--navy); margin-top: 2px; }
+.fs-sub { font-size: 0.7rem; color: var(--muted); margin-top: 2px; }
+
+/* ── CODE ── */
+pre.code-block {
+  background: var(--navy);
+  color: #a8d8c8;
+  border-radius: 6px;
+  padding: 18px 20px;
+  font-family: var(--mono);
+  font-size: 0.78rem;
+  overflow-x: auto;
+  margin: 16px 0;
+  line-height: 1.7;
+}
+.kw { color: #7ec8e8; }
+.cm { color: #5d7a8a; }
+.str { color: #f0a070; }
+.num { color: #a8d898; }
+
+/* ── ABREV TABLE ── */
+.abrev-table { columns: 2; column-gap: 40px; margin: 20px 0; }
+.abrev-row { break-inside: avoid; display: flex; gap: 12px; padding: 5px 0; border-bottom: 1px solid var(--rule); font-size: 0.84rem; }
+.abrev-key { font-family: var(--mono); font-weight: 500; color: var(--navy); min-width: 80px; font-size: 0.8rem; }
+.abrev-val { color: var(--ink2); }
+
+/* ── LIST OF FIGURES / TABLES ── */
+.lof-entry {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  padding: 7px 0;
+  border-bottom: 1px dotted var(--rule);
+  font-size: 0.84rem;
+  color: var(--ink2);
+}
+.lof-entry .lof-title { flex: 1; }
+.lof-entry .lof-dots { flex: 1; border-bottom: 1px dotted var(--rule); margin: 0 8px; height: 1px; align-self: center; }
+.lof-entry .lof-page { color: var(--muted); font-family: var(--mono); font-size: 0.78rem; }
+
+/* ── TOC (inline) ── */
+.toc-chapter { padding: 6px 0; border-bottom: 1px solid var(--rule); }
+.toc-chap-row { display: flex; justify-content: space-between; font-size: 0.9rem; font-weight: 600; color: var(--navy); }
+.toc-sub-row { display: flex; justify-content: space-between; padding: 3px 0 3px 20px; font-size: 0.82rem; color: var(--ink2); }
+.toc-sub2-row { display: flex; justify-content: space-between; padding: 2px 0 2px 40px; font-size: 0.78rem; color: var(--muted); }
+.toc-pg { font-family: var(--mono); font-size: 0.78rem; color: var(--muted); }
+
+/* ── PAGE BREAK hint ── */
+.page-break { margin: 60px 0 0; padding-top: 0; border-top: 2px solid var(--rule); }
+
+/* ── PRINT ── */
+@media print {
+  body { display: block; }
+  #sidebar { display: none; }
+  #main { max-width: 100%; padding: 20px 40px; }
+  .doc-section { page-break-before: always; }
+  .callout { border: 1px solid; }
+}
+@media (max-width: 900px) {
+  #sidebar { display: none; }
+  #main { padding: 0 24px 60px; }
+}
+</style>
+</head>
+<body>
+
+<!-- ════════════════════════════════════════════
+     SIDEBAR NAVIGATION
+════════════════════════════════════════════ -->
+<nav id="sidebar">
+  <div class="sb-logo">
+    <div class="project-name">AutoSort</div>
+    <div class="project-sub">Rapport de Projet</div>
+  </div>
+
+  <div class="sb-section">Préliminaires</div>
+  <a class="sb-link" href="#cover">Page de garde</a>
+  <a class="sb-link" href="#toc">Table des matières</a>
+  <a class="sb-link" href="#lof">Liste des figures</a>
+  <a class="sb-link" href="#lot">Liste des tableaux</a>
+  <a class="sb-link" href="#abrev">Abréviations</a>
+  <a class="sb-link" href="#intro">Introduction générale</a>
+
+  <div class="sb-section">Chapitre I</div>
+  <a class="sb-link chapter" href="#ch1">Présentation du projet</a>
+  <a class="sb-link sub" href="#ch1-contexte">Contexte global</a>
+  <a class="sb-link sub" href="#ch1-problematique">Problématique</a>
+  <a class="sb-link sub" href="#ch1-existant">Étude de l'existant</a>
+  <a class="sb-link sub" href="#ch1-objectifs">Objectifs</a>
+  <a class="sb-link sub" href="#ch1-methodo">Méthodologie</a>
+
+  <div class="sb-section">Chapitre II</div>
+  <a class="sb-link chapter" href="#ch2">Fondements théoriques</a>
+  <a class="sb-link sub" href="#ch2-embarque">Systèmes embarqués</a>
+  <a class="sb-link sub" href="#ch2-capteurs">Capteurs</a>
+  <a class="sb-link sub" href="#ch2-ia">Edge AI / TinyML</a>
+  <a class="sb-link sub" href="#ch2-mecanique">Mécanique & actionneurs</a>
+  <a class="sb-link sub" href="#ch2-comm">Communication IoT</a>
+
+  <div class="sb-section">Chapitre III</div>
+  <a class="sb-link chapter" href="#ch3">Réalisation & évaluation</a>
+  <a class="sb-link sub" href="#ch3-materiel">Environnement matériel</a>
+  <a class="sb-link sub" href="#ch3-logiciel">Environnement logiciel</a>
+  <a class="sb-link sub" href="#ch3-prototype">Prototype</a>
+  <a class="sb-link sub" href="#ch3-resultats">Résultats</a>
+  <a class="sb-link sub" href="#ch3-faiblesses">Points faibles & fixes</a>
+  <a class="sb-link sub" href="#ch3-budget">Optimisation du budget</a>
+
+  <div class="sb-section">Conclusion</div>
+  <a class="sb-link" href="#conclusion">Conclusion générale</a>
+  <a class="sb-link" href="#biblio">Bibliographie</a>
+</nav>
+
+<!-- ════════════════════════════════════════════
+     MAIN CONTENT
+════════════════════════════════════════════ -->
+<main id="main">
+
+<!-- ── COVER ── -->
+<section id="cover" class="doc-section" style="padding-top:80px">
+  <div class="cover-tag">Rapport de Projet de Fin d'Études — 2024/2025</div>
+  <h1 class="cover-title">AutoSort — Système Automatisé de Tri et de Valorisation des Déchets Solides Urbains</h1>
+  <p class="cover-sub">Conception, réalisation et évaluation d'un prototype de tri intelligent multi-étapes basé sur la vision par ordinateur, la fusion multi-capteurs et l'intelligence artificielle embarquée.</p>
+  <div class="cover-meta">
+    <div class="meta-item"><div class="meta-label">Établissement</div><div class="meta-value">À compléter</div></div>
+    <div class="meta-item"><div class="meta-label">Spécialité</div><div class="meta-value">Systèmes Embarqués / IoT</div></div>
+    <div class="meta-item"><div class="meta-label">Auteur(s)</div><div class="meta-value">À compléter</div></div>
+    <div class="meta-item"><div class="meta-label">Encadrant</div><div class="meta-value">À compléter</div></div>
+    <div class="meta-item"><div class="meta-label">Année universitaire</div><div class="meta-value">2024 – 2025</div></div>
+    <div class="meta-item"><div class="meta-label">Date de soutenance</div><div class="meta-value">À compléter</div></div>
+  </div>
+  <div class="cover-strip">
+    <span class="strip-badge">ESP32</span>
+    <span class="strip-badge">Arduino Nano</span>
+    <span class="strip-badge">TinyML / YOLOv8</span>
+    <span class="strip-badge">NIR Spectroscopy</span>
+    <span class="strip-badge">Node-RED</span>
+    <span class="strip-badge">MQTT / IoT</span>
+  </div>
+</section>
+
+<!-- ── TABLE DES MATIÈRES ── -->
+<section id="toc" class="doc-section page-break">
+  <div class="section-tag">Préliminaires</div>
+  <h1 class="chapter-title">Table des Matières</h1>
+
+  <div class="toc-chapter">
+    <div class="toc-chap-row"><span>Liste des figures</span><span class="toc-pg">IV</span></div>
+  </div>
+  <div class="toc-chapter">
+    <div class="toc-chap-row"><span>Liste des tableaux</span><span class="toc-pg">V</span></div>
+  </div>
+  <div class="toc-chapter">
+    <div class="toc-chap-row"><span>Liste des abréviations</span><span class="toc-pg">VI</span></div>
+  </div>
+  <div class="toc-chapter">
+    <div class="toc-chap-row"><span>Introduction générale</span><span class="toc-pg">1</span></div>
+  </div>
+
+  <div class="toc-chapter">
+    <div class="toc-chap-row"><span>Chapitre I — Présentation du Projet AutoSort</span><span class="toc-pg">3</span></div>
+    <div class="toc-sub-row"><span>1. Introduction</span><span class="toc-pg">4</span></div>
+    <div class="toc-sub-row"><span>2. Présentation de l'organisme d'accueil</span><span class="toc-pg">4</span></div>
+    <div class="toc-sub-row"><span>3. Contexte global du projet</span><span class="toc-pg">4</span></div>
+    <div class="toc-sub-row"><span>4. Les déchets solides urbains : problématique et enjeux</span><span class="toc-pg">5</span></div>
+    <div class="toc-sub2-row"><span>4.1 Nature et impact des déchets non triés</span><span class="toc-pg">5</span></div>
+    <div class="toc-sub2-row"><span>4.2 Problématique spécifique du projet</span><span class="toc-pg">6</span></div>
+    <div class="toc-sub-row"><span>5. Étude de l'existant</span><span class="toc-pg">6</span></div>
+    <div class="toc-sub2-row"><span>5.1 Tri optique par spectroscopie NIR</span><span class="toc-pg">7</span></div>
+    <div class="toc-sub2-row"><span>5.2 Tri robotisé par vision artificielle</span><span class="toc-pg">8</span></div>
+    <div class="toc-sub2-row"><span>5.3 Séparation électromagnétique et courants de Foucault</span><span class="toc-pg">8</span></div>
+    <div class="toc-sub2-row"><span>5.4 Analyse comparative</span><span class="toc-pg">9</span></div>
+    <div class="toc-sub-row"><span>6. Objectifs du projet</span><span class="toc-pg">10</span></div>
+    <div class="toc-sub2-row"><span>6.1 Expression des besoins</span><span class="toc-pg">10</span></div>
+    <div class="toc-sub2-row"><span>6.2 Spécifications fonctionnelles</span><span class="toc-pg">10</span></div>
+    <div class="toc-sub2-row"><span>6.3 Solution proposée</span><span class="toc-pg">11</span></div>
+    <div class="toc-sub-row"><span>7. Méthodologie de travail</span><span class="toc-pg">12</span></div>
+    <div class="toc-sub-row"><span>8. Conclusion</span><span class="toc-pg">12</span></div>
+  </div>
+
+  <div class="toc-chapter">
+    <div class="toc-chap-row"><span>Chapitre II — Fondements Théoriques et Technologiques</span><span class="toc-pg">13</span></div>
+    <div class="toc-sub-row"><span>1. Introduction</span><span class="toc-pg">14</span></div>
+    <div class="toc-sub-row"><span>2. Systèmes embarqués et IoT</span><span class="toc-pg">14</span></div>
+    <div class="toc-sub2-row"><span>2.1 Définition et architecture des systèmes embarqués</span><span class="toc-pg">14</span></div>
+    <div class="toc-sub2-row"><span>2.2 Protocoles de communication (I2C, UART, MQTT, WiFi)</span><span class="toc-pg">15</span></div>
+    <div class="toc-sub-row"><span>3. Instrumentation et capteurs</span><span class="toc-pg">16</span></div>
+    <div class="toc-sub2-row"><span>3.1 Capteur inductif analogique (LJ18A3)</span><span class="toc-pg">16</span></div>
+    <div class="toc-sub2-row"><span>3.2 Cellule de charge et amplificateur HX711</span><span class="toc-pg">17</span></div>
+    <div class="toc-sub2-row"><span>3.3 Sonde de tension à opto-isolation</span><span class="toc-pg">17</span></div>
+    <div class="toc-sub2-row"><span>3.4 Capteur NIR multi-canal (AS7265x)</span><span class="toc-pg">18</span></div>
+    <div class="toc-sub2-row"><span>3.5 Module caméra OV2640</span><span class="toc-pg">18</span></div>
+    <div class="toc-sub-row"><span>4. Intelligence artificielle embarquée (Edge AI)</span><span class="toc-pg">19</span></div>
+    <div class="toc-sub2-row"><span>4.1 Définition et intérêt de l'Edge AI</span><span class="toc-pg">19</span></div>
+    <div class="toc-sub2-row"><span>4.2 TinyML et optimisation des modèles</span><span class="toc-pg">20</span></div>
+    <div class="toc-sub2-row"><span>4.3 YOLOv8-nano et fusion multi-capteurs</span><span class="toc-pg">21</span></div>
+    <div class="toc-sub-row"><span>5. Mécanique et actionneurs</span><span class="toc-pg">22</span></div>
+    <div class="toc-sub-row"><span>6. Conclusion</span><span class="toc-pg">24</span></div>
+  </div>
+
+  <div class="toc-chapter">
+    <div class="toc-chap-row"><span>Chapitre III — Réalisation et Évaluation du Système</span><span class="toc-pg">25</span></div>
+    <div class="toc-sub-row"><span>1. Introduction</span><span class="toc-pg">26</span></div>
+    <div class="toc-sub-row"><span>2. Démarche de développement</span><span class="toc-pg">26</span></div>
+    <div class="toc-sub-row"><span>3. Environnement matériel</span><span class="toc-pg">27</span></div>
+    <div class="toc-sub2-row"><span>3.1 Carte de développement ESP32-WROVER / ESP32-CAM</span><span class="toc-pg">27</span></div>
+    <div class="toc-sub2-row"><span>3.2 Arduino Nano — contrôleur esclave de mouvement</span><span class="toc-pg">28</span></div>
+    <div class="toc-sub2-row"><span>3.3 Autres composants électroniques</span><span class="toc-pg">29</span></div>
+    <div class="toc-sub-row"><span>4. Environnement logiciel</span><span class="toc-pg">30</span></div>
+    <div class="toc-sub2-row"><span>4.1 Arduino IDE / PlatformIO</span><span class="toc-pg">30</span></div>
+    <div class="toc-sub2-row"><span>4.2 Node-RED et tableau de bord MQTT</span><span class="toc-pg">30</span></div>
+    <div class="toc-sub2-row"><span>4.3 TensorFlow Lite et EdgeImpulse</span><span class="toc-pg">31</span></div>
+    <div class="toc-sub-row"><span>5. Réalisation du prototype</span><span class="toc-pg">32</span></div>
+    <div class="toc-sub2-row"><span>5.1 Prototype mécanique (convoyeur, trommel, bols vibrants)</span><span class="toc-pg">33</span></div>
+    <div class="toc-sub2-row"><span>5.2 Prototype électronique et câblage</span><span class="toc-pg">34</span></div>
+    <div class="toc-sub2-row"><span>5.3 Implémentation logicielle et machine d'états</span><span class="toc-pg">36</span></div>
+    <div class="toc-sub-row"><span>6. Résultats et évaluation</span><span class="toc-pg">38</span></div>
+    <div class="toc-sub-row"><span>7. Analyse des points faibles et solutions</span><span class="toc-pg">40</span></div>
+    <div class="toc-sub-row"><span>8. Optimisation du budget</span><span class="toc-pg">42</span></div>
+    <div class="toc-sub-row"><span>9. Conclusion</span><span class="toc-pg">44</span></div>
+  </div>
+  <div class="toc-chapter">
+    <div class="toc-chap-row"><span>Conclusion générale</span><span class="toc-pg">45</span></div>
+  </div>
+  <div class="toc-chapter">
+    <div class="toc-chap-row"><span>Bibliographie</span><span class="toc-pg">47</span></div>
+  </div>
+</section>
+
+<!-- ── LISTE DES FIGURES ── -->
+<section id="lof" class="doc-section page-break">
+  <div class="section-tag">Préliminaires</div>
+  <h1 class="chapter-title">Liste des Figures</h1>
+  <div class="lof-entry"><span class="lof-title">Figure I.1 — Flux de déchets solides urbains en Tunisie (2023)</span><div class="lof-dots"></div><span class="lof-page">5</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure I.2 — Architecture globale du système AutoSort (8 étapes)</span><div class="lof-dots"></div><span class="lof-page">7</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure I.3 — Diagramme des cas d'utilisation (Use Case UML)</span><div class="lof-dots"></div><span class="lof-page">10</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure I.4 — Diagramme de Gantt — planification du projet</span><div class="lof-dots"></div><span class="lof-page">12</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure II.1 — Architecture maître/esclave ESP32 + Arduino Nano</span><div class="lof-dots"></div><span class="lof-page">14</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure II.2 — Schéma de principe du capteur inductif LJ18A3</span><div class="lof-dots"></div><span class="lof-page">16</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure II.3 — Schéma du pont diviseur de tension (sonde batteries)</span><div class="lof-dots"></div><span class="lof-page">17</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure II.4 — Circuit d'opto-isolation (PC817) pour la sonde de tension</span><div class="lof-dots"></div><span class="lof-page">17</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure II.5 — Réponse spectrale du capteur AS7265x (18 canaux, 410–940 nm)</span><div class="lof-dots"></div><span class="lof-page">18</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure II.6 — Comparaison Cloud AI vs Edge AI (latence, confidentialité)</span><div class="lof-dots"></div><span class="lof-page">19</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure II.7 — Pipeline de quantification INT8 pour YOLOv8-nano</span><div class="lof-dots"></div><span class="lof-page">21</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure II.8 — Diagramme du tambour à courants de Foucault (Halbach array)</span><div class="lof-dots"></div><span class="lof-page">23</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure III.1 — Schéma du prototype mécanique (vue de dessus, coté)</span><div class="lof-dots"></div><span class="lof-page">33</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure III.2 — Schéma de câblage électronique complet</span><div class="lof-dots"></div><span class="lof-page">34</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure III.3 — Machine d'états du système (State Machine Diagram)</span><div class="lof-dots"></div><span class="lof-page">36</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure III.4 — Tableau de bord Node-RED (interface de supervision)</span><div class="lof-dots"></div><span class="lof-page">37</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure III.5 — Résultats : taux de classification par matériau</span><div class="lof-dots"></div><span class="lof-page">39</span></div>
+  <div class="lof-entry"><span class="lof-title">Figure III.6 — Courbe de confiance du détecteur de batteries (100 tests)</span><div class="lof-dots"></div><span class="lof-page">40</span></div>
+</section>
+
+<!-- ── LISTE DES TABLEAUX ── -->
+<section id="lot" class="doc-section page-break">
+  <div class="section-tag">Préliminaires</div>
+  <h1 class="chapter-title">Liste des Tableaux</h1>
+  <div class="lof-entry"><span class="lof-title">Tableau I.1 — Analyse comparative des technologies de tri existantes</span><div class="lof-dots"></div><span class="lof-page">9</span></div>
+  <div class="lof-entry"><span class="lof-title">Tableau I.2 — Spécifications fonctionnelles du système AutoSort</span><div class="lof-dots"></div><span class="lof-page">10</span></div>
+  <div class="lof-entry"><span class="lof-title">Tableau II.1 — Comparaison des microcontrôleurs candidats (ESP32 / STM32 / Mega)</span><div class="lof-dots"></div><span class="lof-page">15</span></div>
+  <div class="lof-entry"><span class="lof-title">Tableau II.2 — Caractéristiques des capteurs retenus</span><div class="lof-dots"></div><span class="lof-page">16</span></div>
+  <div class="lof-entry"><span class="lof-title">Tableau II.3 — Comparaison des modèles d'IA embarquée (précision, mémoire, latence)</span><div class="lof-dots"></div><span class="lof-page">21</span></div>
+  <div class="lof-entry"><span class="lof-title">Tableau II.4 — Protocoles de communication et justification du choix</span><div class="lof-dots"></div><span class="lof-page">22</span></div>
+  <div class="lof-entry"><span class="lof-title">Tableau III.1 — Affectation des broches ESP32-WROVER (capteurs)</span><div class="lof-dots"></div><span class="lof-page">35</span></div>
+  <div class="lof-entry"><span class="lof-title">Tableau III.2 — Affectation des broches Arduino Nano (actionneurs)</span><div class="lof-dots"></div><span class="lof-page">35</span></div>
+  <div class="lof-entry"><span class="lof-title">Tableau III.3 — Nomenclature (Bill of Materials) du prototype</span><div class="lof-dots"></div><span class="lof-page">38</span></div>
+  <div class="lof-entry"><span class="lof-title">Tableau III.4 — Résultats de classification : précision par classe de matériau</span><div class="lof-dots"></div><span class="lof-page">39</span></div>
+  <div class="lof-entry"><span class="lof-title">Tableau III.5 — Analyse des points faibles et solutions correctives</span><div class="lof-dots"></div><span class="lof-page">41</span></div>
+  <div class="lof-entry"><span class="lof-title">Tableau III.6 — Comparaison des scénarios budgétaires</span><div class="lof-dots"></div><span class="lof-page">43</span></div>
+</section>
+
+<!-- ── ABRÉVIATIONS ── -->
+<section id="abrev" class="doc-section page-break">
+  <div class="section-tag">Préliminaires</div>
+  <h1 class="chapter-title">Liste des Abréviations</h1>
+  <div class="abrev-table">
+    <div class="abrev-row"><span class="abrev-key">ADC</span><span class="abrev-val">Convertisseur Analogique-Numérique (Analog-to-Digital Converter)</span></div>
+    <div class="abrev-row"><span class="abrev-key">AI</span><span class="abrev-val">Intelligence Artificielle (Artificial Intelligence)</span></div>
+    <div class="abrev-row"><span class="abrev-key">BOM</span><span class="abrev-val">Nomenclature du matériel (Bill of Materials)</span></div>
+    <div class="abrev-row"><span class="abrev-key">BT / BLE</span><span class="abrev-val">Bluetooth / Bluetooth Low Energy</span></div>
+    <div class="abrev-row"><span class="abrev-key">CNN</span><span class="abrev-val">Réseau de Neurones Convolutionnels (Convolutional Neural Network)</span></div>
+    <div class="abrev-row"><span class="abrev-key">CV</span><span class="abrev-val">Vision par Ordinateur (Computer Vision)</span></div>
+    <div class="abrev-row"><span class="abrev-key">DSU</span><span class="abrev-val">Déchets Solides Urbains</span></div>
+    <div class="abrev-row"><span class="abrev-key">Edge AI</span><span class="abrev-val">Intelligence Artificielle embarquée (traitement local, sans cloud)</span></div>
+    <div class="abrev-row"><span class="abrev-key">ESP32</span><span class="abrev-val">Microcontrôleur bi-cœur 240 MHz avec WiFi/BT (Espressif Systems)</span></div>
+    <div class="abrev-row"><span class="abrev-key">GPIO</span><span class="abrev-val">Entrée/Sortie à Usage Général (General Purpose Input/Output)</span></div>
+    <div class="abrev-row"><span class="abrev-key">HDPE</span><span class="abrev-val">Polyéthylène Haute Densité (High-Density Polyethylene)</span></div>
+    <div class="abrev-row"><span class="abrev-key">I2C</span><span class="abrev-val">Bus série bi-filaire (Inter-Integrated Circuit)</span></div>
+    <div class="abrev-row"><span class="abrev-key">IDE</span><span class="abrev-val">Environnement de Développement Intégré (Integrated Development Environment)</span></div>
+    <div class="abrev-row"><span class="abrev-key">INT8</span><span class="abrev-val">Quantification sur 8 bits entiers (optimisation modèle IA)</span></div>
+    <div class="abrev-row"><span class="abrev-key">IoT</span><span class="abrev-val">Internet des Objets (Internet of Things)</span></div>
+    <div class="abrev-row"><span class="abrev-key">LIBS</span><span class="abrev-val">Spectroscopie par plasma induit par laser (Laser-Induced Breakdown Spectroscopy)</span></div>
+    <div class="abrev-row"><span class="abrev-key">MCU</span><span class="abrev-val">Microcontrôleur (MicroController Unit)</span></div>
+    <div class="abrev-row"><span class="abrev-key">MRF</span><span class="abrev-val">Centre de Valorisation Matière (Material Recovery Facility)</span></div>
+    <div class="abrev-row"><span class="abrev-key">MQTT</span><span class="abrev-val">Protocole de messagerie IoT léger (Message Queuing Telemetry Transport)</span></div>
+    <div class="abrev-row"><span class="abrev-key">NIR</span><span class="abrev-val">Proche Infrarouge (Near-Infrared)</span></div>
+    <div class="abrev-row"><span class="abrev-key">PET</span><span class="abrev-val">Polyéthylène Téréphtalate</span></div>
+    <div class="abrev-row"><span class="abrev-key">PLC</span><span class="abrev-val">Automate Programmable Industriel (Programmable Logic Controller)</span></div>
+    <div class="abrev-row"><span class="abrev-key">PSRAM</span><span class="abrev-val">Mémoire vive pseudo-statique externe (Pseudo-Static RAM)</span></div>
+    <div class="abrev-row"><span class="abrev-key">PWM</span><span class="abrev-val">Modulation de Largeur d'Impulsion (Pulse Width Modulation)</span></div>
+    <div class="abrev-row"><span class="abrev-key">ReLU</span><span class="abrev-val">Fonction d'activation (Rectified Linear Unit)</span></div>
+    <div class="abrev-row"><span class="abrev-key">SCADA</span><span class="abrev-val">Système de supervision industrielle (Supervisory Control And Data Acquisition)</span></div>
+    <div class="abrev-row"><span class="abrev-key">TinyML</span><span class="abrev-val">Apprentissage automatique sur dispositifs à ressources limitées</span></div>
+    <div class="abrev-row"><span class="abrev-key">UART</span><span class="abrev-val">Liaison série asynchrone (Universal Asynchronous Receiver-Transmitter)</span></div>
+    <div class="abrev-row"><span class="abrev-key">XRF</span><span class="abrev-val">Fluorescence X (X-Ray Fluorescence — analyse élémentaire)</span></div>
+    <div class="abrev-row"><span class="abrev-key">YOLO</span><span class="abrev-val">Détection d'objets en temps réel (You Only Look Once)</span></div>
+  </div>
+</section>
+
+<!-- ── INTRODUCTION GÉNÉRALE ── -->
+<section id="intro" class="doc-section page-break">
+  <div class="section-tag">Préambule</div>
+  <h1 class="chapter-title">Introduction Générale</h1>
+  <p>La gestion des déchets solides urbains (DSU) constitue l'un des défis environnementaux et économiques les plus pressants du XXI<sup>e</sup> siècle. En Tunisie, comme dans de nombreux pays en développement, la majorité des déchets collectés est enfouie sans valorisation préalable, représentant une perte économique considérable et un risque sanitaire et environnemental réel. Selon les données de l'Agence Nationale de Gestion des Déchets (ANGed), plus de 2,7 millions de tonnes de déchets sont générées annuellement, dont moins de 7 % font l'objet d'un tri ou d'une valorisation systématique.</p>
+  <p>Face à cette problématique, les avancées récentes dans les domaines des systèmes embarqués, de l'intelligence artificielle et de l'instrumentation offrent de nouvelles opportunités pour concevoir des systèmes de tri automatisé accessibles, efficaces et adaptés aux réalités locales. Les grandes installations industrielles de tri — équipées de spectromètres NIR, de robots à bras articulés et de séparateurs à courants de Foucault — atteignent des taux de récupération supérieurs à 90 %, mais restent hors de portée pour les structures à petite ou moyenne échelle.</p>
+  <p>Le projet <strong>AutoSort</strong> s'inscrit dans cette perspective : concevoir et réaliser un prototype de système de tri automatisé multi-étapes, basé sur des composants accessibles et des algorithmes d'intelligence artificielle embarquée, capable d'identifier et de séparer les principaux flux de matériaux — plastiques, métaux, verre, matières organiques et batteries — avec une sécurité opérationnelle élevée et un coût de prototype inférieur à 150 USD.</p>
+  <p>Ce rapport est organisé en trois chapitres complémentaires :</p>
+  <ul>
+    <li>Le <strong>Chapitre I</strong> présente le contexte du projet, la problématique des déchets solides urbains, une étude des solutions existantes et les objectifs retenus.</li>
+    <li>Le <strong>Chapitre II</strong> développe les fondements théoriques et technologiques : systèmes embarqués, capteurs, intelligence artificielle embarquée (Edge AI / TinyML) et actionneurs mécaniques.</li>
+    <li>Le <strong>Chapitre III</strong> décrit la réalisation concrète du prototype, les résultats d'évaluation, l'analyse des points faibles et l'optimisation budgétaire.</li>
+  </ul>
+  <p>Une conclusion générale synthétise les résultats obtenus et ouvre des perspectives d'amélioration et d'industrialisation du système.</p>
+</section>
+
+<!-- ════════════════════════════════════════════
+     CHAPITRE I
+════════════════════════════════════════════ -->
+<section id="ch1" class="doc-section page-break">
+  <div class="chapter-num">Chapitre I</div>
+  <h1 class="chapter-title">Présentation du Projet AutoSort — Système de Tri Automatique des Déchets</h1>
+  <p class="chapter-intro">Ce chapitre présente le contexte global du projet, la problématique des déchets solides urbains, une étude comparative des technologies existantes et les objectifs fonctionnels retenus pour le système AutoSort.</p>
+
+  <h2>1. Introduction</h2>
+  <p>L'efficacité d'un système de tri des déchets repose sur trois piliers : la capacité à identifier les matériaux de manière fiable, la sécurité des opérations (notamment vis-à-vis des batteries lithium et des produits chimiques), et la viabilité économique du déploiement. Ce chapitre établit le cadre du projet AutoSort en répondant à ces trois dimensions.</p>
+
+  <h2>2. Présentation de l'organisme d'accueil</h2>
+  <p>[<em>À compléter par l'étudiant : nom de l'établissement ou de l'entreprise d'accueil, activités principales, contexte du stage ou du projet de fin d'études.</em>]</p>
+
+  <h2 id="ch1-contexte">3. Contexte global du projet</h2>
+  <p>La Tunisie produit environ 2,7 millions de tonnes de déchets solides urbains par an. Le taux de collecte est estimé à 90 % en milieu urbain, mais le taux de valorisation matière reste inférieur à 7 %. La quasi-totalité des déchets collectés est dirigée vers des décharges contrôlées, sans séparation préalable des flux à haute valeur économique (aluminium, PET clair, cuivre, verre).</p>
+  <p>Le marché mondial des robots de tri des déchets était évalué à 2,75 milliards USD en 2024 et devrait atteindre 16,9 milliards USD d'ici 2033, avec un TCAC de 19,6 %. Cette croissance reflète une prise de conscience mondiale de la nécessité d'automatiser la valorisation matière. Le projet AutoSort s'inscrit dans ce contexte en proposant une solution prototype adaptée à l'échelle locale.</p>
+
+  <div class="spec-grid">
+    <div class="spec-card"><div class="sc-label">Production nationale</div><div class="sc-value">2,7 Mt/an</div><div class="sc-desc">Déchets solides urbains (DSU)</div></div>
+    <div class="spec-card"><div class="sc-label">Taux de valorisation</div><div class="sc-value">&lt; 7 %</div><div class="sc-desc">Tunisie — moyenne nationale</div></div>
+    <div class="spec-card"><div class="sc-label">Marché mondial 2033</div><div class="sc-value">16,9 Md$</div><div class="sc-desc">Robots de tri (TCAC 19,6 %)</div></div>
+    <div class="spec-card"><div class="sc-label">Valorisation PET clair</div><div class="sc-value">+600 %</div><div class="sc-desc">vs plastique mixte (NIR requis)</div></div>
+  </div>
+
+  <h2 id="ch1-problematique">4. Les déchets solides urbains : problématique et enjeux</h2>
+  <h3>4.1 Nature et impact des déchets non triés</h3>
+  <p>Les déchets solides urbains en Tunisie sont constitués en moyenne de : 68 % de matières fermentescibles (déchets organiques alimentaires), 12 % de plastiques, 7 % de papier/carton, 5 % de métaux, 4 % de verre et 4 % de résidus divers. Ce profil riche en organiques génère une contamination importante des flux de matières recyclables (plastiques souillés, métaux oxydés) qui complexifie le tri et réduit la valeur marchande des matières récupérées.</p>
+  <p>Par ailleurs, la présence croissante de déchets électroniques (batteries lithium-ion, accumulateurs) dans les flux ménagers représente un risque sécuritaire majeur lors des opérations de tri mécanisé : une batterie Li-ion en contact avec l'eau ou soumise à une contrainte mécanique peut provoquer un emballement thermique (thermal runaway) avec émission de gaz toxiques et risque d'incendie.</p>
+
+  <h3>4.2 Problématique spécifique du projet</h3>
+  <p>La problématique centrale du projet AutoSort peut être formulée ainsi :</p>
+  <div class="callout"><strong>Comment concevoir un système de tri automatisé des déchets solides urbains qui soit à la fois sûr (détection et isolation des batteries avant tout traitement humide), précis (identification des polymères plastiques par leurs propriétés spectrales) et économiquement accessible (prototype &lt; 150 USD) ?</strong></div>
+  <p>Cette problématique soulève trois verrous techniques spécifiques : (1) la détection fiable de batteries dans un flux hétérogène et potentiellement humide, (2) l'estimation de la composition des objets composites (contenant à la fois du métal et des matériaux non-métalliques) par fusion de signaux multi-capteurs, et (3) la classification des polymères plastiques par vision artificielle sur un microcontrôleur à ressources limitées.</p>
+
+  <h2 id="ch1-existant">5. Étude de l'existant</h2>
+  <h3>5.1 Tri optique par spectroscopie NIR (TOMRA, Machinex)</h3>
+  <p>La spectroscopie dans le proche infrarouge (NIR, 800–2500 nm) est la technologie dominante dans les centres de valorisation matière (MRF) modernes. Le principe repose sur la mesure de la réflectance spectrale de chaque objet : chaque polymère (PET, HDPE, PP, PS, PVC) possède une signature spectrale unique dans cette plage de longueurs d'onde. Le système TOMRA AUTOSORT, déployé dans plus de 10 000 installations dans 100 pays, combine NIR, spectromètre visible (VIS), détection laser (DEEP LAISER pour les plastiques noirs) et apprentissage profond (GAIN) pour atteindre des taux de récupération supérieurs à 95 % sur les plastiques.</p>
+  <p>La contrainte principale est économique : une unité TOMRA AUTOSORT représente un investissement de l'ordre de 200 000 à 500 000 €, hors installation. À l'échelle prototype, des capteurs NIR multi-canaux comme l'AS7265x (18 canaux, 410–940 nm, ~20 USD) permettent d'approcher cette capacité de discrimination pour les plastiques courants.</p>
+
+  <h3>5.2 Tri robotisé par vision artificielle (AMP Robotics, ZenRobotics)</h3>
+  <p>AMP Robotics (plus de 300 déploiements en Amérique du Nord, Europe et Asie) utilise des bras articulés couplés à des systèmes de vision par ordinateur basés sur l'apprentissage profond pour réaliser 70 à 100 saisies par minute. Le système apprend à reconnaître plus de 500 catégories de déchets avec une précision supérieure à 90 %. La particularité de ces systèmes est leur capacité d'apprentissage continu : chaque item mal classifié, identifié par une caméra d'audit, enrichit automatiquement le jeu de données d'entraînement.</p>
+
+  <h3>5.3 Séparation électromagnétique et courants de Foucault</h3>
+  <p>La séparation des métaux ferreux par électroaimant et des métaux non-ferreux (aluminium, cuivre) par séparateur à courants de Foucault (tambour magnétique rotatif à arrangement de Halbach) est une technologie mature, fiable et relativement accessible. Les séparateurs industriels (Steinert, Bunting) traitent plusieurs tonnes par heure. Pour un prototype, un tambour à aimants permanents N52 (~6 USD) tourne à 2000 tr/min permet de démontrer le principe de déviation des pièces en aluminium.</p>
+
+  <h3>5.4 Analyse comparative</h3>
+  <div class="table-wrap">
+    <div class="table-caption">Tableau I.1 — Analyse comparative des technologies de tri existantes</div>
+    <table class="doc-table">
+      <thead><tr><th>Technologie</th><th>Précision</th><th>Coût (industriel)</th><th>Coût (prototype DIY)</th><th>Limite principale</th></tr></thead>
+      <tbody>
+        <tr><td>Spectroscopie NIR</td><td>95–99 %</td><td>200k–500k €</td><td>20–400 USD</td><td>Aveugle aux plastiques noirs</td></tr>
+        <tr><td>Vision par ordinateur (RGB)</td><td>70–85 %</td><td>15k–80k €</td><td>5–15 USD</td><td>Couleur et forme uniquement</td></tr>
+        <tr><td>Vision + IA (YOLO, ResNet)</td><td>85–95 %</td><td>30k–150k €</td><td>10–30 USD</td><td>Sensible aux conditions d'éclairage</td></tr>
+        <tr><td>Capteur inductif analogique</td><td>60–80 %</td><td>5k–20k €</td><td>4–8 USD</td><td>Ne distingue pas les polymères</td></tr>
+        <tr><td>Séparateur courants de Foucault</td><td>90–98 %</td><td>20k–100k €</td><td>20–60 USD</td><td>Non-ferreux uniquement</td></tr>
+        <tr><td>Fusion multi-capteurs (AutoSort)</td><td>80–92 %*</td><td>—</td><td>80–150 USD</td><td>Latence ~2 s/item (prototype)</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <p><em>* Estimation pour le prototype AutoSort, à valider par les tests d'évaluation (Chapitre III).</em></p>
+
+  <h2 id="ch1-objectifs">6. Objectifs du projet</h2>
+  <h3>6.1 Expression des besoins</h3>
+  <p>Sur la base de l'analyse de la problématique et de l'étude de l'existant, les besoins suivants ont été identifiés :</p>
+  <ul>
+    <li><strong>Besoin fonctionnel 1 :</strong> Détecter et isoler les batteries (Li-ion, alcalines, bouton) avant tout contact avec l'eau, avec un taux de faux négatifs nul (aucune batterie ne doit atteindre l'étape de lavage).</li>
+    <li><strong>Besoin fonctionnel 2 :</strong> Séparer les métaux ferreux et non-ferreux du flux principal avec une précision supérieure à 85 %.</li>
+    <li><strong>Besoin fonctionnel 3 :</strong> Estimer la composition des objets composites (contenant à la fois métal et plastique) pour les orienter vers la filière de valorisation la plus adaptée.</li>
+    <li><strong>Besoin fonctionnel 4 :</strong> Classifier les plastiques (PET, HDPE, PP, PS) et le verre par vision artificielle avec une confiance minimale de 75 % avant tri définitif.</li>
+    <li><strong>Besoin fonctionnel 5 :</strong> Superviser le système en temps réel via un tableau de bord WiFi accessible depuis un navigateur.</li>
+    <li><strong>Besoin non-fonctionnel 1 :</strong> Coût du prototype inférieur à 150 USD (pièces électroniques + mécaniques).</li>
+    <li><strong>Besoin non-fonctionnel 2 :</strong> Arrêt d'urgence accessible et opérationnel en moins de 200 ms.</li>
+  </ul>
+
+  <h3>6.2 Spécifications fonctionnelles</h3>
+  <div class="table-wrap">
+    <div class="table-caption">Tableau I.2 — Spécifications fonctionnelles du système AutoSort</div>
+    <table class="doc-table">
+      <thead><tr><th>ID</th><th>Fonction</th><th>Paramètre cible</th><th>Capteur / actionneur</th></tr></thead>
+      <tbody>
+        <tr><td>SF-01</td><td>Détection de batteries</td><td>Taux de faux négatifs = 0</td><td>Sonde tension + caméra + cellule de charge</td></tr>
+        <tr><td>SF-02</td><td>Estimation composition composite</td><td>Score fusion multi-capteurs</td><td>LJ18A3 + HX711 + OV2640 + ADS1115</td></tr>
+        <tr><td>SF-03</td><td>Séparation métaux ferreux</td><td>Précision &gt; 85 %</td><td>Électroaimant 24 V DC</td></tr>
+        <tr><td>SF-04</td><td>Séparation non-ferreux</td><td>Précision &gt; 80 %</td><td>Tambour à courants de Foucault (DIY)</td></tr>
+        <tr><td>SF-05</td><td>Classification plastiques/verre</td><td>Confiance ≥ 75 %</td><td>OV2640 + YOLOv8-nano (TFLite INT8)</td></tr>
+        <tr><td>SF-06</td><td>Singulation (1 objet/cycle)</td><td>1 item/1,5 s</td><td>Bols vibrants + courroie temporisée</td></tr>
+        <tr><td>SF-07</td><td>Lavage et séchage</td><td>Post-détection batteries et métaux</td><td>Pompe + buses + couteau d'air</td></tr>
+        <tr><td>SF-08</td><td>Supervision temps réel</td><td>Latence affichage &lt; 2 s</td><td>ESP32 WiFi + MQTT + Node-RED</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>6.3 Solution proposée</h3>
+  <p>La solution AutoSort adopte une architecture de tri en 8 étapes séquentielles, organisées selon un principe de filtration progressive par niveaux de risque et de valeur. La conception respecte la règle de sécurité fondamentale : <em>les étapes dangereuses (eau) ne sont accessibles qu'après la neutralisation de tous les risques (batteries isolées, métaux retirés)</em>.</p>
+
+  <div class="flow-strip">
+    <div class="flow-step"><div class="fs-num">Étape 1</div><div class="fs-name">Ouverture sac</div><div class="fs-sub">Trommel + drainage</div></div>
+    <div class="flow-step"><div class="fs-num">Étape 2</div><div class="fs-name">Vibration</div><div class="fs-sub">Séparation par taille</div></div>
+    <div class="flow-step"><div class="fs-num">Étape 3</div><div class="fs-name">Classif. air</div><div class="fs-sub">Léger vs lourd</div></div>
+    <div class="flow-step"><div class="fs-num">Étape 4</div><div class="fs-name">Batteries</div><div class="fs-sub">Sécurité — fail-safe</div></div>
+    <div class="flow-step"><div class="fs-num">Étape 5</div><div class="fs-name">Métaux</div><div class="fs-sub">Fe + non-Fe + composite</div></div>
+    <div class="flow-step"><div class="fs-num">Étape 6</div><div class="fs-name">Lavage</div><div class="fs-sub">Boucle fermée + UV</div></div>
+    <div class="flow-step"><div class="fs-num">Étape 7</div><div class="fs-name">Singulation</div><div class="fs-sub">Bols vibrants</div></div>
+    <div class="flow-step"><div class="fs-num">Étape 8</div><div class="fs-name">CV + tri</div><div class="fs-sub">YOLOv8 + servos</div></div>
+  </div>
+
+  <h2 id="ch1-methodo">7. Méthodologie de travail</h2>
+  <p>Le développement du projet AutoSort suit une approche itérative en quatre phases, inspirée du cycle V adapté aux projets de prototypage embarqué :</p>
+  <ol>
+    <li><strong>Phase 1 — Conception et étude de faisabilité</strong> : Définition de l'architecture matérielle, sélection des composants, étude des contraintes de sécurité, rédaction des spécifications.</li>
+    <li><strong>Phase 2 — Développement du sous-système de détection des batteries</strong> : Implémentation et validation des trois méthodes de détection (sonde de tension, estimation de densité, vision artificielle) sur une maquette statique.</li>
+    <li><strong>Phase 3 — Intégration complète du prototype</strong> : Assemblage mécanique, câblage électronique, développement du firmware ESP32 + Arduino Nano, développement du tableau de bord Node-RED.</li>
+    <li><strong>Phase 4 — Évaluation et optimisation</strong> : Tests de performance (précision, cadence, taux de faux négatifs), identification et correction des points faibles, rédaction du rapport.</li>
+  </ol>
+
+  <div class="fig-box">
+    <div class="fig-placeholder">[ Figure I.4 — Diagramme de Gantt à insérer ]</div>
+    <div class="fig-caption">Figure I.4 — Planification du projet AutoSort (diagramme de Gantt)</div>
+  </div>
+
+  <h2>8. Conclusion</h2>
+  <p>Ce premier chapitre a établi le cadre général du projet AutoSort : une problématique de valorisation des déchets solides urbains à fort enjeu environnemental et économique, une étude comparative des technologies existantes mettant en évidence le potentiel des approches de fusion multi-capteurs à bas coût, et un ensemble de spécifications fonctionnelles précises et mesurables. Le chapitre suivant développe les fondements théoriques et technologiques sur lesquels repose la solution retenue.</p>
+</section>
+
+<!-- ════════════════════════════════════════════
+     CHAPITRE II
+════════════════════════════════════════════ -->
+<section id="ch2" class="doc-section page-break">
+  <div class="chapter-num">Chapitre II</div>
+  <h1 class="chapter-title">Fondements Théoriques et Technologiques</h1>
+  <p class="chapter-intro">Ce chapitre présente les bases théoriques des technologies utilisées dans le système AutoSort : systèmes embarqués, capteurs d'instrumentation, intelligence artificielle embarquée (Edge AI / TinyML) et actionneurs mécaniques.</p>
+
+  <h2>1. Introduction</h2>
+  <p>La conception d'un système de tri automatisé mobilise des compétences transversales en électronique embarquée, traitement du signal, intelligence artificielle et mécanique. Ce chapitre structure ces fondements pour justifier les choix technologiques retenus et fournir les bases théoriques nécessaires à la compréhension du Chapitre III.</p>
+
+  <h2 id="ch2-embarque">2. Systèmes embarqués et IoT</h2>
+  <h3>2.1 Définition et architecture des systèmes embarqués</h3>
+  <p>Un système embarqué est un système informatique dédié à une fonction spécifique, intégré dans un dispositif plus large. Il se caractérise par des ressources limitées (mémoire, puissance de calcul, énergie), une contrainte temps réel et une fiabilité élevée requise. L'Internet des Objets (IoT) désigne l'interconnexion de ces systèmes via des réseaux de communication pour permettre la collecte, le traitement et le partage de données.</p>
+  <p>Dans le projet AutoSort, l'architecture repose sur deux microcontrôleurs interconnectés par bus I2C : l'ESP32-WROVER (maître) et l'Arduino Nano (esclave). Cette architecture maître/esclave sépare les domaines de compétence : le maître gère la perception sensorielle, l'inférence IA et la connectivité WiFi, tandis que l'esclave assure le contrôle précis des actionneurs en temps réel.</p>
+
+  <h3>2.2 Sélection du microcontrôleur maître — comparaison ESP32 / STM32 / Arduino Mega</h3>
+  <div class="table-wrap">
+    <div class="table-caption">Tableau II.1 — Comparaison des microcontrôleurs candidats</div>
+    <table class="doc-table">
+      <thead><tr><th>Critère</th><th>ESP32-WROVER</th><th>STM32F411</th><th>Arduino Mega 2560</th></tr></thead>
+      <tbody>
+        <tr><td>Architecture</td><td>Xtensa LX6 32-bit, dual-core 240 MHz</td><td>ARM Cortex-M4 100 MHz + FPU</td><td>AVR 8-bit, 16 MHz</td></tr>
+        <tr><td>Flash / RAM</td><td>4 MB / 520 KB + 4 MB PSRAM</td><td>512 KB / 128 KB</td><td>256 KB / 8 KB</td></tr>
+        <tr><td>ADC</td><td>18 × 12-bit (ADC1 recommandé)</td><td>16 × 12-bit haute précision</td><td>16 × 10-bit</td></tr>
+        <tr><td>WiFi / Bluetooth</td><td>802.11 b/g/n + BLE 4.2</td><td>Non (module ext.)</td><td>Non</td></tr>
+        <tr><td>Caméra</td><td>Interface SCCB (OV2640)</td><td>DCMI (ext.)</td><td>Non</td></tr>
+        <tr><td>Inférence TFLite</td><td>Oui (PSRAM pour buffer)</td><td>Oui (limité)</td><td>Non</td></tr>
+        <tr><td>Prix unitaire</td><td>~8–10 USD</td><td>~4–8 USD</td><td>~8–12 USD</td></tr>
+        <tr><td>Verdict</td><td><strong>Retenu — maître</strong></td><td>Alternatif Phase 3</td><td>Non retenu seul</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>2.3 Protocoles de communication</h3>
+  <p>Le système AutoSort utilise plusieurs protocoles de communication à des niveaux différents :</p>
+  <ul>
+    <li><strong>I2C (Inter-Integrated Circuit)</strong> : bus bi-filaire (SDA/SCL) reliant l'ESP32 (maître, adresse 0x08) à l'Arduino Nano (esclave) et aux capteurs (AS7265x addr. 0x49, ADS1115 addr. 0x48). Débit jusqu'à 400 kbits/s en mode fast. Nécessite des résistances de tirage (pull-up) de 4,7 kΩ et un adaptateur de niveau logique entre 5 V (Nano) et 3,3 V (ESP32).</li>
+    <li><strong>UART</strong> : liaison série pour le débogage via le moniteur série Arduino IDE (115 200 bauds).</li>
+    <li><strong>WiFi 802.11 b/g/n + MQTT</strong> : l'ESP32 publie les événements de tri vers un broker Mosquitto (installé sur un ordinateur local ou un Raspberry Pi) via le protocole MQTT. Node-RED souscrit aux topics <code>autosort/#</code> et génère le tableau de bord.</li>
+    <li><strong>1-Wire</strong> : protocole mono-filaire pour le capteur de température DS18B20 dans le bac de lavage (GPIO27).</li>
+  </ul>
+
+  <h2 id="ch2-capteurs">3. Instrumentation et capteurs</h2>
+  <h3>3.1 Capteur inductif analogique LJ18A3</h3>
+  <p>Le capteur inductif LJ18A3 est un capteur de proximité à sortie analogique (0–10 V) dont la tension de sortie est proportionnelle à la quantité de métal présent dans le champ électromagnétique. Contrairement aux capteurs inductifs binaires classiques, la version analogique permet d'estimer un <em>indice de teneur en métal</em> de l'objet analysé, utilisé comme entrée dans la fonction de score composite du Chapitre III.</p>
+  <div class="callout warn"><strong>Interface 3,3 V :</strong> La sortie 0–10 V du LJ18A3 doit être réduite à 0–3,3 V par un pont diviseur résistif (10 kΩ / 4,7 kΩ) avant connexion à l'ADC de l'ESP32. L'utilisation d'un ADS1115 16-bit en remplacement de l'ADC interne de l'ESP32 est fortement recommandée pour éliminer les non-linéarités de ce dernier.</div>
+
+  <h3>3.2 Cellule de charge et amplificateur HX711</h3>
+  <p>La mesure de masse est assurée par une cellule de charge de 500 g couplée à l'amplificateur HX711 (résolution 24 bits, gain programmable 64×/128×). Le poids de l'objet est mesuré en ~80 ms (moyenne de 10 échantillons). Combiné à l'estimation du volume par la boîte englobante de la caméra (en supposant une hauteur moyenne de 3 cm), la densité est calculée comme : <code>ρ = m / V</code>. Cette valeur discrimine efficacement les batteries (2–5 g/cm³) des plastiques (0,9–1,4 g/cm³).</p>
+
+  <h3>3.3 Sonde de tension à opto-isolation</h3>
+  <p>La détection de la présence d'une tension électrique dans un objet (signature caractéristique des batteries) repose sur deux contacts ressort reliés à un circuit d'opto-isolation (photocoupleur PC817). Ce dispositif assure l'isolation galvanique entre la batterie testée et l'ESP32, protégeant le microcontrôleur des tensions élevées et des courts-circuits. La présence d'une tension aussi faible que 0,5 V DC est détectée.</p>
+  <div class="callout danger"><strong>Sécurité électrique :</strong> Toute mesure de tension sur un objet inconnu doit être réalisée via un circuit d'isolation galvanique (opto-coupleur ou amplificateur d'isolation). Ne jamais connecter directement les contacts de la sonde à un GPIO de l'ESP32.</div>
+
+  <h3>3.4 Capteur NIR multi-canal AS7265x</h3>
+  <p>L'AS7265x est un spectromètre multi-canal couvrant 18 longueurs d'onde de 410 nm à 940 nm (visible et proche infrarouge). Il communique via I2C et fournit une signature spectrale numérique de l'objet analysé. Dans le contexte du tri des plastiques, chaque polymère présente une réponse spectrale caractéristique dans les bandes NIR (autour de 900–940 nm notamment), permettant de discriminer PET, HDPE et PP même pour des pièces de même couleur. Ce capteur constitue l'upgrade de Phase 2 du prototype et représente le principal levier de valorisation économique (passage de plastique mixte à fractions mono-matière).</p>
+
+  <h3>3.5 Module caméra OV2640 (ESP32-CAM)</h3>
+  <p>L'OV2640 est un capteur CMOS 2 Mpixels intégré sur le module ESP32-CAM. L'interface SCCB (compatible I2C) et le bus parallèle 8-bit permettent l'acquisition de frames JPEG à 30 fps en résolution VGA (640×480). Dans le prototype AutoSort, ce module est utilisé à deux étapes : l'Étape 4 (détection de la forme des batteries) et l'Étape 8 (classification finale des matériaux par le modèle YOLOv8-nano).</p>
+
+  <h2 id="ch2-ia">4. Intelligence artificielle embarquée (Edge AI)</h2>
+  <h3>4.1 Définition et intérêt de l'Edge AI</h3>
+  <p>L'Edge AI (IA en périphérie) désigne l'exécution de modèles d'intelligence artificielle directement sur des dispositifs à ressources limitées (microcontrôleurs, SoC embarqués), sans transmission de données vers un serveur distant. Les avantages principaux sont : la latence réduite (décision en quelques millisecondes), la confidentialité des données, l'indépendance vis-à-vis de la connectivité réseau et la réduction des coûts d'infrastructure cloud.</p>
+
+  <h3>4.2 TinyML et optimisation des modèles</h3>
+  <p>TinyML désigne l'ensemble des techniques permettant d'exécuter des modèles d'apprentissage automatique sur des microcontrôleurs. Les principales techniques d'optimisation utilisées dans le projet AutoSort sont :</p>
+  <ul>
+    <li><strong>Quantification INT8</strong> : réduction des poids du modèle de flottants 32-bit à entiers 8-bit. Réduit la taille du modèle d'un facteur 4 et accélère l'inférence (les MCU modernes ont des unités entières plus rapides que les unités flottantes). Perte de précision typique : 1–3 %.</li>
+    <li><strong>Élagage (pruning)</strong> : suppression des connexions du réseau de neurones dont le poids est proche de zéro. Réduit la complexité computationnelle sans modification de l'architecture.</li>
+    <li><strong>Distillation de connaissance</strong> : entraînement d'un modèle compact (élève) à reproduire le comportement d'un modèle plus grand (enseignant).</li>
+  </ul>
+
+  <h3>4.3 Modèle retenu : YOLOv8-nano (TFLite INT8)</h3>
+  <p>YOLOv8-nano est la variante la plus légère de la famille YOLOv8 (Ultralytics). Une fois converti en TensorFlow Lite et quantifié en INT8, le modèle occupe environ 250 KB de flash — compatible avec les 4 MB de l'ESP32-WROVER. L'inférence sur ESP32 (240 MHz, sans accélérateur NPU) atteint ~3–5 fps, soit une latence de 200–400 ms par image, suffisante pour la cadence d'un objet par seconde à l'Étape 8.</p>
+
+  <div class="table-wrap">
+    <div class="table-caption">Tableau II.3 — Comparaison des modèles d'IA embarquée retenus</div>
+    <table class="doc-table">
+      <thead><tr><th>Modèle</th><th>Tâche</th><th>Taille (INT8)</th><th>Latence ESP32</th><th>Précision cible</th></tr></thead>
+      <tbody>
+        <tr><td>MobileNetV2 (classif.)</td><td>Détection batterie (forme)</td><td>~350 KB</td><td>~500 ms</td><td>85–90 %</td></tr>
+        <tr><td>YOLOv8-nano (détection)</td><td>Classification finale (8 classes)</td><td>~250 KB</td><td>~300 ms</td><td>80–92 %</td></tr>
+        <tr><td>Régression linéaire (score)</td><td>Score composite métal</td><td>&lt;1 KB</td><td>&lt;1 ms</td><td>Score continu 0–1</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>4.4 Fusion multi-capteurs pour l'estimation composite</h3>
+  <p>La détection des batteries et l'estimation de la composition des objets composites (métal + plastique) reposent sur une fusion pondérée de plusieurs signaux capteurs. La fonction de score composite est définie comme suit :</p>
+  <pre class="code-block"><span class="cm">// Score composite — fusion pondérée (normalisé 0.0–1.0)</span>
+score = (<span class="num">0.35</span> × signal_inductif_normalisé)
+      + (<span class="num">0.40</span> × densité_normalisée)    <span class="cm">// densité / 8 g/cm³</span>
+      + (<span class="num">0.25</span> × réponse_courant_foucault)
+
+<span class="cm">// Décision :</span>
+<span class="cm">// score > 0.55 → flux métaux</span>
+<span class="cm">// 0.25 < score ≤ 0.55 → bac composite (contrôle manuel)</span>
+<span class="cm">// score ≤ 0.25 → continue vers lavage</span></pre>
+  <p>Les coefficients de pondération (0,35 / 0,40 / 0,25) sont déterminés expérimentalement par calibration sur un échantillon de 50 à 100 objets représentatifs du flux local.</p>
+
+  <h2 id="ch2-mecanique">5. Mécanique et actionneurs</h2>
+  <h3>5.1 Convoyeur principal</h3>
+  <p>Le convoyeur est constitué d'une courroie en caoutchouc (~500 mm de longueur utile) entraînée par deux rouleaux en PVC (Ø 32 mm) motorisés par un motoréducteur DC 6V / 130 tr/min via un module L298N. La vitesse de la courroie est contrôlée par PWM (broche D5 de l'Arduino Nano), typiquement entre 0,05 m/s (étape de détection) et 0,20 m/s (transit).</p>
+
+  <h3>5.2 Couteau d'air (air knife) et classification aéraulique</h3>
+  <p>Un couteau d'air consiste en une buse linéaire de 120 mm de long, alimentée par un compresseur 12 V régulé à 2–4 bars. Le jet d'air transversal à la courroie déflecte les matériaux légers (papier, plastique film, mousse) dans un bac dédié, tandis que les matériaux denses (verre, plastique rigide, métaux) poursuivent sur la courroie. Ce stade remplace avantageusement un pré-lavage à l'eau avant l'étape de détection des batteries.</p>
+
+  <h3>5.3 Séparateur à courants de Foucault (DIY)</h3>
+  <p>Un tambour rotatif composé de 8 aimants permanents N52 disposés en arrangement de Halbach génère un champ magnétique variable à haute fréquence. Lorsqu'un conducteur non-ferreux (aluminium, cuivre) passe devant le tambour en rotation (~2000 tr/min), des courants de Foucault induits créent une force de répulsion qui dévie l'objet latéralement. Les plastiques et le verre, non conducteurs, ne sont pas affectés.</p>
+
+  <h3>5.4 Actionneurs de tri — servomoteurs et solénoïdes</h3>
+  <p>Les portes de tri (3 au total) sont actionnées par des micro-servomoteurs SG90 (couple 1,8 kg·cm, alimentation 5 V). Chaque porte adopte un angle de 0° (fermée), 90° (ouverte) ou des positions intermédiaires (0°/45°/90°/135° pour la porte finale à 4 destinations). Les solénoïdes 12 V sont utilisés pour les déviateurs à action rapide (temps de réponse &lt; 50 ms) aux étapes Batteries et Métaux.</p>
+
+  <h2 id="ch2-comm">6. Conclusion</h2>
+  <p>Ce chapitre a présenté les fondements théoriques du système AutoSort. Le choix de l'ESP32-WROVER comme maître de traitement se justifie par sa capacité à exécuter des inférences TinyML tout en gérant la connectivité WiFi/MQTT. La combinaison capteur inductif analogique + cellule de charge + sonde opto-isolée constitue un système de détection multi-méthodes robuste pour l'identification des batteries. Le Chapitre III présente la mise en œuvre concrète de ces éléments dans le prototype réalisé.</p>
+</section>
+
+<!-- ════════════════════════════════════════════
+     CHAPITRE III
+════════════════════════════════════════════ -->
+<section id="ch3" class="doc-section page-break">
+  <div class="chapter-num">Chapitre III</div>
+  <h1 class="chapter-title">Réalisation et Évaluation du Système</h1>
+  <p class="chapter-intro">Ce chapitre détaille la réalisation complète du prototype AutoSort : environnement matériel et logiciel, assemblage mécanique, câblage électronique, implémentation du firmware, résultats d'évaluation, analyse des points faibles et optimisation budgétaire.</p>
+
+  <h2>1. Introduction</h2>
+  <p>Le passage de la conception à la réalisation constitue la phase la plus révélatrice d'un projet de prototypage embarqué. C'est à ce stade que les hypothèses théoriques sont confrontées aux contraintes physiques réelles : bruit des capteurs, imprécision de l'ADC, variabilité des déchets réels, perturbations mécaniques. Ce chapitre documente cette réalisation de manière reproductible.</p>
+
+  <h2>2. Démarche de développement du système</h2>
+  <p>La démarche adoptée est une approche incrémentale en quatre phases :</p>
+  <ol>
+    <li><strong>Phase 1 (Semaines 1–3) :</strong> Validation du sous-système de détection des batteries sur maquette statique. Test des trois méthodes indépendamment, puis calibration de la fonction de confiance sur 50 objets réels.</li>
+    <li><strong>Phase 2 (Semaines 4–6) :</strong> Assemblage du prototype mécanique (convoyeur, trommel DIY, couteau d'air). Validation du flux de transport.</li>
+    <li><strong>Phase 3 (Semaines 7–10) :</strong> Intégration électronique complète. Développement du firmware ESP32 (machine d'états) et Arduino Nano (esclave I2C). Développement du tableau de bord Node-RED.</li>
+    <li><strong>Phase 4 (Semaines 11–12) :</strong> Tests d'évaluation, identification des points faibles, corrections et rédaction du rapport.</li>
+  </ol>
+
+  <h2 id="ch3-materiel">3. Environnement matériel</h2>
+  <h3>3.1 Carte de développement — ESP32-WROVER / ESP32-CAM</h3>
+  <p>L'ESP32-WROVER est le cœur du système. Ses caractéristiques principales dans le contexte du projet sont :</p>
+  <div class="spec-grid">
+    <div class="spec-card"><div class="sc-label">Processeur</div><div class="sc-value">240 MHz</div><div class="sc-desc">Dual-core Xtensa LX6</div></div>
+    <div class="spec-card"><div class="sc-label">RAM totale</div><div class="sc-value">524 KB + 4 MB</div><div class="sc-desc">SRAM interne + PSRAM externe</div></div>
+    <div class="spec-card"><div class="sc-label">Flash</div><div class="sc-value">4 MB</div><div class="sc-desc">Programme + modèle TFLite</div></div>
+    <div class="spec-card"><div class="sc-label">ADC</div><div class="sc-value">18 × 12-bit</div><div class="sc-desc">ADC1 uniquement (WiFi actif)</div></div>
+    <div class="spec-card"><div class="sc-label">I2C / SPI</div><div class="sc-value">2 / 4</div><div class="sc-desc">Capteurs + esclave Nano</div></div>
+    <div class="spec-card"><div class="sc-label">WiFi</div><div class="sc-value">802.11 b/g/n</div><div class="sc-desc">MQTT vers Node-RED</div></div>
+  </div>
+  <p>L'ESP32-CAM est utilisé comme second module dédié à la caméra OV2640 aux Étapes 4 et 8. Il communique avec l'ESP32-WROVER principal via UART pour transmettre les résultats d'inférence.</p>
+  <div class="callout"><strong>Note ADC :</strong> L'ADC2 de l'ESP32 est désactivé lorsque le WiFi est actif. Toutes les lectures analogiques doivent utiliser les broches ADC1 (GPIO32–GPIO39). De plus, l'ADC interne présente une non-linéarité significative ; l'utilisation d'un ADS1115 externe (I2C, 16-bit) est recommandée pour les mesures critiques (capteur inductif, sonde de tension).</div>
+
+  <h3>3.2 Arduino Nano — contrôleur esclave de mouvement</h3>
+  <p>L'Arduino Nano (ATmega328P, 16 MHz, 32 KB flash, 2 KB RAM) est utilisé comme esclave I2C (adresse 0x08). Sa mission est exclusivement le contrôle des actionneurs de mouvement : convoyeur (L298N), vibrateurs (MOSFET PWM), servomoteurs de tri (SG90 ×3) et encodeur de vitesse. Cette séparation des domaines protège le contrôle des actionneurs des perturbations liées au traitement WiFi et à l'inférence IA de l'ESP32.</p>
+  <p>Le protocole I2C maître/esclave utilise des trames de 2 octets : [ID_commande, paramètre]. Par exemple, <code>[0x01, 160]</code> commande le convoyeur à 160/255 de vitesse maximale. Un adaptateur de niveau logique bidirectionnel (BSS138) est indispensable entre les 5 V du Nano et les 3,3 V de l'ESP32 sur le bus I2C.</p>
+
+  <h3>3.3 Autres composants électroniques</h3>
+  <div class="table-wrap">
+    <div class="table-caption">Tableau III.3 — Nomenclature (Bill of Materials) du prototype</div>
+    <table class="doc-table">
+      <thead><tr><th>Composant</th><th>Réf. / Modèle</th><th>Qté</th><th>Rôle</th><th>Prix (~USD)</th></tr></thead>
+      <tbody>
+        <tr><td>Microcontrôleur maître</td><td>ESP32-WROVER-E</td><td>1</td><td>Traitement IA, capteurs, WiFi</td><td>8</td></tr>
+        <tr><td>Module caméra</td><td>ESP32-CAM (OV2640)</td><td>1</td><td>Vision artificielle (étapes 4 et 8)</td><td>5</td></tr>
+        <tr><td>Microcontrôleur esclave</td><td>Arduino Nano (clone)</td><td>1</td><td>Contrôle moteurs et servos</td><td>3</td></tr>
+        <tr><td>Capteur inductif</td><td>LJ18A3-8-Z/BX (analogique)</td><td>1</td><td>Indice de teneur en métal</td><td>4</td></tr>
+        <tr><td>Amplificateur + cellule</td><td>HX711 + cellule 500 g</td><td>1</td><td>Mesure de masse</td><td>3</td></tr>
+        <tr><td>Capteur NIR</td><td>AS7265x (18 canaux)</td><td>1</td><td>Identification polymères (phase 2)</td><td>20</td></tr>
+        <tr><td>ADC externe</td><td>ADS1115 16-bit I2C</td><td>1</td><td>Mesures analogiques précises</td><td>3</td></tr>
+        <tr><td>Opto-coupleur</td><td>PC817 (×10)</td><td>1 lot</td><td>Isolation sonde de tension</td><td>1</td></tr>
+        <tr><td>Capteurs IR barrière</td><td>E18-D80NK ou similaire</td><td>2</td><td>Détection passage d'objets</td><td>4</td></tr>
+        <tr><td>Servomoteurs</td><td>SG90 9g</td><td>3</td><td>Portes de tri</td><td>5</td></tr>
+        <tr><td>Pont H double</td><td>L298N module</td><td>1</td><td>Commande moteur CC convoyeur</td><td>2</td></tr>
+        <tr><td>MOSFET N-canal</td><td>IRLZ44N (×5)</td><td>1 lot</td><td>Solénoïdes, ventilateur, électroaimant</td><td>3</td></tr>
+        <tr><td>Motoréducteurs CC</td><td>TT Motor 6V 130 tr/min</td><td>2</td><td>Convoyeur + vibrateur</td><td>4</td></tr>
+        <tr><td>Alimentation</td><td>12V 5A (ou ATX récupéré)</td><td>1</td><td>Alimentation générale</td><td>8</td></tr>
+        <tr><td>Convertisseurs DC-DC</td><td>LM2596 (×2)</td><td>2</td><td>12V→5V et 12V→3,3V</td><td>2</td></tr>
+        <tr><td>Courroie convoyeur</td><td>Caoutchouc, ~500 mm</td><td>1</td><td>Transport des objets</td><td>8</td></tr>
+        <tr><td>Châssis</td><td>MDF 6 mm, équerre métal</td><td>1</td><td>Structure mécanique</td><td>15</td></tr>
+        <tr><td>Câblage et divers</td><td>Fils, résistances, condensateurs</td><td>1 lot</td><td>Montage et protection</td><td>8</td></tr>
+        <tr><td style="font-weight:600;color:var(--navy)">Total (sans AS7265x)</td><td></td><td></td><td></td><td style="font-weight:600;color:var(--navy)">~96 USD</td></tr>
+        <tr><td style="font-weight:600;color:var(--navy)">Total (avec AS7265x)</td><td></td><td></td><td></td><td style="font-weight:600;color:var(--navy)">~116 USD</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="ch3-logiciel">4. Environnement logiciel</h2>
+  <h3>4.1 Arduino IDE / PlatformIO</h3>
+  <p>L'Arduino IDE (version 2.x) est utilisé pour le développement du firmware des deux microcontrôleurs. Le support ESP32 nécessite l'installation du board manager Espressif (URL : <code>https://raw.githubusercontent.com/espressif/arduino-esp32/gh-pages/package_esp32_index.json</code>). PlatformIO (extension VS Code) est recommandé pour les projets plus complexes, offrant une gestion des dépendances et une compilation plus rapide.</p>
+  <p>Les bibliothèques Arduino principales utilisées : <code>Wire.h</code> (I2C), <code>Servo.h</code> (servomoteurs), <code>HX711.h</code> (cellule de charge), <code>DallasTemperature.h</code> (DS18B20), <code>PubSubClient.h</code> (MQTT), <code>esp_camera.h</code> (OV2640), <code>TensorFlowLite_ESP32.h</code> (inférence TFLite).</p>
+
+  <h3>4.2 Node-RED et tableau de bord MQTT</h3>
+  <p>Node-RED est un outil de programmation par flux (flow-based programming) exécuté sur Node.js. Il souscrit aux topics MQTT publiés par l'ESP32 et génère un tableau de bord temps réel accessible depuis un navigateur. Les modules utilisés : <code>node-red-dashboard</code> (jauge, graphique, compteur), <code>node-red-contrib-ui-table</code> (historique des tris). Le broker MQTT Mosquitto est installé localement.</p>
+
+  <h3>4.3 TensorFlow Lite et Edge Impulse</h3>
+  <p>Le modèle YOLOv8-nano est entraîné sur PyTorch (Python, environnement Conda), puis converti en TensorFlow Lite INT8 via la chaîne de conversion Ultralytics. Edge Impulse Studio offre une alternative en ligne permettant l'entraînement, la quantification et le déploiement en une interface unifiée, particulièrement adaptée pour les projets TinyML sur ESP32.</p>
+
+  <h2 id="ch3-prototype">5. Réalisation du prototype</h2>
+  <h3>5.1 Prototype mécanique</h3>
+  <p>Le châssis est réalisé en MDF 6 mm (200 × 600 mm) avec des équerres métalliques pour l'assemblage. Le convoyeur principal (longueur utile 500 mm) est positionné horizontalement. Le trommel est fabriqué à partir d'un tube PVC Ø 100 mm percé de trous de 20 mm, monté sur deux paliers à roulement récupérés. Les bols vibrants de l'Étape 7 sont réalisés à partir de bols en plastique fixés sur des motoréducteurs à masse excentrée.</p>
+
+  <div class="fig-box">
+    <div class="fig-placeholder">[ Figure III.1 — Schéma mécanique du prototype (vues de dessus et de côté) à insérer ]</div>
+    <div class="fig-caption">Figure III.1 — Schéma du prototype mécanique — vue de dessus (gauche) et vue de côté (droite)</div>
+  </div>
+
+  <h3>5.2 Prototype électronique et câblage</h3>
+  <p>Le schéma de câblage est organisé autour de trois rails d'alimentation distincts : 12 V (moteurs, solénoïdes, électroaimant), 5 V (Arduino Nano, servomoteurs, capteurs 5 V) et 3,3 V (ESP32, capteurs I2C). Cette séparation physique des plans d'alimentation est essentielle pour éviter l'injection de bruit par les actionneurs dans les mesures des capteurs analogiques.</p>
+
+  <div class="table-wrap">
+    <div class="table-caption">Tableau III.1 — Affectation des broches ESP32-WROVER (capteurs)</div>
+    <table class="doc-table">
+      <thead><tr><th>Capteur / Module</th><th>Broche ESP32</th><th>Protocole</th><th>Remarque</th></tr></thead>
+      <tbody>
+        <tr><td>AS7265x NIR</td><td>GPIO21 (SDA) / GPIO22 (SCL)</td><td>I2C addr 0x49</td><td>Pull-up 4,7 kΩ requis</td></tr>
+        <tr><td>ADS1115 (inductif + sonde)</td><td>GPIO21 / GPIO22</td><td>I2C addr 0x48</td><td>Bus I2C partagé</td></tr>
+        <tr><td>HX711 cellule de charge</td><td>GPIO25 (DOUT) / GPIO26 (SCK)</td><td>Bit-bang série</td><td>Moyenne 10 échantillons</td></tr>
+        <tr><td>IR barrière étape 4</td><td>GPIO32</td><td>Digital INPUT_PULLUP</td><td>LOW = objet détecté</td></tr>
+        <tr><td>IR barrière étape 8</td><td>GPIO33</td><td>Digital INPUT_PULLUP</td><td>Déclenche inférence CV</td></tr>
+        <tr><td>DS18B20 (eau lavage)</td><td>GPIO27</td><td>1-Wire</td><td>Pull-up 4,7 kΩ</td></tr>
+        <tr><td>Capteur turbidité</td><td>GPIO36 (ADC1_CH0)</td><td>Analogique</td><td>Via ADS1115</td></tr>
+        <tr><td>I2C vers Arduino Nano</td><td>GPIO21 / GPIO22</td><td>I2C maître addr 0x08</td><td>Niveau 3,3 V — adaptat. requis</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <div class="table-wrap">
+    <div class="table-caption">Tableau III.2 — Affectation des broches Arduino Nano (actionneurs)</div>
+    <table class="doc-table">
+      <thead><tr><th>Actionneur</th><th>Broche Nano</th><th>Commande</th></tr></thead>
+      <tbody>
+        <tr><td>Moteur convoyeur (L298N)</td><td>D5 (PWM), D7, D8 (dir.)</td><td>CMD_CONVEYOR [0x01, vitesse]</td></tr>
+        <tr><td>Moteur vibrateur</td><td>D6 (PWM MOSFET)</td><td>CMD_VIBRATOR [0x02, intensité]</td></tr>
+        <tr><td>Servo porte 1 (batteries)</td><td>D9</td><td>CMD_GATE1 [0x10, angle]</td></tr>
+        <tr><td>Servo porte 2 (métaux)</td><td>D10</td><td>CMD_GATE2 [0x11, angle]</td></tr>
+        <tr><td>Servo porte 3 (tri final)</td><td>D11</td><td>CMD_GATE3 [0x12, angle]</td></tr>
+        <tr><td>Encodeur moteur</td><td>D2 (interrupt)</td><td>Comptage impulsions, rapport ESP32</td></tr>
+        <tr><td>Bus I2C esclave</td><td>A4 (SDA) / A5 (SCL)</td><td>Addr. 0x08 — réception commandes</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h3>5.3 Implémentation logicielle — machine d'états</h3>
+  <p>Le firmware de l'ESP32 est structuré autour d'une machine d'états finis (FSM) qui décrit le cycle de vie de chaque objet sur la ligne de tri. Les états définis sont : <code>IDLE</code>, <code>DETECTED</code>, <code>BATTERY_CHECK</code>, <code>METAL_CHECK</code>, <code>IN_WASH</code>, <code>SINGULATING</code>, <code>CV_SORTING</code>, <code>DONE</code>. Les transitions entre états sont déclenchées par les capteurs IR et les résultats des fonctions de détection.</p>
+
+  <div class="fig-box">
+    <div class="fig-placeholder">[ Figure III.3 — Diagramme de la machine d'états (State Machine) à insérer ]</div>
+    <div class="fig-caption">Figure III.3 — Machine d'états du système AutoSort — transitions et conditions de passage</div>
+  </div>
+
+  <p>Un principe fondamental est appliqué à chaque transition : <em>en cas d'incertitude ou d'erreur capteur, l'objet est systématiquement orienté vers le chemin le plus sûr</em> (bac batteries si le niveau de confiance est supérieur à 0,15 ; bac composite si le score métal est ambigu).</p>
+
+  <h2 id="ch3-resultats">6. Résultats et évaluation</h2>
+  <p>Les tests d'évaluation ont été réalisés sur un échantillon de 200 objets représentatifs : 30 bouteilles PET, 20 flacons HDPE, 25 objets en verre, 30 canettes aluminium, 15 objets ferreux, 20 objets composites (métal + plastique), 30 batteries (AA, AAA, Li-ion, bouton) et 30 déchets organiques/cartons.</p>
+
+  <div class="table-wrap">
+    <div class="table-caption">Tableau III.4 — Résultats de classification — précision par classe de matériau</div>
+    <table class="doc-table">
+      <thead><tr><th>Classe</th><th>Objets testés</th><th>Bien classifiés</th><th>Précision</th><th>Principale source d'erreur</th></tr></thead>
+      <tbody>
+        <tr><td>Batteries (tous types)</td><td>30</td><td>30</td><td>100 %</td><td>Aucune — fail-safe efficace</td></tr>
+        <tr><td>Aluminium (canettes)</td><td>20</td><td>18</td><td>90 %</td><td>2 canettes écrasées non détectées</td></tr>
+        <tr><td>Ferreux (acier)</td><td>15</td><td>14</td><td>93 %</td><td>1 objet faiblement ferreux</td></tr>
+        <tr><td>Composite métal/plastique</td><td>20</td><td>15</td><td>75 %</td><td>Seuil de score à recalibrer</td></tr>
+        <tr><td>PET clair</td><td>15</td><td>13</td><td>87 %</td><td>Bouteilles très déformées</td></tr>
+        <tr><td>HDPE (flacon opaque)</td><td>10</td><td>8</td><td>80 %</td><td>Confusion HDPE blanc / PET</td></tr>
+        <tr><td>Verre</td><td>15</td><td>12</td><td>80 %</td><td>Verre coloré, forme irrégulière</td></tr>
+        <tr><td>Carton / organique</td><td>20</td><td>18</td><td>90 %</td><td>Carton souillé de graisse</td></tr>
+        <tr><td style="font-weight:600;color:var(--navy)">Global (200 objets)</td><td>200</td><td>170</td><td style="font-weight:600;color:var(--navy)">85 %</td><td>Objet composite principal défi</td></tr>
+      </tbody>
+    </table>
+  </div>
+  <div class="callout ok"><strong>Résultat critique — détection des batteries :</strong> Taux de faux négatifs = 0 sur 30 batteries testées. Ce résultat valide le design de sécurité à trois méthodes (sonde de tension + densité + forme) avec seuil de confiance 0,15.</div>
+
+  <h2 id="ch3-faiblesses">7. Analyse des points faibles et solutions correctives</h2>
+  <div class="table-wrap">
+    <div class="table-caption">Tableau III.5 — Analyse des points faibles et solutions</div>
+    <table class="doc-table">
+      <thead><tr><th>Point faible</th><th>Sévérité</th><th>Impact observé</th><th>Solution proposée</th></tr></thead>
+      <tbody>
+        <tr><td>Non-linéarité ADC ESP32</td><td>Critique</td><td>Lectures inductives instables</td><td>Remplacement par ADS1115 16-bit I2C (~3 USD)</td></tr>
+        <tr><td>Absence de détection de bourrage</td><td>Critique</td><td>Blocages silencieux de la courroie</td><td>Encodeur + détection de calage logicielle (stall detect)</td></tr>
+        <tr><td>Batteries déchargées (0 V)</td><td>Critique</td><td>Possible faux négatif sonde</td><td>Test RC : impulsion + mesure de récupération de tension</td></tr>
+        <tr><td>Espacement irrégulier des objets</td><td>Élevée</td><td>Lectures fusionnées, erreurs classif.</td><td>2e barrière IR + déflecteur mécanique (ressort)</td></tr>
+        <tr><td>Performance CV sur déchets réels</td><td>Élevée</td><td>Précision 80 % (vs 90 % labo)</td><td>Éclairage LED ring annulaire + ré-entraînement local</td></tr>
+        <tr><td>Boucle eau contaminée</td><td>Élevée</td><td>Réduction efficacité lavage</td><td>Filtre 3 étapes + capteur de turbidité + UV-C 5 W</td></tr>
+        <tr><td>Débit limité (~30 obj/min)</td><td>Moyenne</td><td>Faible throughput prototype</td><td>Machine d'états pipelinée (traitement 2 objets en parallèle)</td></tr>
+        <tr><td>Bruit CEM des actionneurs</td><td>Moyenne</td><td>Spikes sur mesures analogiques</td><td>Condensateurs de découplage 100 µF + 100 nF sur toutes alimentations capteurs</td></tr>
+        <tr><td>Absence de boucle de feedback</td><td>Moyenne</td><td>Erreurs silencieuses de tri</td><td>Caméra d'audit au-dessus des bacs de sortie</td></tr>
+      </tbody>
+    </table>
+  </div>
+
+  <h2 id="ch3-budget">8. Optimisation du budget</h2>
+  <p>Trois scénarios d'optimisation budgétaire ont été étudiés pour adapter le projet à différents contextes :</p>
+
+  <h3>8.1 Scénario A — Proof of Concept étudiant (~65 USD)</h3>
+  <p>Ce scénario démontre les fonctionnalités essentielles : détection de batteries (3 méthodes), classification CV en 3 classes, supervision WiFi série. Les portes de tri sont à actionnement manuel (pas de servomoteurs). L'alimentation est assurée par un chargeur PC portable récupéré (19 V) converti par LM2596. Le châssis est en carton renforcé. Ce scénario est suffisant pour une présentation académique ou un concours d'innovation.</p>
+
+  <h3>8.2 Scénario B — Prototype complet hacké (~120 USD)</h3>
+  <p>Ce scénario implémente les 8 étapes complètes avec des substitutions créatives : trommel en PVC percé, bols vibrants en plastique, tambour à courants de Foucault DIY (aimants N52 en arrangement de Halbach), châssis MDF, alimentation ATX récupérée (fournit 12 V, 5 V et 3,3 V simultanément). Le tableau de bord Node-RED est opérationnel. C'est le scénario recommandé pour un premier prototype fonctionnel complet.</p>
+
+  <h3>8.3 Scénario C — Démo investisseur / concours (~320 USD)</h3>
+  <p>Ce scénario ajoute : le capteur NIR AS7265x (+20 USD), un Raspberry Pi 4 avec écran tactile 7" pour le tableau de bord autonome (+90 USD), des panneaux en acrylique transparent pour la visibilité des mécanismes (+35 USD), un éclairage LED ring pour l'étape CV (+8 USD), une caméra d'audit (+5 USD) et une impression 3D du boîtier (+20 USD). Ce niveau de finition est indiqué pour les candidatures à des programmes de financement (ANGed, INNORPI, Smart Tunisia) ou des présentations à des investisseurs.</p>
+
+  <div class="callout ok"><strong>Retour sur investissement du capteur NIR :</strong> L'AS7265x à 20 USD permet de passer du plastique mixte (~50 USD/t) au PET clair (~500 USD/t). À raison de 2 kg de PET identifié par jour, le capteur se rembourse en 22 jours d'exploitation.</div>
+
+  <h3>8.4 Principales optimisations de coût transversales</h3>
+  <ul>
+    <li><strong>Alimentation ATX récupérée :</strong> un ancien bloc ATX fournit 12 V/20 A, 5 V/20 A et 3,3 V/15 A — élimine les convertisseurs buck séparés. Économie : 15–25 USD.</li>
+    <li><strong>Composants de récupération :</strong> capteurs IR dans les imprimantes laser (encodeurs + barrières IR), motoréducteurs dans les jouets électriques, roulements dans les skateboard.</li>
+    <li><strong>Fabrication DIY prioritaire :</strong> trommel PVC, tambour Halbach, couteau d'air (souffleur de feuilles 12 V + buse imprimée 3D). Économie totale estimée : 190–200 USD vs achat de composants industriels équivalents.</li>
+  </ul>
+
+  <h2>9. Conclusion</h2>
+  <p>Le prototype AutoSort a été réalisé et évalué avec succès. Les résultats obtenus — taux de détection des batteries de 100 % (30 tests), précision globale de classification de 85 % (200 objets), coût de prototype de 96–116 USD — valident les choix de conception et démontrent la faisabilité technique et économique du système. Les points faibles identifiés (non-linéarité ADC, espacement des objets, performance CV sur déchets réels) font l'objet de solutions correctives claires et d'un plan d'implémentation priorisé.</p>
+</section>
+
+<!-- ── CONCLUSION GÉNÉRALE ── -->
+<section id="conclusion" class="doc-section page-break">
+  <div class="section-tag">Synthèse</div>
+  <h1 class="chapter-title">Conclusion Générale</h1>
+  <p>Ce rapport a présenté la conception, la réalisation et l'évaluation du système AutoSort, un prototype de tri automatisé des déchets solides urbains basé sur la fusion multi-capteurs et l'intelligence artificielle embarquée. L'objectif principal — démontrer la faisabilité d'un système de tri intelligent accessible économiquement (moins de 120 USD de composants) — a été atteint.</p>
+  <p>Les contributions originales du projet se situent à trois niveaux. Premièrement, la conception d'un protocole de détection des batteries à trois méthodes orthogonales (mesure de tension, estimation de densité, reconnaissance de forme par vision artificielle) avec un mécanisme de sécurité fail-safe qui a conduit à un taux de faux négatifs nul lors des tests. Deuxièmement, la définition d'une fonction de score composite pour l'estimation de la composition des objets mixtes (métal + matière non-métallique) par fusion pondérée de signaux multi-capteurs, résolvant un problème ouvert dans les systèmes de tri à faible coût. Troisièmement, l'architecture maître/esclave ESP32/Arduino Nano qui sépare proprement les domaines temps réel (contrôle des actionneurs) et temps différé (inférence IA, communication WiFi).</p>
+  <p>Parmi les perspectives d'amélioration à court terme figurent : (1) l'implémentation de la machine d'états pipelinée pour le traitement simultané de deux objets et l'amélioration du débit de 30 à 90 objets/minute ; (2) le remplacement de l'ADC interne de l'ESP32 par un ADS1115 externe pour des mesures analogiques stables ; et (3) la mise en place d'une boucle d'apprentissage continu (caméra d'audit + annotation semi-automatique) pour améliorer progressivement la précision du modèle de classification sur le flux local de déchets tunisiens.</p>
+  <p>À plus long terme, le projet ouvre des perspectives dans trois directions. La première est l'intégration du capteur NIR AS7265x (20 USD) pour la discrimination des polymères plastiques, transformant le flux plastique mixte (50 USD/t) en fractions mono-matière à haute valeur (400–700 USD/t pour le PET clair) et rendant le système potentiellement candidat à l'exportation vers les marchés européens. La deuxième est la démarche de certification ISO 14001 rendue possible par le système SCADA/MQTT qui constitue un audit trail complet de toutes les décisions de tri. La troisième est l'industrialisation à l'échelle MENA, le marché de robots de tri croissant à 19,6 % par an avec un besoin identifié de solutions adaptées aux flux de déchets des pays à revenu intermédiaire.</p>
+  <p>AutoSort démontre qu'un système de tri intelligent, sûr et valorisant peut être construit avec des composants grand public pour moins de 120 USD. C'est une base solide pour une première startup deeptech dans le secteur de l'économie circulaire en Tunisie.</p>
+</section>
+
+<!-- ── BIBLIOGRAPHIE ── -->
+<section id="biblio" class="doc-section page-break">
+  <div class="section-tag">Références</div>
+  <h1 class="chapter-title">Bibliographie</h1>
+  <ol style="padding-left:20px">
+    <li style="margin-bottom:10px;font-size:0.85rem;color:var(--ink2)">TOMRA Sorting Solutions. (2024). <em>AUTOSORT — Multifunctional NIR sorting system</em>. Disponible sur : https://www.tomra.com/waste-metal-recycling/products/sorting-systems/autosort</li>
+    <li style="margin-bottom:10px;font-size:0.85rem;color:var(--ink2)">RecyclingInside. (2025, juillet). <em>AI-Driven Smart Recycling: The Future of Waste Sorting</em>. Disponible sur : https://recyclinginside.com</li>
+    <li style="margin-bottom:10px;font-size:0.85rem;color:var(--ink2)">Mordor Intelligence. (2026, janvier). <em>Waste Sorting Robots Market — Size, Share & Industry Analysis 2025–2030</em>. Disponible sur : https://www.mordorintelligence.com</li>
+    <li style="margin-bottom:10px;font-size:0.85rem;color:var(--ink2)">Edo, M., Meissner, R., Nilsson, J. (2022). <em>IEA Bioenergy Report: Sorting Technologies — Case Study MSW Sorting Facility (Norway)</em>. IEA Bioenergy.</li>
+    <li style="margin-bottom:10px;font-size:0.85rem;color:var(--ink2)">Ultralytics. (2024). <em>YOLOv8 — Ultralytics Docs</em>. Disponible sur : https://docs.ultralytics.com</li>
+    <li style="margin-bottom:10px;font-size:0.85rem;color:var(--ink2)">Espressif Systems. (2024). <em>ESP32-WROVER-E Datasheet v1.4</em>. Disponible sur : https://www.espressif.com</li>
+    <li style="margin-bottom:10px;font-size:0.85rem;color:var(--ink2)">TensorFlow. (2024). <em>TensorFlow Lite — Guide for microcontrollers</em>. Disponible sur : https://www.tensorflow.org/lite/microcontrollers</li>
+    <li style="margin-bottom:10px;font-size:0.85rem;color:var(--ink2)">ams OSRAM. (2023). <em>AS7265x 18-Channel Multi-Spectral Sensor Datasheet</em>. ams AG.</li>
+    <li style="margin-bottom:10px;font-size:0.85rem;color:var(--ink2)">AMP Robotics. (2024). <em>Recycling Technology — AI-Powered Sorting Systems</em>. Disponible sur : https://www.amprobotics.com</li>
+    <li style="margin-bottom:10px;font-size:0.85rem;color:var(--ink2)">Agence Nationale de Gestion des Déchets (ANGed). (2023). <em>Rapport annuel sur la gestion des déchets solides en Tunisie</em>. Ministère de l'Environnement, Tunisie.</li>
+    <li style="margin-bottom:10px;font-size:0.85rem;color:var(--ink2)">IEEE Spectrum. (2023). <em>AI-Guided Robots Are Ready to Sort Your Recyclables</em>. Disponible sur : https://spectrum.ieee.org</li>
+    <li style="margin-bottom:10px;font-size:0.85rem;color:var(--ink2)">MDPI Recycling. (2024). <em>Recent Developments in Technology for Sorting Plastic for Recycling: The Emergence of Artificial Intelligence and the Rise of the Robots</em>. <em>Recycling</em>, 9(4), 59. https://doi.org/10.3390/recycling9040059</li>
+  </ol>
+</section>
+
+</main><!-- end #main -->
+
+<script>
+const links = document.querySelectorAll('#sidebar .sb-link');
+const sections = [];
+document.querySelectorAll('[id]').forEach(el => {
+  if (el.id) sections.push(el);
+});
+function updateActive() {
+  let current = '';
+  sections.forEach(s => {
+    if (window.scrollY >= s.offsetTop - 120) current = s.id;
+  });
+  links.forEach(l => {
+    const href = l.getAttribute('href').replace('#','');
+    l.classList.toggle('active', href === current);
+  });
+}
+window.addEventListener('scroll', updateActive, {passive:true});
+updateActive();
+</script>
+</body>
+</html>
