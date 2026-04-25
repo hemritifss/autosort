@@ -1,0 +1,2712 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Rapport - Station Intelligente de Tri des Déchets</title>
+    <style>
+        /* ═══════════════════════════════════════════
+           GLOBAL STYLES
+        ═══════════════════════════════════════════ */
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        :root {
+            --primary: #1a5276;
+            --secondary: #2ecc71;
+            --accent: #e74c3c;
+            --warning: #f39c12;
+            --dark: #1c2833;
+            --light: #f8f9fa;
+            --gray: #95a5a6;
+            --border: #dce1e7;
+            --text: #2c3e50;
+            --shadow: 0 2px 15px rgba(0,0,0,0.08);
+        }
+
+        body {
+            font-family: 'Times New Roman', Times, serif;
+            font-size: 12pt;
+            line-height: 1.8;
+            color: var(--text);
+            background: #fff;
+            counter-reset: chapter;
+        }
+
+        /* ═══════════════════════════════════════════
+           PRINT / PAGE STYLES
+        ═══════════════════════════════════════════ */
+        @media print {
+            .page-break { page-break-after: always; }
+            .no-print { display: none; }
+            body { font-size: 11pt; }
+            .cover { height: 100vh; }
+        }
+
+        /* ═══════════════════════════════════════════
+           NAVIGATION (screen only)
+        ═══════════════════════════════════════════ */
+        .nav-sidebar {
+            position: fixed;
+            left: 0;
+            top: 0;
+            width: 260px;
+            height: 100vh;
+            background: var(--dark);
+            overflow-y: auto;
+            z-index: 1000;
+            padding: 20px 0;
+            box-shadow: 3px 0 15px rgba(0,0,0,0.3);
+        }
+
+        .nav-sidebar h3 {
+            color: var(--secondary);
+            padding: 10px 20px 20px;
+            font-size: 13px;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            border-bottom: 1px solid rgba(255,255,255,0.1);
+            margin-bottom: 10px;
+        }
+
+        .nav-sidebar a {
+            display: block;
+            color: rgba(255,255,255,0.7);
+            text-decoration: none;
+            padding: 6px 20px;
+            font-size: 11px;
+            transition: all 0.2s;
+            font-family: Arial, sans-serif;
+        }
+
+        .nav-sidebar a:hover {
+            background: rgba(255,255,255,0.1);
+            color: var(--secondary);
+            padding-left: 28px;
+        }
+
+        .nav-sidebar a.chapter-link {
+            color: #fff;
+            font-weight: bold;
+            margin-top: 8px;
+            font-size: 11px;
+            border-left: 3px solid var(--secondary);
+        }
+
+        .main-content {
+            margin-left: 260px;
+            padding: 0;
+        }
+
+        @media (max-width: 768px) {
+            .nav-sidebar { display: none; }
+            .main-content { margin-left: 0; }
+        }
+
+        /* ═══════════════════════════════════════════
+           COVER PAGE
+        ═══════════════════════════════════════════ */
+        .cover {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #0d2137 0%, #1a5276 50%, #1e8449 100%);
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 60px 40px;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .cover::before {
+            content: '';
+            position: absolute;
+            top: -50%;
+            left: -50%;
+            width: 200%;
+            height: 200%;
+            background: url("data:image/svg+xml,%3Csvg width='60' height='60' viewBox='0 0 60 60' xmlns='http://www.w3.org/2000/svg'%3E%3Cg fill='none' fill-rule='evenodd'%3E%3Cg fill='%23ffffff' fill-opacity='0.03'%3E%3Cpath d='M36 34v-4h-2v4h-4v2h4v4h2v-4h4v-2h-4zm0-30V0h-2v4h-4v2h4v4h2V6h4V4h-4zM6 34v-4H4v4H0v2h4v4h2v-4h4v-2H6zM6 4V0H4v4H0v2h4v4h2V6h4V4H6z'/%3E%3C/g%3E%3C/g%3E%3C/svg%3E");
+        }
+
+        .cover-logo {
+            width: 100px;
+            height: 100px;
+            background: rgba(255,255,255,0.15);
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 48px;
+            margin-bottom: 30px;
+            border: 3px solid rgba(255,255,255,0.3);
+            backdrop-filter: blur(10px);
+        }
+
+        .cover-institution {
+            color: rgba(255,255,255,0.9);
+            font-size: 14pt;
+            font-weight: bold;
+            margin-bottom: 5px;
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .cover-dept {
+            color: rgba(255,255,255,0.7);
+            font-size: 11pt;
+            margin-bottom: 40px;
+            font-style: italic;
+        }
+
+        .cover-divider {
+            width: 80px;
+            height: 3px;
+            background: var(--secondary);
+            margin: 25px auto;
+            border-radius: 2px;
+        }
+
+        .cover-rapport-type {
+            color: var(--secondary);
+            font-size: 13pt;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 15px;
+            font-family: Arial, sans-serif;
+        }
+
+        .cover-title {
+            color: #fff;
+            font-size: 24pt;
+            font-weight: bold;
+            line-height: 1.3;
+            margin-bottom: 15px;
+            text-shadow: 2px 2px 10px rgba(0,0,0,0.3);
+            max-width: 700px;
+        }
+
+        .cover-subtitle {
+            color: rgba(255,255,255,0.8);
+            font-size: 14pt;
+            font-style: italic;
+            margin-bottom: 50px;
+            max-width: 600px;
+        }
+
+        .cover-info-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+            max-width: 600px;
+            margin: 0 auto 40px;
+        }
+
+        .cover-info-box {
+            background: rgba(255,255,255,0.1);
+            border: 1px solid rgba(255,255,255,0.2);
+            border-radius: 10px;
+            padding: 15px 20px;
+            text-align: left;
+            backdrop-filter: blur(5px);
+        }
+
+        .cover-info-box label {
+            color: var(--secondary);
+            font-size: 9pt;
+            text-transform: uppercase;
+            letter-spacing: 1px;
+            font-family: Arial, sans-serif;
+            display: block;
+            margin-bottom: 5px;
+        }
+
+        .cover-info-box span {
+            color: #fff;
+            font-size: 11pt;
+            font-weight: bold;
+        }
+
+        .cover-year {
+            color: rgba(255,255,255,0.6);
+            font-size: 12pt;
+            margin-top: 20px;
+        }
+
+        /* ═══════════════════════════════════════════
+           SECTION PAGES (TOC, etc.)
+        ═══════════════════════════════════════════ */
+        .section-page {
+            min-height: 100vh;
+            padding: 80px 80px;
+            background: #fff;
+        }
+
+        .section-page.gray-bg {
+            background: #f8f9fa;
+        }
+
+        /* ═══════════════════════════════════════════
+           TABLE OF CONTENTS
+        ═══════════════════════════════════════════ */
+        .toc-title {
+            font-size: 20pt;
+            color: var(--primary);
+            font-weight: bold;
+            margin-bottom: 40px;
+            padding-bottom: 15px;
+            border-bottom: 3px solid var(--secondary);
+            text-transform: uppercase;
+            letter-spacing: 2px;
+        }
+
+        .toc-entry {
+            display: flex;
+            align-items: baseline;
+            padding: 5px 0;
+            font-size: 11pt;
+        }
+
+        .toc-entry.level-0 {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 12pt;
+            margin-top: 12px;
+            border-left: 4px solid var(--secondary);
+            padding-left: 12px;
+        }
+
+        .toc-entry.level-1 {
+            padding-left: 30px;
+            color: var(--text);
+        }
+
+        .toc-entry.level-2 {
+            padding-left: 55px;
+            color: #5d6d7e;
+            font-size: 10.5pt;
+        }
+
+        .toc-dots {
+            flex: 1;
+            border-bottom: 1px dotted #ccc;
+            margin: 0 8px;
+        }
+
+        .toc-page {
+            color: var(--primary);
+            font-weight: bold;
+            min-width: 30px;
+            text-align: right;
+        }
+
+        /* ═══════════════════════════════════════════
+           CHAPTER HEADERS
+        ═══════════════════════════════════════════ */
+        .chapter-cover {
+            min-height: 35vh;
+            background: linear-gradient(135deg, var(--primary), #154360);
+            padding: 60px 80px;
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            position: relative;
+            overflow: hidden;
+        }
+
+        .chapter-cover::after {
+            content: attr(data-chapter);
+            position: absolute;
+            right: -20px;
+            bottom: -30px;
+            font-size: 150pt;
+            font-weight: bold;
+            color: rgba(255,255,255,0.05);
+            font-family: Arial, sans-serif;
+            line-height: 1;
+        }
+
+        .chapter-number {
+            color: var(--secondary);
+            font-size: 13pt;
+            text-transform: uppercase;
+            letter-spacing: 3px;
+            margin-bottom: 10px;
+            font-family: Arial, sans-serif;
+        }
+
+        .chapter-title {
+            color: #fff;
+            font-size: 26pt;
+            font-weight: bold;
+            line-height: 1.2;
+            max-width: 700px;
+        }
+
+        .chapter-desc {
+            color: rgba(255,255,255,0.7);
+            font-size: 12pt;
+            margin-top: 15px;
+            font-style: italic;
+            max-width: 600px;
+        }
+
+        /* ═══════════════════════════════════════════
+           CONTENT STYLES
+        ═══════════════════════════════════════════ */
+        .content-section {
+            padding: 60px 80px;
+            background: #fff;
+        }
+
+        .content-section.alt {
+            background: #fafbfc;
+        }
+
+        h1 {
+            font-size: 18pt;
+            color: var(--primary);
+            margin: 40px 0 20px;
+            padding-bottom: 10px;
+            border-bottom: 2px solid var(--secondary);
+            counter-increment: section;
+        }
+
+        h2 {
+            font-size: 14pt;
+            color: #1a5276;
+            margin: 30px 0 15px;
+            padding-left: 15px;
+            border-left: 4px solid var(--secondary);
+        }
+
+        h3 {
+            font-size: 12pt;
+            color: #2c3e50;
+            margin: 20px 0 10px;
+            padding-left: 30px;
+            font-style: italic;
+        }
+
+        h4 {
+            font-size: 11pt;
+            color: #34495e;
+            margin: 15px 0 8px;
+            padding-left: 45px;
+            text-decoration: underline;
+        }
+
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+            text-indent: 20px;
+        }
+
+        /* ═══════════════════════════════════════════
+           TABLES
+        ═══════════════════════════════════════════ */
+        .table-container {
+            margin: 25px 0;
+            overflow-x: auto;
+        }
+
+        .table-caption {
+            text-align: center;
+            font-style: italic;
+            color: var(--gray);
+            font-size: 10pt;
+            margin-bottom: 8px;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 10.5pt;
+            box-shadow: var(--shadow);
+        }
+
+        thead {
+            background: var(--primary);
+            color: #fff;
+        }
+
+        thead th {
+            padding: 12px 15px;
+            text-align: center;
+            font-weight: bold;
+            letter-spacing: 0.5px;
+        }
+
+        tbody tr:nth-child(even) {
+            background: #f0f4f8;
+        }
+
+        tbody tr:hover {
+            background: #e8f4fd;
+        }
+
+        tbody td {
+            padding: 10px 15px;
+            border-bottom: 1px solid var(--border);
+            vertical-align: top;
+        }
+
+        .td-center { text-align: center; }
+        .td-good { color: #1e8449; font-weight: bold; }
+        .td-bad { color: #c0392b; }
+        .td-medium { color: #d68910; }
+
+        /* ═══════════════════════════════════════════
+           FIGURES & DIAGRAMS
+        ═══════════════════════════════════════════ */
+        .figure-box {
+            margin: 30px auto;
+            max-width: 800px;
+        }
+
+        .figure-caption {
+            text-align: center;
+            font-style: italic;
+            color: var(--gray);
+            font-size: 10pt;
+            margin-top: 10px;
+        }
+
+        .diagram {
+            background: #f8f9fa;
+            border: 1px solid var(--border);
+            border-radius: 8px;
+            padding: 30px;
+            font-family: 'Courier New', monospace;
+            font-size: 10pt;
+            line-height: 1.6;
+            overflow-x: auto;
+            white-space: pre;
+        }
+
+        /* Architecture Diagrams (visual) */
+        .arch-diagram {
+            background: linear-gradient(135deg, #f8f9fa, #e8ecf0);
+            border: 2px solid var(--border);
+            border-radius: 12px;
+            padding: 30px;
+            margin: 20px 0;
+        }
+
+        .arch-row {
+            display: flex;
+            justify-content: center;
+            align-items: center;
+            gap: 15px;
+            margin: 10px 0;
+            flex-wrap: wrap;
+        }
+
+        .arch-block {
+            background: var(--primary);
+            color: white;
+            padding: 12px 20px;
+            border-radius: 8px;
+            text-align: center;
+            font-size: 10pt;
+            font-family: Arial, sans-serif;
+            min-width: 120px;
+            box-shadow: 0 3px 10px rgba(0,0,0,0.2);
+        }
+
+        .arch-block.green { background: #1e8449; }
+        .arch-block.orange { background: #d35400; }
+        .arch-block.red { background: #c0392b; }
+        .arch-block.gray { background: #5d6d7e; }
+        .arch-block.yellow { background: #d4ac0d; color: #333; }
+
+        .arch-arrow {
+            font-size: 18pt;
+            color: var(--gray);
+        }
+
+        .arch-arrow-down {
+            text-align: center;
+            font-size: 18pt;
+            color: var(--gray);
+            margin: 5px 0;
+        }
+
+        /* ═══════════════════════════════════════════
+           INFO BOXES
+        ═══════════════════════════════════════════ */
+        .info-box {
+            background: #eaf4fb;
+            border-left: 5px solid var(--primary);
+            border-radius: 0 8px 8px 0;
+            padding: 18px 22px;
+            margin: 20px 0;
+        }
+
+        .warning-box {
+            background: #fef9e7;
+            border-left: 5px solid var(--warning);
+            border-radius: 0 8px 8px 0;
+            padding: 18px 22px;
+            margin: 20px 0;
+        }
+
+        .success-box {
+            background: #eafaf1;
+            border-left: 5px solid var(--secondary);
+            border-radius: 0 8px 8px 0;
+            padding: 18px 22px;
+            margin: 20px 0;
+        }
+
+        .danger-box {
+            background: #fdedec;
+            border-left: 5px solid var(--accent);
+            border-radius: 0 8px 8px 0;
+            padding: 18px 22px;
+            margin: 20px 0;
+        }
+
+        .box-title {
+            font-weight: bold;
+            margin-bottom: 8px;
+            font-size: 11pt;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ═══════════════════════════════════════════
+           SPEC CARDS
+        ═══════════════════════════════════════════ */
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(250px, 1fr));
+            gap: 20px;
+            margin: 20px 0;
+        }
+
+        .spec-card {
+            background: #fff;
+            border: 1px solid var(--border);
+            border-radius: 10px;
+            padding: 20px;
+            box-shadow: var(--shadow);
+        }
+
+        .spec-card-title {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 12pt;
+            margin-bottom: 12px;
+            padding-bottom: 8px;
+            border-bottom: 2px solid var(--secondary);
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 5px 0;
+            border-bottom: 1px dotted #eee;
+            font-size: 10.5pt;
+        }
+
+        .spec-label { color: #5d6d7e; }
+        .spec-value { font-weight: bold; color: var(--text); }
+
+        /* ═══════════════════════════════════════════
+           COMPONENT CARDS
+        ═══════════════════════════════════════════ */
+        .component-card {
+            background: linear-gradient(135deg, #fff, #f8f9fa);
+            border: 1px solid var(--border);
+            border-radius: 12px;
+            padding: 25px;
+            margin: 20px 0;
+            box-shadow: var(--shadow);
+            position: relative;
+            overflow: hidden;
+        }
+
+        .component-card::before {
+            content: '';
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 5px;
+            height: 100%;
+            background: var(--secondary);
+        }
+
+        .component-header {
+            display: flex;
+            align-items: center;
+            gap: 15px;
+            margin-bottom: 18px;
+        }
+
+        .component-icon {
+            width: 55px;
+            height: 55px;
+            background: var(--primary);
+            border-radius: 10px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 24px;
+            flex-shrink: 0;
+        }
+
+        .component-name {
+            font-size: 14pt;
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .component-model {
+            font-size: 10pt;
+            color: var(--gray);
+            font-style: italic;
+        }
+
+        .component-body {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 20px;
+        }
+
+        @media (max-width: 600px) {
+            .component-body { grid-template-columns: 1fr; }
+        }
+
+        .component-specs table {
+            box-shadow: none;
+        }
+
+        .pros-cons {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+        }
+
+        .pros, .cons {
+            padding: 12px;
+            border-radius: 8px;
+            font-size: 10pt;
+        }
+
+        .pros {
+            background: #eafaf1;
+            border: 1px solid #a9dfbf;
+        }
+
+        .cons {
+            background: #fdedec;
+            border: 1px solid #f1948a;
+        }
+
+        .pros h5, .cons h5 {
+            font-weight: bold;
+            margin-bottom: 8px;
+        }
+
+        .pros h5 { color: #1e8449; }
+        .cons h5 { color: #c0392b; }
+
+        .pros ul, .cons ul {
+            padding-left: 18px;
+        }
+
+        .pros ul li, .cons ul li {
+            margin-bottom: 4px;
+        }
+
+        /* ═══════════════════════════════════════════
+           COMPARISON MATRIX
+        ═══════════════════════════════════════════ */
+        .rating-cell {
+            display: flex;
+            gap: 3px;
+            justify-content: center;
+        }
+
+        .star { color: #f39c12; }
+        .star-empty { color: #ddd; }
+
+        .winner-badge {
+            background: var(--secondary);
+            color: white;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 8.5pt;
+            font-weight: bold;
+            display: inline-block;
+        }
+
+        /* ═══════════════════════════════════════════
+           TIMELINE / METHODOLOGY
+        ═══════════════════════════════════════════ */
+        .timeline {
+            position: relative;
+            padding-left: 40px;
+            margin: 25px 0;
+        }
+
+        .timeline::before {
+            content: '';
+            position: absolute;
+            left: 15px;
+            top: 0;
+            bottom: 0;
+            width: 3px;
+            background: linear-gradient(to bottom, var(--primary), var(--secondary));
+        }
+
+        .timeline-item {
+            position: relative;
+            margin-bottom: 25px;
+        }
+
+        .timeline-dot {
+            position: absolute;
+            left: -31px;
+            top: 5px;
+            width: 18px;
+            height: 18px;
+            background: var(--primary);
+            border-radius: 50%;
+            border: 3px solid #fff;
+            box-shadow: 0 0 0 2px var(--primary);
+        }
+
+        .timeline-title {
+            font-weight: bold;
+            color: var(--primary);
+            font-size: 11.5pt;
+            margin-bottom: 5px;
+        }
+
+        .timeline-content {
+            font-size: 10.5pt;
+            color: var(--text);
+        }
+
+        /* ═══════════════════════════════════════════
+           BOM TABLE
+        ═══════════════════════════════════════════ */
+        .bom-table td:last-child {
+            font-weight: bold;
+            color: var(--primary);
+        }
+
+        .bom-total {
+            background: var(--primary) !important;
+            color: white;
+            font-weight: bold;
+        }
+
+        .bom-total td {
+            color: white !important;
+        }
+
+        /* ═══════════════════════════════════════════
+           CIRCUIT DIAGRAMS
+        ═══════════════════════════════════════════ */
+        .circuit-diagram {
+            background: #0d1117;
+            color: #58a6ff;
+            font-family: 'Courier New', monospace;
+            font-size: 9.5pt;
+            padding: 25px 30px;
+            border-radius: 10px;
+            overflow-x: auto;
+            line-height: 1.7;
+            margin: 20px 0;
+            white-space: pre;
+        }
+
+        .circuit-diagram .comment { color: #8b949e; }
+        .circuit-diagram .pin { color: #79c0ff; }
+        .circuit-diagram .signal { color: #56d364; }
+        .circuit-diagram .voltage { color: #ff7b72; }
+        .circuit-diagram .label { color: #d2a8ff; }
+
+        /* ═══════════════════════════════════════════
+           INTRODUCTION / CONCLUSION BOXES
+        ═══════════════════════════════════════════ */
+        .intro-box {
+            background: linear-gradient(135deg, #eaf4fb, #e8f8f5);
+            border: 1px solid #aed6f1;
+            border-radius: 10px;
+            padding: 22px 28px;
+            margin: 20px 0 35px;
+            font-style: italic;
+        }
+
+        .conclusion-box {
+            background: linear-gradient(135deg, #fef9e7, #fdfefe);
+            border: 1px solid #f9e79f;
+            border-radius: 10px;
+            padding: 22px 28px;
+            margin: 35px 0 20px;
+        }
+
+        /* ═══════════════════════════════════════════
+           CODE BLOCKS
+        ═══════════════════════════════════════════ */
+        .code-block {
+            background: #1e1e1e;
+            color: #d4d4d4;
+            font-family: 'Courier New', monospace;
+            font-size: 9pt;
+            padding: 20px;
+            border-radius: 8px;
+            overflow-x: auto;
+            margin: 15px 0;
+            line-height: 1.6;
+            white-space: pre;
+        }
+
+        /* ═══════════════════════════════════════════
+           LIST STYLES
+        ═══════════════════════════════════════════ */
+        ul.custom, ol.custom {
+            padding-left: 30px;
+            margin: 10px 0;
+        }
+
+        ul.custom li, ol.custom li {
+            margin-bottom: 6px;
+            font-size: 11pt;
+        }
+
+        ul.check-list {
+            list-style: none;
+            padding-left: 10px;
+        }
+
+        ul.check-list li::before {
+            content: '✓ ';
+            color: var(--secondary);
+            font-weight: bold;
+        }
+
+        ul.cross-list {
+            list-style: none;
+            padding-left: 10px;
+        }
+
+        ul.cross-list li::before {
+            content: '✗ ';
+            color: var(--accent);
+            font-weight: bold;
+        }
+
+        /* ═══════════════════════════════════════════
+           PAGE COUNTER BANNER
+        ═══════════════════════════════════════════ */
+        .page-banner {
+            background: var(--primary);
+            color: white;
+            padding: 8px 80px;
+            font-size: 9pt;
+            font-family: Arial, sans-serif;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        /* ═══════════════════════════════════════════
+           CHOICE JUSTIFICATION
+        ═══════════════════════════════════════════ */
+        .choice-box {
+            background: linear-gradient(135deg, #eafaf1, #d5f5e3);
+            border: 2px solid var(--secondary);
+            border-radius: 10px;
+            padding: 22px;
+            margin: 20px 0;
+        }
+
+        .choice-box-title {
+            color: #1e8449;
+            font-weight: bold;
+            font-size: 12pt;
+            margin-bottom: 12px;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+
+        /* ═══════════════════════════════════════════
+           METRIC CARDS
+        ═══════════════════════════════════════════ */
+        .metrics-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .metric-card {
+            background: var(--primary);
+            color: white;
+            padding: 20px;
+            border-radius: 10px;
+            text-align: center;
+            box-shadow: var(--shadow);
+        }
+
+        .metric-value {
+            font-size: 24pt;
+            font-weight: bold;
+            color: var(--secondary);
+            display: block;
+        }
+
+        .metric-label {
+            font-size: 9.5pt;
+            opacity: 0.8;
+            margin-top: 5px;
+        }
+
+        /* Scroll to top */
+        .scroll-top {
+            position: fixed;
+            bottom: 30px;
+            right: 30px;
+            background: var(--primary);
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            cursor: pointer;
+            text-decoration: none;
+            font-size: 18px;
+            box-shadow: 0 3px 15px rgba(0,0,0,0.3);
+            z-index: 999;
+        }
+    </style>
+</head>
+<body>
+
+<!-- ═══════════════════════════════════════════
+     NAVIGATION SIDEBAR
+═══════════════════════════════════════════ -->
+<nav class="nav-sidebar no-print">
+    <h3>📋 Navigation</h3>
+    <a href="#cover">🏠 Couverture</a>
+    <a href="#toc">📑 Table des Matières</a>
+    <a href="#liste-figures">📊 Liste des Figures</a>
+    <a href="#liste-tableaux">📋 Liste des Tableaux</a>
+    <a href="#liste-abrev">🔤 Abréviations</a>
+    <a href="#intro-generale">📌 Introduction Générale</a>
+
+    <a href="#chapitre1" class="chapter-link">CHAPITRE I</a>
+    <a href="#ch1-presentation">1. Présentation</a>
+    <a href="#ch1-contexte">2. Contexte</a>
+    <a href="#ch1-problematique">3. Problématique</a>
+    <a href="#ch1-existant">4. État de l'art</a>
+    <a href="#ch1-objectifs">5. Objectifs</a>
+    <a href="#ch1-methodologie">6. Méthodologie</a>
+
+    <a href="#chapitre2" class="chapter-link">CHAPITRE II</a>
+    <a href="#ch2-embarques">1. Systèmes embarqués</a>
+    <a href="#ch2-controllers">2. Microcontrôleurs</a>
+    <a href="#ch2-sensors">3. Capteurs</a>
+    <a href="#ch2-actuators">4. Actionneurs</a>
+    <a href="#ch2-communication">5. Communication</a>
+    <a href="#ch2-ai">6. Intelligence Artificielle</a>
+    <a href="#ch2-vision">7. Vision par Ordinateur</a>
+
+    <a href="#chapitre3" class="chapter-link">CHAPITRE III</a>
+    <a href="#ch3-materiel">1. Environnement matériel</a>
+    <a href="#ch3-logiciel">2. Environnement logiciel</a>
+    <a href="#ch3-prototype">3. Réalisation prototype</a>
+    <a href="#ch3-resultats">4. Résultats & Tests</a>
+
+    <a href="#conclusion">🏁 Conclusion Générale</a>
+    <a href="#bibliographie">📚 Bibliographie</a>
+</nav>
+
+<!-- SCROLL TOP -->
+<a href="#cover" class="scroll-top no-print">↑</a>
+
+<!-- ═══════════════════════════════════════════
+     MAIN CONTENT
+═══════════════════════════════════════════ -->
+<main class="main-content">
+
+<!-- ════════════════════════════════════════════════════════
+     COVER PAGE
+════════════════════════════════════════════════════════ -->
+<section id="cover" class="cover page-break">
+    <div class="cover-logo">♻️</div>
+    <!--<div class="cover-institution">République Tunisienne</div>
+    <div class="cover-institution" style="font-size:12pt;">Ministère de l'Enseignement Supérieur</div>
+    <div class="cover-dept">Institut Supérieur des Sciences Appliquées et de Technologie</div>-->
+
+    <div class="cover-divider"></div>
+
+    <!--<div class="cover-rapport-type">Rapport de Projet de Fin d'Études</div>-->
+
+    <div class="cover-title">
+        Station Intelligente de Tri Automatique des Déchets
+    </div>
+    <div class="cover-subtitle">
+        Conception d'un système embarqué multimodal intégrant la vision artificielle,
+        la fusion de capteurs et le contrôle temps-réel pour la valorisation optimale des déchets solides
+    </div>
+
+   <!-- <div class="cover-info-grid">
+        <div class="cover-info-box">
+            <label>Réalisé par</label>
+            <span>Étudiant(e) en Génie Électronique</span>
+        </div>
+        <div class="cover-info-box">
+            <label>Encadrant</label>
+            <span>Prof. [Nom Encadrant]</span>
+        </div>
+        <div class="cover-info-box">
+            <label>Spécialité</label>
+            <span>Systèmes Embarqués & IoT</span>
+        </div>
+        <div class="cover-info-box">
+            <label>Année Universitaire</label>
+            <span>2024 – 2025</span>
+        </div>
+    </div>-->
+    <div class="cover-year">© 2025-2026 — Tous droits réservés</div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     TABLE OF CONTENTS
+════════════════════════════════════════════════════════ -->
+<section id="toc" class="section-page page-break">
+    <div class="toc-title">Table des Matières</div>
+
+    <div class="toc-entry level-0">
+        <span>LISTE DES FIGURES</span><span class="toc-dots"></span><span class="toc-page">IV</span>
+    </div>
+    <div class="toc-entry level-0">
+        <span>LISTE DES TABLEAUX</span><span class="toc-dots"></span><span class="toc-page">V</span>
+    </div>
+    <div class="toc-entry level-0">
+        <span>LISTE DES ABRÉVIATIONS</span><span class="toc-dots"></span><span class="toc-page">VI</span>
+    </div>
+    <div class="toc-entry level-0">
+        <span>INTRODUCTION GÉNÉRALE</span><span class="toc-dots"></span><span class="toc-page">1</span>
+    </div>
+
+    <div class="toc-entry level-0">
+        <span>CHAPITRE I — Présentation du Projet</span><span class="toc-dots"></span><span class="toc-page">3</span>
+    </div>
+    <div class="toc-entry level-1"><span>1. Introduction</span><span class="toc-dots"></span><span class="toc-page">4</span></div>
+    <div class="toc-entry level-1"><span>2. Contexte global du projet</span><span class="toc-dots"></span><span class="toc-page">4</span></div>
+    <div class="toc-entry level-1"><span>3. La gestion des déchets : problématique et enjeux</span><span class="toc-dots"></span><span class="toc-page">5</span></div>
+    <div class="toc-entry level-2"><span>3.1 Nature et impact des déchets solides</span><span class="toc-dots"></span><span class="toc-page">5</span></div>
+    <div class="toc-entry level-2"><span>3.2 Problématique spécifique du projet</span><span class="toc-dots"></span><span class="toc-page">6</span></div>
+    <div class="toc-entry level-1"><span>4. Étude de l'existant</span><span class="toc-dots"></span><span class="toc-page">7</span></div>
+    <div class="toc-entry level-2"><span>4.1 Systèmes de tri manuel</span><span class="toc-dots"></span><span class="toc-page">7</span></div>
+    <div class="toc-entry level-2"><span>4.2 Tri par séparation magnétique</span><span class="toc-dots"></span><span class="toc-page">8</span></div>
+    <div class="toc-entry level-2"><span>4.3 Tri optique industriel (NIR/SWIR)</span><span class="toc-dots"></span><span class="toc-page">8</span></div>
+    <div class="toc-entry level-2"><span>4.4 Systèmes robotisés à IA (AMP, ZenRobotics)</span><span class="toc-dots"></span><span class="toc-page">9</span></div>
+    <div class="toc-entry level-2"><span>4.5 Analyse comparative</span><span class="toc-dots"></span><span class="toc-page">10</span></div>
+    <div class="toc-entry level-1"><span>5. Objectifs du projet</span><span class="toc-dots"></span><span class="toc-page">11</span></div>
+    <div class="toc-entry level-2"><span>5.1 Expression des besoins</span><span class="toc-dots"></span><span class="toc-page">11</span></div>
+    <div class="toc-entry level-2"><span>5.2 Spécifications fonctionnelles</span><span class="toc-dots"></span><span class="toc-page">12</span></div>
+    <div class="toc-entry level-2"><span>5.3 Solution proposée</span><span class="toc-dots"></span><span class="toc-page">13</span></div>
+    <div class="toc-entry level-1"><span>6. Méthodologie de travail</span><span class="toc-dots"></span><span class="toc-page">14</span></div>
+    <div class="toc-entry level-1"><span>7. Conclusion</span><span class="toc-dots"></span><span class="toc-page">15</span></div>
+
+    <div class="toc-entry level-0">
+        <span>CHAPITRE II — Fondements Théoriques et Technologiques</span><span class="toc-dots"></span><span class="toc-page">16</span>
+    </div>
+    <div class="toc-entry level-1"><span>1. Introduction</span><span class="toc-dots"></span><span class="toc-page">17</span></div>
+    <div class="toc-entry level-1"><span>2. Architecture du système embarqué proposé</span><span class="toc-dots"></span><span class="toc-page">17</span></div>
+    <div class="toc-entry level-1"><span>3. Étude comparative des microcontrôleurs</span><span class="toc-dots"></span><span class="toc-page">18</span></div>
+    <div class="toc-entry level-2"><span>3.1 Arduino MEGA 2560</span><span class="toc-dots"></span><span class="toc-page">18</span></div>
+    <div class="toc-entry level-2"><span>3.2 ESP32 DevKit</span><span class="toc-dots"></span><span class="toc-page">19</span></div>
+    <div class="toc-entry level-2"><span>3.3 STM32F411 BlackPill</span><span class="toc-dots"></span><span class="toc-page">20</span></div>
+    <div class="toc-entry level-2"><span>3.4 Raspberry Pi 4</span><span class="toc-dots"></span><span class="toc-page">21</span></div>
+    <div class="toc-entry level-2"><span>3.5 NVIDIA Jetson Nano</span><span class="toc-dots"></span><span class="toc-page">21</span></div>
+    <div class="toc-entry level-2"><span>3.6 Analyse comparative et justification des choix</span><span class="toc-dots"></span><span class="toc-page">22</span></div>
+    <div class="toc-entry level-1"><span>4. Étude comparative des capteurs</span><span class="toc-dots"></span><span class="toc-page">24</span></div>
+    <div class="toc-entry level-2"><span>4.1 Capteurs de présence et de positionnement</span><span class="toc-dots"></span><span class="toc-page">24</span></div>
+    <div class="toc-entry level-2"><span>4.2 Capteurs de couleur et spectraux</span><span class="toc-dots"></span><span class="toc-page">25</span></div>
+    <div class="toc-entry level-2"><span>4.3 Capteurs de détection métallique</span><span class="toc-dots"></span><span class="toc-page">26</span></div>
+    <div class="toc-entry level-2"><span>4.4 Capteurs thermiques</span><span class="toc-dots"></span><span class="toc-page">27</span></div>
+    <div class="toc-entry level-2"><span>4.5 Capteurs de poids</span><span class="toc-dots"></span><span class="toc-page">27</span></div>
+    <div class="toc-entry level-1"><span>5. Actionneurs et systèmes d'éjection</span><span class="toc-dots"></span><span class="toc-page">28</span></div>
+    <div class="toc-entry level-1"><span>6. Intelligence Artificielle — Vision par Ordinateur</span><span class="toc-dots"></span><span class="toc-page">29</span></div>
+    <div class="toc-entry level-2"><span>6.1 Modèles de détection d'objets</span><span class="toc-dots"></span><span class="toc-page">29</span></div>
+    <div class="toc-entry level-2"><span>6.2 Fusion de données multi-capteurs</span><span class="toc-dots"></span><span class="toc-page">30</span></div>
+    <div class="toc-entry level-1"><span>7. Protocoles de communication</span><span class="toc-dots"></span><span class="toc-page">31</span></div>
+    <div class="toc-entry level-1"><span>8. Conclusion</span><span class="toc-dots"></span><span class="toc-page">32</span></div>
+
+    <div class="toc-entry level-0">
+        <span>CHAPITRE III — Réalisation et Évaluation du Système</span><span class="toc-dots"></span><span class="toc-page">33</span>
+    </div>
+    <div class="toc-entry level-1"><span>1. Introduction</span><span class="toc-dots"></span><span class="toc-page">34</span></div>
+    <div class="toc-entry level-1"><span>2. Démarche de développement</span><span class="toc-dots"></span><span class="toc-page">34</span></div>
+    <div class="toc-entry level-1"><span>3. Environnement matériel</span><span class="toc-dots"></span><span class="toc-page">35</span></div>
+    <div class="toc-entry level-2"><span>3.1 Unité centrale (Jetson Nano)</span><span class="toc-dots"></span><span class="toc-page">35</span></div>
+    <div class="toc-entry level-2"><span>3.2 Contrôleur moteur (STM32F411)</span><span class="toc-dots"></span><span class="toc-page">36</span></div>
+    <div class="toc-entry level-2"><span>3.3 Nœuds capteurs (ESP32)</span><span class="toc-dots"></span><span class="toc-page">37</span></div>
+    <div class="toc-entry level-2"><span>3.4 Système de détection optique</span><span class="toc-dots"></span><span class="toc-page">38</span></div>
+    <div class="toc-entry level-2"><span>3.5 Système de sécurité</span><span class="toc-dots"></span><span class="toc-page">39</span></div>
+    <div class="toc-entry level-1"><span>4. Environnement logiciel</span><span class="toc-dots"></span><span class="toc-page">40</span></div>
+    <div class="toc-entry level-1"><span>5. Réalisation du prototype</span><span class="toc-dots"></span><span class="toc-page">42</span></div>
+    <div class="toc-entry level-2"><span>5.1 Prototype mécanique</span><span class="toc-dots"></span><span class="toc-page">42</span></div>
+    <div class="toc-entry level-2"><span>5.2 Prototype électronique</span><span class="toc-dots"></span><span class="toc-page">43</span></div>
+    <div class="toc-entry level-2"><span>5.3 Schémas de câblage</span><span class="toc-dots"></span><span class="toc-page">44</span></div>
+    <div class="toc-entry level-1"><span>6. Tests et évaluation des performances</span><span class="toc-dots"></span><span class="toc-page">46</span></div>
+    <div class="toc-entry level-1"><span>7. Conclusion</span><span class="toc-dots"></span><span class="toc-page">48</span></div>
+
+    <div class="toc-entry level-0">
+        <span>CONCLUSION GÉNÉRALE ET PERSPECTIVES</span><span class="toc-dots"></span><span class="toc-page">49</span>
+    </div>
+    <div class="toc-entry level-0">
+        <span>BIBLIOGRAPHIE ET WEBOGRAPHIE</span><span class="toc-dots"></span><span class="toc-page">51</span>
+    </div>
+    <div class="toc-entry level-0">
+        <span>ANNEXES</span><span class="toc-dots"></span><span class="toc-page">53</span>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     LISTE DES FIGURES
+════════════════════════════════════════════════════════ -->
+<section id="liste-figures" class="section-page gray-bg page-break">
+    <div class="toc-title">Liste des Figures</div>
+
+    <div class="toc-entry level-1"><span>Figure I.1 — Impact global de la mauvaise gestion des déchets</span><span class="toc-dots"></span><span class="toc-page">5</span></div>
+    <div class="toc-entry level-1"><span>Figure I.2 — Composition typique d'un sac de déchets ménagers</span><span class="toc-dots"></span><span class="toc-page">6</span></div>
+    <div class="toc-entry level-1"><span>Figure I.3 — Système de tri manuel traditionnel</span><span class="toc-dots"></span><span class="toc-page">7</span></div>
+    <div class="toc-entry level-1"><span>Figure I.4 — Séparateur magnétique industriel (Overband)</span><span class="toc-dots"></span><span class="toc-page">8</span></div>
+    <div class="toc-entry level-1"><span>Figure I.5 — Système TOMRA AutoSort NIR</span><span class="toc-dots"></span><span class="toc-page">9</span></div>
+    <div class="toc-entry level-1"><span>Figure I.6 — Architecture générale de la solution proposée</span><span class="toc-dots"></span><span class="toc-page">13</span></div>
+    <div class="toc-entry level-1"><span>Figure I.7 — Diagramme de la méthodologie de travail</span><span class="toc-dots"></span><span class="toc-page">14</span></div>
+    <div class="toc-entry level-1"><span>Figure II.1 — Architecture matérielle distribuée du système</span><span class="toc-dots"></span><span class="toc-page">17</span></div>
+    <div class="toc-entry level-1"><span>Figure II.2 — NVIDIA Jetson Nano Developer Kit 4GB</span><span class="toc-dots"></span><span class="toc-page">22</span></div>
+    <div class="toc-entry level-1"><span>Figure II.3 — STM32F411CEU6 BlackPill</span><span class="toc-dots"></span><span class="toc-page">23</span></div>
+    <div class="toc-entry level-1"><span>Figure II.4 — ESP32 DevKit v1</span><span class="toc-dots"></span><span class="toc-page">23</span></div>
+    <div class="toc-entry level-1"><span>Figure II.5 — Capteur spectral AS7265x (18 canaux)</span><span class="toc-dots"></span><span class="toc-page">25</span></div>
+    <div class="toc-entry level-1"><span>Figure II.6 — Capteur couleur TCS34725</span><span class="toc-dots"></span><span class="toc-page">26</span></div>
+    <div class="toc-entry level-1"><span>Figure II.7 — Capteur inductif de proximité (NPN, 8mm)</span><span class="toc-dots"></span><span class="toc-page">26</span></div>
+    <div class="toc-entry level-1"><span>Figure II.8 — Capteur thermique MLX90614</span><span class="toc-dots"></span><span class="toc-page">27</span></div>
+    <div class="toc-entry level-1"><span>Figure II.9 — Cellule de charge + HX711</span><span class="toc-dots"></span><span class="toc-page">28</span></div>
+    <div class="toc-entry level-1"><span>Figure II.10 — Architecture YOLO v8 pour la détection en temps réel</span><span class="toc-dots"></span><span class="toc-page">30</span></div>
+    <div class="toc-entry level-1"><span>Figure II.11 — Pipeline de fusion multi-capteurs</span><span class="toc-dots"></span><span class="toc-page">31</span></div>
+    <div class="toc-entry level-1"><span>Figure III.1 — Démarche de développement itératif</span><span class="toc-dots"></span><span class="toc-page">34</span></div>
+    <div class="toc-entry level-1"><span>Figure III.2 — Schéma de câblage complet STM32 + Moteurs</span><span class="toc-dots"></span><span class="toc-page">44</span></div>
+    <div class="toc-entry level-1"><span>Figure III.3 — Schéma de câblage ESP32 #1 + Capteurs</span><span class="toc-dots"></span><span class="toc-page">44</span></div>
+    <div class="toc-entry level-1"><span>Figure III.4 — Schéma de câblage ESP32 #2 + Sécurité</span><span class="toc-dots"></span><span class="toc-page">45</span></div>
+    <div class="toc-entry level-1"><span>Figure III.5 — Distribution de puissance du prototype</span><span class="toc-dots"></span><span class="toc-page">45</span></div>
+    <div class="toc-entry level-1"><span>Figure III.6 — Prototype mécanique vue de dessus</span><span class="toc-dots"></span><span class="toc-page">42</span></div>
+    <div class="toc-entry level-1"><span>Figure III.7 — Matrice de confusion du modèle YOLO</span><span class="toc-dots"></span><span class="toc-page">47</span></div>
+    <div class="toc-entry level-1"><span>Figure III.8 — Courbes de précision/rappel par classe</span><span class="toc-dots"></span><span class="toc-page">47</span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     LISTE DES TABLEAUX
+════════════════════════════════════════════════════════ -->
+<section id="liste-tableaux" class="section-page page-break">
+    <div class="toc-title">Liste des Tableaux</div>
+
+    <div class="toc-entry level-1"><span>Tableau I.1 — Comparaison des systèmes de tri existants</span><span class="toc-dots"></span><span class="toc-page">10</span></div>
+    <div class="toc-entry level-1"><span>Tableau I.2 — Spécifications fonctionnelles du système</span><span class="toc-dots"></span><span class="toc-page">12</span></div>
+    <div class="toc-entry level-1"><span>Tableau II.1 — Comparaison des microcontrôleurs candidats</span><span class="toc-dots"></span><span class="toc-page">22</span></div>
+    <div class="toc-entry level-1"><span>Tableau II.2 — Spécifications techniques du Jetson Nano</span><span class="toc-dots"></span><span class="toc-page">22</span></div>
+    <div class="toc-entry level-1"><span>Tableau II.3 — Spécifications techniques STM32F411</span><span class="toc-dots"></span><span class="toc-page">23</span></div>
+    <div class="toc-entry level-1"><span>Tableau II.4 — Spécifications techniques ESP32</span><span class="toc-dots"></span><span class="toc-page">24</span></div>
+    <div class="toc-entry level-1"><span>Tableau II.5 — Comparaison des capteurs de présence</span><span class="toc-dots"></span><span class="toc-page">24</span></div>
+    <div class="toc-entry level-1"><span>Tableau II.6 — Comparaison des capteurs spectraux/couleur</span><span class="toc-dots"></span><span class="toc-page">25</span></div>
+    <div class="toc-entry level-1"><span>Tableau II.7 — Comparaison des capteurs de détection métallique</span><span class="toc-dots"></span><span class="toc-page">26</span></div>
+    <div class="toc-entry level-1"><span>Tableau II.8 — Comparaison des modèles de détection YOLO</span><span class="toc-dots"></span><span class="toc-page">30</span></div>
+    <div class="toc-entry level-1"><span>Tableau II.9 — Comparaison des protocoles de communication</span><span class="toc-dots"></span><span class="toc-page">31</span></div>
+    <div class="toc-entry level-1"><span>Tableau III.1 — Budget matériel du prototype</span><span class="toc-dots"></span><span class="toc-page">43</span></div>
+    <div class="toc-entry level-1"><span>Tableau III.2 — Affectation des broches STM32F411</span><span class="toc-dots"></span><span class="toc-page">44</span></div>
+    <div class="toc-entry level-1"><span>Tableau III.3 — Affectation des broches ESP32 #1</span><span class="toc-dots"></span><span class="toc-page">44</span></div>
+    <div class="toc-entry level-1"><span>Tableau III.4 — Affectation des broches ESP32 #2</span><span class="toc-dots"></span><span class="toc-page">45</span></div>
+    <div class="toc-entry level-1"><span>Tableau III.5 — Résultats des tests de tri par matériau</span><span class="toc-dots"></span><span class="toc-page">47</span></div>
+    <div class="toc-entry level-1"><span>Tableau III.6 — Comparaison objectifs vs résultats obtenus</span><span class="toc-dots"></span><span class="toc-page">48</span></div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     ABRÉVIATIONS
+════════════════════════════════════════════════════════ -->
+<section id="liste-abrev" class="section-page gray-bg page-break">
+    <div class="toc-title">Liste des Abréviations</div>
+
+    <div class="table-container">
+        <table>
+            <thead>
+                <tr>
+                    <th style="width:20%">Abréviation</th>
+                    <th>Signification</th>
+                    <th style="width:25%">Domaine</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>ADC</strong></td><td>Analog-to-Digital Converter — Convertisseur Analogique-Numérique</td><td>Électronique</td></tr>
+                <tr><td><strong>AI / IA</strong></td><td>Artificial Intelligence / Intelligence Artificielle</td><td>Informatique</td></tr>
+                <tr><td><strong>BOM</strong></td><td>Bill of Materials — Liste des matériaux</td><td>Ingénierie</td></tr>
+                <tr><td><strong>CNN</strong></td><td>Convolutional Neural Network — Réseau de Neurones Convolutionnel</td><td>IA</td></tr>
+                <tr><td><strong>CSI</strong></td><td>Camera Serial Interface</td><td>Électronique</td></tr>
+                <tr><td><strong>CUDA</strong></td><td>Compute Unified Device Architecture (NVIDIA)</td><td>GPU/IA</td></tr>
+                <tr><td><strong>DMA</strong></td><td>Direct Memory Access</td><td>Microcontrôleur</td></tr>
+                <tr><td><strong>ECS</strong></td><td>Eddy Current Separator — Séparateur par courant de Foucault</td><td>Tri déchets</td></tr>
+                <tr><td><strong>ESP32</strong></td><td>Microcontrôleur WiFi/BT d'Espressif Systems</td><td>Électronique</td></tr>
+                <tr><td><strong>FPS</strong></td><td>Frames Per Second — Images par seconde</td><td>Vision</td></tr>
+                <tr><td><strong>FreeRTOS</strong></td><td>Free Real-Time Operating System</td><td>Embarqué</td></tr>
+                <tr><td><strong>GPIO</strong></td><td>General Purpose Input/Output</td><td>Électronique</td></tr>
+                <tr><td><strong>GPU</strong></td><td>Graphics Processing Unit</td><td>Informatique</td></tr>
+                <tr><td><strong>HDPE</strong></td><td>High-Density Polyethylene — Polyéthylène Haute Densité</td><td>Matériaux</td></tr>
+                <tr><td><strong>HSI</strong></td><td>Hyperspectral Imaging — Imagerie hyperspectrale</td><td>Optique</td></tr>
+                <tr><td><strong>I2C</strong></td><td>Inter-Integrated Circuit (protocole de communication)</td><td>Électronique</td></tr>
+                <tr><td><strong>IoT</strong></td><td>Internet of Things — Internet des Objets</td><td>Réseaux</td></tr>
+                <tr><td><strong>IR</strong></td><td>Infrared — Infrarouge</td><td>Optique</td></tr>
+                <tr><td><strong>JSON</strong></td><td>JavaScript Object Notation</td><td>Informatique</td></tr>
+                <tr><td><strong>LIBS</strong></td><td>Laser-Induced Breakdown Spectroscopy</td><td>Physique</td></tr>
+                <tr><td><strong>MCU</strong></td><td>Microcontroller Unit — Microcontrôleur</td><td>Électronique</td></tr>
+                <tr><td><strong>MRF</strong></td><td>Material Recovery Facility — Centre de valorisation matière</td><td>Recyclage</td></tr>
+                <tr><td><strong>NIR</strong></td><td>Near-Infrared — Proche Infrarouge (900-1700nm)</td><td>Spectroscopie</td></tr>
+                <tr><td><strong>NPN</strong></td><td>Type de transistor bipolaire (Negative-Positive-Negative)</td><td>Électronique</td></tr>
+                <tr><td><strong>PET</strong></td><td>Polyéthylène Téréphtalate</td><td>Matériaux</td></tr>
+                <tr><td><strong>PID</strong></td><td>Proportionnel-Intégral-Dérivé (régulateur)</td><td>Automatique</td></tr>
+                <tr><td><strong>PP</strong></td><td>Polypropylène</td><td>Matériaux</td></tr>
+                <tr><td><strong>PS</strong></td><td>Polystyrène</td><td>Matériaux</td></tr>
+                <tr><td><strong>PWM</strong></td><td>Pulse Width Modulation — Modulation de Largeur d'Impulsion</td><td>Électronique</td></tr>
+                <tr><td><strong>RDF</strong></td><td>Refuse Derived Fuel — Combustible Solide de Récupération</td><td>Énergie</td></tr>
+                <tr><td><strong>RTOS</strong></td><td>Real-Time Operating System — Système d'Exploitation Temps Réel</td><td>Embarqué</td></tr>
+                <tr><td><strong>SPI</strong></td><td>Serial Peripheral Interface</td><td>Électronique</td></tr>
+                <tr><td><strong>STM32</strong></td><td>Microcontrôleur 32-bit de STMicroelectronics</td><td>Électronique</td></tr>
+                <tr><td><strong>SWIR</strong></td><td>Short-Wave Infrared (1000-2500nm)</td><td>Spectroscopie</td></tr>
+                <tr><td><strong>UART</strong></td><td>Universal Asynchronous Receiver-Transmitter</td><td>Électronique</td></tr>
+                <tr><td><strong>USB</strong></td><td>Universal Serial Bus</td><td>Informatique</td></tr>
+                <tr><td><strong>YOLO</strong></td><td>You Only Look Once (algorithme de détection d'objets)</td><td>IA/Vision</td></tr>
+                <tr><td><strong>XRF</strong></td><td>X-Ray Fluorescence — Fluorescence aux rayons X</td><td>Physique</td></tr>
+                <tr><td><strong>XRT</strong></td><td>X-Ray Transmission</td><td>Physique</td></tr>
+            </tbody>
+        </table>
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     INTRODUCTION GÉNÉRALE
+════════════════════════════════════════════════════════ -->
+<section id="intro-generale" class="section-page page-break">
+    <div class="toc-title">Introduction Générale</div>
+
+    <p>Face à l'accélération de l'urbanisation mondiale et à la croissance démographique sans précédent, la gestion des déchets solides représente aujourd'hui l'un des défis environnementaux et socioéconomiques les plus critiques de notre époque. Selon les données de la Banque Mondiale (2023), la planète génère annuellement plus de <strong>2,01 milliards de tonnes</strong> de déchets solides municipaux, un chiffre qui devrait atteindre <strong>3,40 milliards de tonnes</strong> d'ici 2050 si aucune mesure drastique n'est prise.</p>
+
+    <p>En Afrique du Nord et au Maghreb en particulier, cette problématique prend une dimension encore plus préoccupante. Les taux de recyclage effectif y restent inférieurs à <strong>10%</strong>, contre 45 à 60% dans les pays nordiques. La grande majorité des déchets collectés finit dans des décharges non contrôlées, engendrant des pollutions atmosphériques, hydriques et terrestres aux conséquences sanitaires et écologiques alarmantes.</p>
+
+    <p>La transition vers une <strong>économie circulaire</strong> impose une rupture technologique dans la chaîne de traitement des déchets. Le tri sélectif, première étape indispensable à toute valorisation matière, repose encore massivement sur le travail manuel dans les pays en développement — une pratique coûteuse, inefficace, et dangereuse pour la santé des travailleurs exposés quotidiennement à des substances toxiques, à des objets tranchants et à des agents biologiques pathogènes.</p>
+
+    <p>C'est dans ce contexte que s'inscrit le présent projet : la conception et la réalisation d'une <strong>station intelligente de tri automatique des déchets</strong>, un prototype de système embarqué multimodal capable d'identifier, de classifier et de séparer différents types de déchets solides en temps réel, grâce à la combinaison de la vision artificielle, de la fusion de capteurs hétérogènes et d'algorithmes d'intelligence artificielle embarquée.</p>
+
+    <div class="info-box">
+        <div class="box-title">💡 Innovation du Projet</div>
+        Notre système se distingue des solutions industrielles existantes par son approche <strong>Safety-First</strong> (priorité absolue à la détection des déchets dangereux comme les batteries au lithium), son architecture <strong>distribuée et modulaire</strong> (Jetson Nano + STM32 + ESP32), et sa capacité d'adaptation aux flux de déchets <strong>locaux</strong> grâce à un modèle d'IA entraînable sur des données collectées in situ.
+    </div>
+
+    <p>L'architecture technique retenue repose sur une hiérarchie de trois niveaux de traitement : un niveau stratégique assuré par la plateforme NVIDIA Jetson Nano dotée de 128 cœurs CUDA pour l'inférence du réseau de neurones YOLOv8 ; un niveau tactique géré par un microcontrôleur STM32F411 pour le contrôle temps-réel des moteurs avec régulation PID ; et un niveau opérationnel confié à deux nœuds ESP32 assurant respectivement la lecture des capteurs multimodaux et la gestion des actionneurs d'éjection et des systèmes de sécurité.</p>
+
+    <p>Le présent rapport est structuré en trois chapitres complémentaires :</p>
+
+    <ul class="custom">
+        <li><strong>Le Chapitre I</strong> présente le contexte général du projet, analyse la problématique de la gestion des déchets, dresse un état de l'art des solutions existantes et définit les objectifs et spécifications du système proposé.</li>
+        <li><strong>Le Chapitre II</strong> développe les fondements théoriques et technologiques du projet, avec une étude comparative approfondie des composants électroniques, capteurs et algorithmes d'IA retenus, justifiant chaque choix technologique par rapport aux alternatives disponibles.</li>
+        <li><strong>Le Chapitre III</strong> décrit la réalisation concrète du prototype, depuis les schémas de câblage jusqu'aux résultats expérimentaux, en passant par les procédures de calibration et les tests de performance.</li>
+    </ul>
+
+    <p>Une conclusion générale synthétise les apports du projet et ouvre des perspectives d'amélioration et d'industrialisation.</p>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     CHAPITRE I
+════════════════════════════════════════════════════════ -->
+<div id="chapitre1" class="chapter-cover page-break" data-chapter="I">
+    <div class="chapter-number">Chapitre I</div>
+    <div class="chapter-title">Présentation du Projet de Station de Tri Intelligente</div>
+    <div class="chapter-desc">Contexte, problématique, état de l'art et objectifs du système de tri automatique des déchets solides</div>
+</div>
+
+<section class="content-section">
+    <h1 id="ch1-intro">1. Introduction</h1>
+    <div class="intro-box">
+        Ce chapitre pose le cadre global du projet. Il présente d'abord le contexte environnemental et économique qui motive le développement d'une solution de tri automatique. Il analyse ensuite les systèmes existants — tant industriels que de recherche — pour identifier leurs limites et justifier l'approche originale retenue. Enfin, il définit précisément les objectifs, les spécifications fonctionnelles et la méthodologie de travail adoptée.
+    </div>
+
+    <h1 id="ch1-contexte">2. Contexte Global du Projet</h1>
+
+    <p>La problématique des déchets solides constitue une préoccupation majeure à l'échelle mondiale. La production de déchets est directement corrélée au développement économique et à la croissance démographique : selon le rapport <em>What a Waste 2.0</em> de la Banque Mondiale (Silpa Kaza et al., 2018), les pays à revenus élevés génèrent en moyenne 683 kg de déchets par habitant et par an, contre 180 kg dans les pays à faibles revenus, ces derniers étant cependant confrontés à des capacités de traitement nettement insuffisantes.</p>
+
+    <p>La valorisation des déchets — qu'elle soit matière (recyclage), organique (compostage, méthanisation) ou énergétique (combustion, pyrolyse) — exige impérativement une étape préliminaire de <strong>tri sélectif</strong> permettant de séparer les différentes fractions selon leur nature. Cette étape conditionne directement la qualité et donc la valeur marchande des matériaux récupérés.</p>
+
+    <div class="metrics-grid">
+        <div class="metric-card">
+            <span class="metric-value">2,01 Mds</span>
+            <div class="metric-label">Tonnes de déchets/an mondiales</div>
+        </div>
+        <div class="metric-card">
+            <span class="metric-value">&lt;10%</span>
+            <div class="metric-label">Taux de recyclage au Maghreb</div>
+        </div>
+        <div class="metric-card">
+            <span class="metric-value">3,40 Mds</span>
+            <div class="metric-label">Tonnes prévues en 2050</div>
+        </div>
+        <div class="metric-card">
+            <span class="metric-value">90-95%</span>
+            <div class="metric-label">Objectif de récupération du système</div>
+        </div>
+    </div>
+
+    <h1 id="ch1-problematique">3. La Gestion des Déchets : Problématique et Enjeux</h1>
+
+    <h2>3.1 Nature et Impact des Déchets Solides</h2>
+
+    <p>Les déchets ménagers et assimilés présentent une composition extrêmement hétérogène. Une analyse typique d'un sac de déchets ménagers révèle la présence simultanée de matières organiques fermentescibles, de plastiques de différents types (PET, HDPE, PP, PS, PVC), de papiers et cartons, de métaux ferreux et non ferreux, de verre, de textiles et de déchets dits "dangereux" incluant notamment les piles et batteries, les produits chimiques ménagers et les seringues.</p>
+
+    <div class="figure-box">
+        <div class="arch-diagram">
+            <div style="text-align:center; font-weight:bold; margin-bottom:20px; font-size:12pt;">
+                Composition typique des déchets ménagers (zone urbaine, Maghreb)
+            </div>
+            <div class="arch-row">
+                <div class="arch-block" style="background:#8B4513; min-width:140px;">🍂 Organique<br><strong>40-50%</strong></div>
+                <div class="arch-block" style="background:#1a6e9f; min-width:120px;">🧴 Plastique<br><strong>15-20%</strong></div>
+                <div class="arch-block" style="background:#5d6d7e; min-width:110px;">📰 Papier<br><strong>10-15%</strong></div>
+            </div>
+            <div class="arch-row">
+                <div class="arch-block" style="background:#6c8c3c; min-width:110px;">🍾 Verre<br><strong>5-10%</strong></div>
+                <div class="arch-block" style="background:#7d6608; min-width:100px;">🔩 Métal<br><strong>3-5%</strong></div>
+                <div class="arch-block red" style="min-width:100px;">⚠️ Dangereux<br><strong>1-3%</strong></div>
+                <div class="arch-block gray" style="min-width:110px;">❓ Autres<br><strong>10-15%</strong></div>
+            </div>
+        </div>
+        <div class="figure-caption">Figure I.2 — Composition typique d'un sac de déchets ménagers en zone urbaine au Maghreb</div>
+    </div>
+
+    <h2>3.2 Problématique Spécifique du Projet</h2>
+
+    <p>Le tri manuel, solution dominante dans les pays en développement, souffre de limitations fondamentales qui compromettent son efficacité et sa viabilité à long terme. Sur le plan économique, le coût de la main-d'œuvre représente 70 à 80% du coût opérationnel total d'un centre de tri. Sur le plan sanitaire, les travailleurs sont exposés à de multiples risques : blessures par objets tranchants (verre, métal), contaminations biologiques (déchets médicaux), exposition aux substances chimiques (piles, solvants) et à des gaz toxiques (décomposition des matières organiques, batteries au lithium endommagées).</p>
+
+    <div class="danger-box">
+        <div class="box-title">⚠️ Risque Critique : Batteries Lithium-Ion</div>
+        Les batteries au lithium représentent le risque le plus grave dans les flux de déchets ménagers. Lorsqu'elles sont comprimées, perforées ou soumises à l'humidité, elles peuvent provoquer un phénomène d'emballement thermique (<em>thermal runaway</em>) conduisant à des incendies violents impossible à éteindre avec de l'eau. En 2022, les batteries mal triées ont causé plus de 1 200 incendies dans des centres de tri en Europe. Notre système intègre un protocole de détection prioritaire des batteries AVANT toute opération mécanique.
+    </div>
+
+    <h1 id="ch1-existant">4. Étude de l'Existant</h1>
+
+    <p>Avant de définir notre solution, une analyse rigoureuse des approches existantes s'impose. Nous distinguons quatre catégories de systèmes de tri, allant des méthodes traditionnelles aux solutions robotisées de dernière génération.</p>
+
+    <h2>4.1 Tri Manuel Traditionnel</h2>
+    <p>Le tri manuel consiste à faire passer les déchets sur des convoyeurs où des opérateurs humains les séparent à la main selon leur nature. C'est la méthode la plus répandue dans les pays en développement en raison de son faible coût d'investissement initial. Cependant, ses performances restent limitées : un opérateur expérimenté traite entre 0,5 et 1 tonne par heure avec un taux de précision variant entre 70 et 80%, dépendant fortement de la fatigue et des conditions de travail.</p>
+
+    <h2>4.2 Séparation Magnétique</h2>
+    <p>Les séparateurs magnétiques (overband magnets, drums magnétiques) constituent la première étape de séparation automatique dans la quasi-totalité des centres de tri modernes. Basés sur les propriétés ferromagnétiques des métaux ferreux, ils permettent de récupérer efficacement (90-98%) l'acier et le fer du flux de déchets. Les séparateurs à courants de Foucault (Eddy Current Separators — ECS) permettent quant à eux d'extraire les métaux non ferreux comme l'aluminium. Ces technologies, bien que matures et fiables, sont limitées à la séparation métallique et ne permettent pas de distinguer les différentes catégories de plastiques ou de papier.</p>
+
+    <h2>4.3 Tri Optique Industriel (NIR/SWIR)</h2>
+    <p>Les systèmes de tri optique industriels, commercialisés par des acteurs comme TOMRA (Norvège), PELLENC ST (France) ou STEINERT (Allemagne), représentent l'état de l'art actuel du tri automatisé. Ils utilisent principalement la spectroscopie dans le proche infrarouge (NIR, 900-1700 nm) pour identifier la nature chimique des matériaux, combinée à des caméras RGB pour la détection de couleur et de forme. Des jets d'air comprimé éjectent ensuite les matériaux identifiés vers les bacs correspondants.</p>
+
+    <h2>4.4 Systèmes Robotisés à Intelligence Artificielle</h2>
+    <p>La nouvelle génération de systèmes de tri intègre des bras robotisés pilotés par des algorithmes de vision par ordinateur basés sur le deep learning. AMP Robotics (États-Unis) propose ainsi des robots capables de réaliser jusqu'à 80 prises par minute avec reconnaissance de plus de 2000 types d'emballages. ZenRobotics (Finlande) cible les déchets de construction et de démolition avec des bras pouvant manipuler des objets jusqu'à plusieurs kilogrammes. Ces systèmes atteignent des précisions supérieures à 95%, mais leur coût — plusieurs centaines de milliers d'euros par unité — les réserve aux grandes installations industrielles.</p>
+
+    <h2>4.5 Analyse Comparative des Solutions Existantes</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau I.1 — Comparaison des systèmes de tri existants</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Critère</th>
+                    <th>Tri Manuel</th>
+                    <th>Séparation Magnétique</th>
+                    <th>NIR Industriel</th>
+                    <th>Robot IA</th>
+                    <th>Notre Système</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Précision de tri</strong></td>
+                    <td class="td-center td-medium">70-80%</td>
+                    <td class="td-center td-medium">90-98% (métal)</td>
+                    <td class="td-center td-good">92-97%</td>
+                    <td class="td-center td-good">95-99%</td>
+                    <td class="td-center td-good">85-96% 🎯</td>
+                </tr>
+                <tr>
+                    <td><strong>Types identifiés</strong></td>
+                    <td class="td-center">Variable</td>
+                    <td class="td-center td-bad">Métal seul</td>
+                    <td class="td-center td-good">6-10 types</td>
+                    <td class="td-center td-good">15+ types</td>
+                    <td class="td-center td-good">16 types 🎯</td>
+                </tr>
+                <tr>
+                    <td><strong>Débit (t/h)</strong></td>
+                    <td class="td-center">0,5-1</td>
+                    <td class="td-center td-good">10-40</td>
+                    <td class="td-center td-good">5-20</td>
+                    <td class="td-center td-medium">1-5</td>
+                    <td class="td-center td-medium">0,1-0,5 (proto)</td>
+                </tr>
+                <tr>
+                    <td><strong>Investissement</strong></td>
+                    <td class="td-center td-good">Faible</td>
+                    <td class="td-center td-good">€10-50K</td>
+                    <td class="td-center td-bad">€200K-1M+</td>
+                    <td class="td-center td-bad">€500K-3M+</td>
+                    <td class="td-center td-good">€500-1K 🎯</td>
+                </tr>
+                <tr>
+                    <td><strong>Sécurité (batteries)</strong></td>
+                    <td class="td-center td-bad">❌ Risque élevé</td>
+                    <td class="td-center td-bad">❌ Aucune</td>
+                    <td class="td-center td-medium">⚠️ Limitée</td>
+                    <td class="td-center td-medium">⚠️ Partielle</td>
+                    <td class="td-center td-good">✅ Prioritaire</td>
+                </tr>
+                <tr>
+                    <td><strong>Plasturgie noire</strong></td>
+                    <td class="td-center td-medium">Manuelle</td>
+                    <td class="td-center td-bad">❌</td>
+                    <td class="td-center td-bad">❌ NIR aveugle</td>
+                    <td class="td-center td-medium">⚠️ Variable</td>
+                    <td class="td-center td-good">✅ SWIR/AI</td>
+                </tr>
+                <tr>
+                    <td><strong>Adaptabilité locale</strong></td>
+                    <td class="td-center td-good">✅</td>
+                    <td class="td-center td-bad">❌</td>
+                    <td class="td-center td-bad">❌ Fermé</td>
+                    <td class="td-center td-medium">⚠️</td>
+                    <td class="td-center td-good">✅ Open AI</td>
+                </tr>
+                <tr>
+                    <td><strong>Maintenance</strong></td>
+                    <td class="td-center td-good">Simple</td>
+                    <td class="td-center td-good">Simple</td>
+                    <td class="td-center td-bad">Spécialisée</td>
+                    <td class="td-center td-bad">Très spécialisée</td>
+                    <td class="td-center td-good">Accessible</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="success-box">
+        <div class="box-title">✅ Positionnement de Notre Solution</div>
+        Notre système se positionne comme une solution <strong>intermédiaire intelligente</strong> : il offre des performances de tri proches des systèmes industriels haut de gamme (85-96% de précision), tout en maintenant un coût d'investissement compatible avec les budgets des structures académiques et des PME dans les pays en développement (€500-1000 pour le prototype). Sa modularité permet une montée en puissance progressive vers des débits industriels.
+    </div>
+
+    <h1 id="ch1-objectifs">5. Objectifs du Projet</h1>
+
+    <h2>5.1 Expression des Besoins</h2>
+
+    <p>Sur la base de l'analyse de la problématique et des lacunes identifiées dans les solutions existantes, les besoins peuvent être articulés selon deux dimensions :</p>
+
+    <p><strong>Besoins fonctionnels :</strong></p>
+    <ul class="custom">
+        <li>Identifier automatiquement au moins 10 catégories de déchets (PET, HDPE, PP, papier, carton, aluminium, acier, verre, organique, batterie/dangereux)</li>
+        <li>Séparer physiquement les matériaux identifiés en au minimum 6 flux distincts</li>
+        <li>Détecter et isoler PRIORITAIREMENT les éléments dangereux (batteries, objets chimiques)</li>
+        <li>Traiter les objets individuellement à une cadence minimale de 1 objet/seconde</li>
+        <li>Transmettre les données de tri en temps réel vers une interface de supervision</li>
+    </ul>
+
+    <p><strong>Besoins non-fonctionnels :</strong></p>
+    <ul class="custom">
+        <li>Sécurité : le système ne doit jamais aggraver le risque lié aux déchets dangereux</li>
+        <li>Robustesse : fonctionnement continu sans intervention humaine pendant au moins 4 heures</li>
+        <li>Modularité : architecture extensible permettant l'ajout de nouveaux capteurs</li>
+        <li>Accessibilité : coût du prototype inférieur à 1000€, maintenance réalisable avec des compétences de niveau technicien</li>
+    </ul>
+
+    <h2>5.2 Spécifications Fonctionnelles</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau I.2 — Spécifications fonctionnelles du système de tri</p>
+        <table>
+            <thead>
+                <tr><th>Fonction</th><th>Description</th><th>Indicateur</th><th>Valeur cible</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>FP1 — Identification</td><td>Classifier chaque déchet par type de matériau</td><td>Précision globale</td><td>≥ 85%</td></tr>
+                <tr><td>FP2 — Séparation</td><td>Éjecter chaque déchet vers le bac correspondant</td><td>Précision éjection</td><td>≥ 90%</td></tr>
+                <tr><td>FP3 — Sécurité</td><td>Détecter et isoler batteries et objets dangereux</td><td>Taux de détection</td><td>≥ 99%</td></tr>
+                <tr><td>FP4 — Débit</td><td>Traiter un flux continu d'objets</td><td>Cadence</td><td>≥ 1 objet/s</td></tr>
+                <tr><td>FS1 — Supervision</td><td>Afficher statistiques en temps réel</td><td>Latence dashboard</td><td>≤ 2s</td></tr>
+                <tr><td>FS2 — Arrêt urgence</td><td>Stopper tous les actionneurs en cas d'alerte</td><td>Temps de réaction</td><td>≤ 100ms</td></tr>
+                <tr><td>FS3 — Calibration</td><td>Permettre la recalibration des paramètres</td><td>Procédure guidée</td><td>≤ 30 min</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>5.3 Solution Proposée</h2>
+
+    <p>La solution retenue est une station de tri automatisée à architecture distribuée, combinant :</p>
+
+    <div class="arch-diagram">
+        <div style="text-align:center; font-weight:bold; margin-bottom:20px;">Architecture Fonctionnelle du Système Proposé</div>
+        <div class="arch-row">
+            <div class="arch-block orange">📦 Entrée<br>Déchets bruts</div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-block">🔍 Pré-scan<br>Sécurité</div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-block green">📐 Tri<br>par taille</div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-block">🧲 Séparation<br>magnétique</div>
+        </div>
+        <div class="arch-arrow-down">↓</div>
+        <div class="arch-row">
+            <div class="arch-block red">⚠️ Bac<br>Dangereux</div>
+            <div class="arch-arrow">←</div>
+            <div class="arch-block yellow">💨 Éjection<br>Air Jets</div>
+            <div class="arch-arrow">←</div>
+            <div class="arch-block green">🧠 IA + Fusion<br>Capteurs</div>
+            <div class="arch-arrow">←</div>
+            <div class="arch-block">📷 Vision<br>+ Sensors</div>
+        </div>
+        <div class="arch-arrow-down">↓</div>
+        <div class="arch-row">
+            <div class="arch-block" style="background:#1e8449;">♻️ PET</div>
+            <div class="arch-block" style="background:#1a6e9f;">♻️ HDPE</div>
+            <div class="arch-block" style="background:#7d6608;">📰 Papier</div>
+            <div class="arch-block" style="background:#6c3483;">🔩 Métal</div>
+            <div class="arch-block" style="background:#5d6d7e;">🍾 Verre</div>
+            <div class="arch-block" style="background:#784212;">🌱 Organique</div>
+        </div>
+    </div>
+    <div class="figure-caption">Figure I.6 — Architecture générale de la solution proposée</div>
+
+    <h1 id="ch1-methodologie">6. Méthodologie de Travail</h1>
+
+    <p>La méthodologie adoptée pour ce projet suit une approche de développement itératif et incrémental, inspirée des principes Agile adaptés aux contraintes de l'ingénierie matérielle. Cette approche permet de valider chaque composant individuellement avant son intégration dans le système global, réduisant ainsi les risques de défaillances tardives difficiles à diagnostiquer.</p>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">Phase 1 — Analyse et Spécification (Semaines 1-2)</div>
+            <div class="timeline-content">Étude bibliographique, analyse de l'existant, définition des exigences, sélection des composants et élaboration des schémas d'architecture.</div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">Phase 2 — Développement IA (Semaines 3-5)</div>
+            <div class="timeline-content">Collecte et annotation du dataset de déchets, entraînement du modèle YOLOv8, optimisation pour Jetson Nano (TensorRT FP16), validation de la précision sur jeu de test.</div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">Phase 3 — Développement Embarqué (Semaines 4-7)</div>
+            <div class="timeline-content">Programmation STM32 (FreeRTOS + PID moteurs), programmation ESP32 capteurs et sécurité, intégration des pilotes de communication UART/JSON.</div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">Phase 4 — Réalisation Mécanique (Semaines 5-8)</div>
+            <div class="timeline-content">Conception et assemblage du convoyeur prototype, montage des capteurs, installation des jets d'air et des bacs de tri, câblage électronique.</div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">Phase 5 — Intégration et Tests (Semaines 8-10)</div>
+            <div class="timeline-content">Intégration de tous les sous-systèmes, calibration (vitesse, timing, capteurs), tests unitaires et tests d'intégration, mesure des performances.</div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">Phase 6 — Rédaction et Soutenance (Semaines 10-12)</div>
+            <div class="timeline-content">Rédaction du rapport final, préparation de la présentation, démonstration du prototype fonctionnel.</div>
+        </div>
+    </div>
+
+    <h1>7. Conclusion</h1>
+    <div class="conclusion-box">
+        Ce chapitre a établi le cadre du projet en démontrant la pertinence d'une solution automatisée de tri des déchets face aux limites des approches manuelles et industrielles existantes. La problématique de la sécurité — particulièrement vis-à-vis des batteries lithium — a été identifiée comme un enjeu critique souvent négligé dans les systèmes actuels. Les objectifs et spécifications définis guideront le développement technique décrit dans les chapitres suivants. Le Chapitre II développera les fondements théoriques et comparatifs qui justifient les choix technologiques retenus.
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     CHAPITRE II
+════════════════════════════════════════════════════════ -->
+<div id="chapitre2" class="chapter-cover page-break" data-chapter="II">
+    <div class="chapter-number">Chapitre II</div>
+    <div class="chapter-title">Fondements Théoriques et Technologiques</div>
+    <div class="chapter-desc">Étude comparative approfondie des microcontrôleurs, capteurs, actionneurs, algorithmes d'IA et protocoles de communication — justification de chaque choix technologique</div>
+</div>
+
+<section class="content-section">
+    <h1>1. Introduction</h1>
+    <div class="intro-box">
+        Ce chapitre constitue le cœur de la réflexion technologique du projet. Pour chaque composant du système — des microcontrôleurs aux capteurs en passant par les algorithmes d'IA — nous présentons une étude comparative rigoureuse des alternatives disponibles sur le marché, analysons leurs avantages et inconvénients au regard des exigences du système, et justifions le choix retenu par des arguments techniques précis et mesurables.
+    </div>
+
+    <h1>2. Architecture du Système Embarqué Proposé</h1>
+
+    <p>L'architecture du système adopte un modèle <strong>distribué hiérarchique</strong> à trois niveaux, inspiré des architectures SCADA industrielles mais adaptée aux contraintes budgétaires et de prototype académique. Ce choix architectural répond à une exigence fondamentale : la nécessité de garantir simultanément des <em>performances temps-réel</em> pour le contrôle des moteurs et des <em>performances computationnelles</em> pour l'inférence du réseau de neurones — deux exigences techniquement incompatibles sur un seul et même processeur.</p>
+
+    <div class="arch-diagram">
+        <div style="text-align:center; font-weight:bold; margin-bottom:20px; font-size:13pt;">Architecture Matérielle Distribuée — Vue Hiérarchique</div>
+        <div class="arch-row">
+            <div class="arch-block" style="background:#1a3a5c; padding:20px 30px; font-size:11pt;">
+                🧠 NVIDIA Jetson Nano<br>
+                <small style="opacity:0.8;">Niveau Stratégique<br>AI Inference + Supervision</small>
+            </div>
+        </div>
+        <div class="arch-arrow-down">│ UART USB ↕ JSON</div>
+        <div class="arch-row">
+            <div class="arch-block" style="background:#1e6b4a; padding:15px 25px;">
+                ⚙️ STM32F411<br>
+                <small style="opacity:0.8;">Niveau Tactique<br>Motor Control + PID</small>
+            </div>
+            <div style="width:80px;"></div>
+            <div class="arch-block" style="background:#6e4c1e; padding:15px 25px;">
+                📡 ESP32 #1<br>
+                <small style="opacity:0.8;">Nœud Capteurs<br>Spectral + Color + Weight</small>
+            </div>
+            <div style="width:80px;"></div>
+            <div class="arch-block red" style="padding:15px 25px;">
+                🛡️ ESP32 #2<br>
+                <small style="opacity:0.8;">Sécurité + Éjection<br>Metal + Thermal + Jets</small>
+            </div>
+        </div>
+        <div class="arch-arrow-down">│ GPIO / PWM / I2C / ADC ↕</div>
+        <div class="arch-row">
+            <div class="arch-block gray" style="font-size:9.5pt; padding:10px;">🔄 Moteurs DC<br>+ Encodeurs</div>
+            <div class="arch-block gray" style="font-size:9.5pt; padding:10px;">📷 Caméra<br>IMX219</div>
+            <div class="arch-block gray" style="font-size:9.5pt; padding:10px;">🌈 AS7265x<br>18 canaux</div>
+            <div class="arch-block gray" style="font-size:9.5pt; padding:10px;">🧲 Inductif<br>x3</div>
+            <div class="arch-block gray" style="font-size:9.5pt; padding:10px;">💨 Air Jets<br>+ Relais</div>
+            <div class="arch-block gray" style="font-size:9.5pt; padding:10px;">🌡️ MLX90614<br>Thermique</div>
+        </div>
+    </div>
+    <div class="figure-caption">Figure II.1 — Architecture matérielle distribuée du système de tri intelligent</div>
+
+    <h1 id="ch2-controllers">3. Étude Comparative des Microcontrôleurs et Plateformes de Traitement</h1>
+
+    <p>Le choix des plateformes de traitement est la décision architecturale la plus structurante du projet. Cinq plateformes candidates ont été évaluées selon sept critères pondérés correspondant aux exigences du système.</p>
+
+    <!-- ARDUINO -->
+    <h2>3.1 Arduino MEGA 2560</h2>
+
+    <div class="component-card">
+        <div class="component-header">
+            <div class="component-icon">🔵</div>
+            <div>
+                <div class="component-name">Arduino MEGA 2560</div>
+                <div class="component-model">ATmega2560 — 8-bit AVR, 16 MHz</div>
+            </div>
+        </div>
+        <div class="component-body">
+            <div class="component-specs">
+                <div class="spec-row"><span class="spec-label">Processeur</span><span class="spec-value">ATmega2560, 8-bit, 16 MHz</span></div>
+                <div class="spec-row"><span class="spec-label">Mémoire Flash</span><span class="spec-value">256 KB</span></div>
+                <div class="spec-row"><span class="spec-label">SRAM</span><span class="spec-value">8 KB</span></div>
+                <div class="spec-row"><span class="spec-label">Broches I/O</span><span class="spec-value">54 digitales, 16 analogiques</span></div>
+                <div class="spec-row"><span class="spec-label">UART</span><span class="spec-value">4 × UART</span></div>
+                <div class="spec-row"><span class="spec-label">PWM</span><span class="spec-value">15 canaux</span></div>
+                <div class="spec-row"><span class="spec-label">Timers</span><span class="spec-value">6 timers (8 et 16-bit)</span></div>
+                <div class="spec-row"><span class="spec-label">Tension logique</span><span class="spec-value">5V</span></div>
+                <div class="spec-row"><span class="spec-label">Prix</span><span class="spec-value">~€10-15</span></div>
+                <div class="spec-row"><span class="spec-label">WiFi/BT</span><span class="spec-value">Non</span></div>
+            </div>
+            <div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h5>✅ Avantages</h5>
+                        <ul>
+                            <li>Nombreuses broches I/O</li>
+                            <li>Excellente documentation</li>
+                            <li>Communauté très large</li>
+                            <li>Robuste et éprouvé</li>
+                            <li>Facile à programmer</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h5>❌ Inconvénients</h5>
+                        <ul>
+                            <li>16 MHz — trop lent pour PID haute fréquence</li>
+                            <li>8 KB SRAM — insuffisant pour JSON + buffers</li>
+                            <li>Pas de FreeRTOS mature</li>
+                            <li>Pas de DMA</li>
+                            <li>Architecture 8-bit obsolète</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- ESP32 -->
+    <h2>3.2 ESP32 DevKit v1</h2>
+
+    <div class="component-card">
+        <div class="component-header">
+            <div class="component-icon">📡</div>
+            <div>
+                <div class="component-name">ESP32 DevKit v1</div>
+                <div class="component-model">Espressif ESP32 — Dual-core Xtensa LX6, 240 MHz</div>
+            </div>
+        </div>
+        <div class="component-body">
+            <div class="component-specs">
+                <div class="spec-row"><span class="spec-label">Processeur</span><span class="spec-value">Dual-core Xtensa LX6, 240 MHz</span></div>
+                <div class="spec-row"><span class="spec-label">Mémoire Flash</span><span class="spec-value">4 MB (externe SPI)</span></div>
+                <div class="spec-row"><span class="spec-label">SRAM</span><span class="spec-value">520 KB</span></div>
+                <div class="spec-row"><span class="spec-label">Broches I/O</span><span class="spec-value">36 GPIO (34 en input)</span></div>
+                <div class="spec-row"><span class="spec-label">ADC</span><span class="spec-value">2 × 12-bit ADC, 18 canaux</span></div>
+                <div class="spec-row"><span class="spec-label">UART / SPI / I2C</span><span class="spec-value">3 / 3 / 2</span></div>
+                <div class="spec-row"><span class="spec-label">WiFi</span><span class="spec-value">802.11 b/g/n (2.4 GHz)</span></div>
+                <div class="spec-row"><span class="spec-label">Bluetooth</span><span class="spec-value">BT Classic + BLE 4.2</span></div>
+                <div class="spec-row"><span class="spec-label">Tension logique</span><span class="spec-value">3.3V</span></div>
+                <div class="spec-row"><span class="spec-label">Prix</span><span class="spec-value">~€3-8</span></div>
+            </div>
+            <div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h5>✅ Avantages</h5>
+                        <ul>
+                            <li>WiFi + BT intégré</li>
+                            <li>Dual-core (tâches parallèles)</li>
+                            <li>Prix très attractif</li>
+                            <li>FreeRTOS natif</li>
+                            <li>520 KB SRAM suffisant</li>
+                            <li>ADC 12-bit multiple</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h5>❌ Inconvénients</h5>
+                        <ul>
+                            <li>ADC non-linéaire (bruit)</li>
+                            <li>Pas de timers hardware dédiés moteur</li>
+                            <li>Pas d'interface encodeur quadrature HW</li>
+                            <li>Non idéal pour PID moteur haute précision</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- STM32 -->
+    <h2>3.3 STM32F411 BlackPill</h2>
+
+    <div class="component-card">
+        <div class="component-header">
+            <div class="component-icon" style="background:#c0392b;">⚙️</div>
+            <div>
+                <div class="component-name">STM32F411CEU6 — BlackPill</div>
+                <div class="component-model">ARM Cortex-M4F, 100 MHz, FPU intégré</div>
+            </div>
+        </div>
+        <div class="component-body">
+            <div class="component-specs">
+                <div class="spec-row"><span class="spec-label">Processeur</span><span class="spec-value">ARM Cortex-M4F, 100 MHz</span></div>
+                <div class="spec-row"><span class="spec-label">FPU</span><span class="spec-value">Oui — Float matériel (PID!)</span></div>
+                <div class="spec-row"><span class="spec-label">Mémoire Flash</span><span class="spec-value">512 KB</span></div>
+                <div class="spec-row"><span class="spec-label">SRAM</span><span class="spec-value">128 KB</span></div>
+                <div class="spec-row"><span class="spec-label">Timers avancés</span><span class="spec-value">11 (dont encodeurs quadrature)</span></div>
+                <div class="spec-row"><span class="spec-label">PWM</span><span class="spec-value">16+ canaux 16-bit</span></div>
+                <div class="spec-row"><span class="spec-label">DMA</span><span class="spec-value">16 canaux</span></div>
+                <div class="spec-row"><span class="spec-label">ADC</span><span class="spec-value">12-bit, 16 canaux</span></div>
+                <div class="spec-row"><span class="spec-label">UART/SPI/I2C</span><span class="spec-value">6 / 5 / 3</span></div>
+                <div class="spec-row"><span class="spec-label">Prix</span><span class="spec-value">~€5-15</span></div>
+            </div>
+            <div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h5>✅ Avantages</h5>
+                        <ul>
+                            <li>FPU matériel → PID ultra-rapide</li>
+                            <li>Timers 16-bit + encodeur HW</li>
+                            <li>DMA → pas de charge CPU pour I/O</li>
+                            <li>FreeRTOS optimal (Cortex-M4)</li>
+                            <li>Interruptions déterministes (NVIC)</li>
+                            <li>Très faible consommation</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h5>❌ Inconvénients</h5>
+                        <ul>
+                            <li>Pas de WiFi natif</li>
+                            <li>Courbe d'apprentissage plus raide</li>
+                            <li>HAL/CubeMX requis</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- RASPBERRY PI -->
+    <h2>3.4 Raspberry Pi 4 Model B</h2>
+
+    <div class="component-card">
+        <div class="component-header">
+            <div class="component-icon" style="background:#c0392b;">🍓</div>
+            <div>
+                <div class="component-name">Raspberry Pi 4 Model B</div>
+                <div class="component-model">Broadcom BCM2711, Cortex-A72, 4×1.8 GHz</div>
+            </div>
+        </div>
+        <div class="component-body">
+            <div class="component-specs">
+                <div class="spec-row"><span class="spec-label">Processeur</span><span class="spec-value">BCM2711, 4×Cortex-A72, 1.8 GHz</span></div>
+                <div class="spec-row"><span class="spec-label">RAM</span><span class="spec-value">4 GB LPDDR4</span></div>
+                <div class="spec-row"><span class="spec-label">GPU</span><span class="spec-value">VideoCore VI (généraliste)</span></div>
+                <div class="spec-row"><span class="spec-label">OS</span><span class="spec-value">Linux (Raspberry Pi OS)</span></div>
+                <div class="spec-row"><span class="spec-label">USB</span><span class="spec-value">2× USB 3.0, 2× USB 2.0</span></div>
+                <div class="spec-row"><span class="spec-label">CSI</span><span class="spec-value">1× (caméra)</span></div>
+                <div class="spec-row"><span class="spec-label">Prix</span><span class="spec-value">~€60-75</span></div>
+            </div>
+            <div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h5>✅ Avantages</h5>
+                        <ul>
+                            <li>Puissant CPU (4 cœurs)</li>
+                            <li>4 GB RAM — confortable</li>
+                            <li>Linux complet</li>
+                            <li>Large écosystème logiciel</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h5>❌ Inconvénients</h5>
+                        <ul>
+                            <li>GPU généraliste, pas CUDA</li>
+                            <li>IA limitée (inférence CPU)</li>
+                            <li>Pas de tensor cores dédiés</li>
+                            <li>YOLOv8 : ~5 FPS seulement</li>
+                            <li>Pas adapté au temps-réel strict</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- JETSON NANO -->
+    <h2>3.5 NVIDIA Jetson Nano Developer Kit 4GB</h2>
+
+    <div class="component-card">
+        <div class="component-header">
+            <div class="component-icon" style="background:#76b900;">🚀</div>
+            <div>
+                <div class="component-name">NVIDIA Jetson Nano 4GB <span class="winner-badge">✅ CHOISI</span></div>
+                <div class="component-model">Quad-core ARM Cortex-A57 + 128 CUDA Cores (Maxwell GPU)</div>
+            </div>
+        </div>
+        <div class="component-body">
+            <div class="component-specs">
+                <div class="spec-row"><span class="spec-label">CPU</span><span class="spec-value">4× Cortex-A57, 1.43 GHz</span></div>
+                <div class="spec-row"><span class="spec-label">GPU</span><span class="spec-value">128 CUDA cores Maxwell</span></div>
+                <div class="spec-row"><span class="spec-label">RAM</span><span class="spec-value">4 GB LPDDR4 (partagée CPU/GPU)</span></div>
+                <div class="spec-row"><span class="spec-label">Performance IA</span><span class="spec-value">472 GFLOPS</span></div>
+                <div class="spec-row"><span class="spec-label">TensorRT</span><span class="spec-value">Oui — FP16 accéléré</span></div>
+                <div class="spec-row"><span class="spec-label">YOLOv8n FPS</span><span class="spec-value">~30-60 FPS (TensorRT FP16)</span></div>
+                <div class="spec-row"><span class="spec-label">CSI Camera</span><span class="spec-value">2× MIPI CSI-2</span></div>
+                <div class="spec-row"><span class="spec-label">USB</span><span class="spec-value">4× USB 3.0</span></div>
+                <div class="spec-row"><span class="spec-label">GPIO</span><span class="spec-value">40 broches (compatible RPi)</span></div>
+                <div class="spec-row"><span class="spec-label">OS</span><span class="spec-value">Ubuntu 18.04 (JetPack 4.6)</span></div>
+                <div class="spec-row"><span class="spec-label">Prix</span><span class="spec-value">~€90-130</span></div>
+            </div>
+            <div>
+                <div class="pros-cons">
+                    <div class="pros">
+                        <h5>✅ Avantages Décisifs</h5>
+                        <ul>
+                            <li>128 CUDA cores → inférence IA rapide</li>
+                            <li>TensorRT : accélération matérielle IA</li>
+                            <li>YOLOv8 @ 30-60 FPS en temps réel</li>
+                            <li>PyTorch, TensorFlow, OpenCV natifs</li>
+                            <li>Linux complet → développement aisé</li>
+                            <li>4 USB 3.0 → connexion microcontrôleurs</li>
+                            <li>CSI → caméra haute qualité</li>
+                        </ul>
+                    </div>
+                    <div class="cons">
+                        <h5>⚠️ Contraintes Gérées</h5>
+                        <ul>
+                            <li>Prix supérieur (~€100) — justifié par GPU</li>
+                            <li>Consommation 5-10W (alimenté séparément)</li>
+                            <li>Non idéal pour temps-réel strict → délégué STM32</li>
+                        </ul>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <h2>3.6 Analyse Comparative et Justification des Choix</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau II.1 — Matrice de comparaison des plateformes de traitement (notation /5)</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Critère (Poids)</th>
+                    <th>Arduino<br>MEGA</th>
+                    <th>ESP32</th>
+                    <th>STM32<br>F411</th>
+                    <th>RPi 4</th>
+                    <th>Jetson<br>Nano</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Inférence IA temps réel</strong> (30%)</td>
+                    <td class="td-center td-bad">0/5</td>
+                    <td class="td-center td-bad">1/5</td>
+                    <td class="td-center td-bad">1/5</td>
+                    <td class="td-center td-medium">3/5</td>
+                    <td class="td-center td-good">5/5 ✅</td>
+                </tr>
+                <tr>
+                    <td><strong>Contrôle moteur PID</strong> (25%)</td>
+                    <td class="td-center td-medium">2/5</td>
+                    <td class="td-center td-medium">3/5</td>
+                    <td class="td-center td-good">5/5 ✅</td>
+                    <td class="td-center td-bad">1/5</td>
+                    <td class="td-center td-bad">1/5</td>
+                </tr>
+                <tr>
+                    <td><strong>Lecture capteurs multi</strong> (20%)</td>
+                    <td class="td-center td-medium">3/5</td>
+                    <td class="td-center td-good">5/5 ✅</td>
+                    <td class="td-center td-good">4/5</td>
+                    <td class="td-center td-medium">3/5</td>
+                    <td class="td-center td-medium">3/5</td>
+                </tr>
+                <tr>
+                    <td><strong>Temps réel garanti</strong> (15%)</td>
+                    <td class="td-center td-medium">3/5</td>
+                    <td class="td-center td-medium">3/5</td>
+                    <td class="td-center td-good">5/5 ✅</td>
+                    <td class="td-center td-bad">2/5</td>
+                    <td class="td-center td-bad">2/5</td>
+                </tr>
+                <tr>
+                    <td><strong>Connectivité</strong> (5%)</td>
+                    <td class="td-center td-bad">1/5</td>
+                    <td class="td-center td-good">5/5</td>
+                    <td class="td-center td-bad">2/5</td>
+                    <td class="td-center td-good">5/5</td>
+                    <td class="td-center td-good">5/5</td>
+                </tr>
+                <tr>
+                    <td><strong>Coût</strong> (5%)</td>
+                    <td class="td-center td-good">4/5</td>
+                    <td class="td-center td-good">5/5</td>
+                    <td class="td-center td-good">5/5</td>
+                    <td class="td-center td-medium">3/5</td>
+                    <td class="td-center td-medium">3/5</td>
+                </tr>
+                <tr style="background:#e8f4fd; font-weight:bold;">
+                    <td><strong>Score pondéré total</strong></td>
+                    <td class="td-center">1.70</td>
+                    <td class="td-center">2.95</td>
+                    <td class="td-center">3.45</td>
+                    <td class="td-center">2.50</td>
+                    <td class="td-center td-good">3.10 + 2.95*</td>
+                </tr>
+            </tbody>
+        </table>
+        <p style="font-size:9pt; color:#666; text-align:center; margin-top:5px;">* Jetson Nano pour l'IA + ESP32 pour capteurs = combinaison optimale</p>
+    </div>
+
+    <div class="choice-box">
+        <div class="choice-box-title">🎯 Justification de l'Architecture Distribuée Retenue</div>
+        <p>L'analyse révèle qu'<strong>aucune plateforme unique</strong> ne peut satisfaire simultanément toutes les exigences du système. C'est pourquoi nous adoptons une architecture distribuée à trois nœuds :</p>
+        <ul class="check-list" style="margin-top:10px;">
+            <li><strong>Jetson Nano</strong> : inférence YOLOv8 temps réel (30+ FPS), supervision globale, dashboard</li>
+            <li><strong>STM32F411</strong> : contrôle moteur PID déterministe à 1 kHz, timers hardware encodeurs</li>
+            <li><strong>ESP32 × 2</strong> : lecture capteurs multi-protocoles (I2C/ADC/GPIO), WiFi dashboard, gestion relais</li>
+        </ul>
+        <p style="margin-top:10px;">Cette décomposition est économiquement optimale : le coût total des trois microcontrôleurs (€15-30) est inférieur à celui d'un STM32H7 haut de gamme qui n'offrirait pas l'IA intégrée. Elle est également pédagogiquement riche car elle illustre les architectures distribuées réelles des systèmes industriels.</p>
+    </div>
+
+    <h1 id="ch2-sensors">4. Étude Comparative des Capteurs</h1>
+
+    <h2>4.1 Capteurs de Présence et de Positionnement</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau II.5 — Comparaison des capteurs de présence/positionnement</p>
+        <table>
+            <thead>
+                <tr><th>Capteur</th><th>Technologie</th><th>Portée</th><th>Précision</th><th>Matériaux détectés</th><th>Prix</th><th>Retenu</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>HC-SR04</strong></td>
+                    <td>Ultrasonique</td>
+                    <td>2-400 cm</td>
+                    <td>±3 mm</td>
+                    <td>Tous (solides)</td>
+                    <td>€1-2</td>
+                    <td class="td-center td-good">✅ Hauteur</td>
+                </tr>
+                <tr>
+                    <td><strong>IR Obstacle</strong></td>
+                    <td>Infrarouge réfléchi</td>
+                    <td>2-30 cm</td>
+                    <td>±5 mm</td>
+                    <td>Solides non IR-absorbants</td>
+                    <td>€1-2</td>
+                    <td class="td-center td-good">✅ Présence</td>
+                </tr>
+                <tr>
+                    <td><strong>Photoélectrique</strong></td>
+                    <td>Barrière optique</td>
+                    <td>0.1-10 m</td>
+                    <td>±1 mm</td>
+                    <td>Tous (opacité)</td>
+                    <td>€5-20</td>
+                    <td class="td-center td-medium">⚠️ Optionnel</td>
+                </tr>
+                <tr>
+                    <td><strong>Laser TOF (VL53L1X)</strong></td>
+                    <td>Time-of-Flight</td>
+                    <td>1-400 cm</td>
+                    <td>±1 mm</td>
+                    <td>Tous</td>
+                    <td>€8-15</td>
+                    <td class="td-center td-medium">⚠️ V2</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="choice-box">
+        <div class="choice-box-title">🎯 Choix : HC-SR04 + IR Obstacle</div>
+        L'HC-SR04 est retenu pour la mesure de hauteur des objets (estimation du volume), tandis que les capteurs IR à obstacle sont utilisés comme déclencheurs de présence aux points clés du convoyeur (entrée, position caméra, position jet d'éjection). Ce doublement assure la robustesse du timing sans surcoût significatif.
+    </div>
+
+    <h2>4.2 Capteurs de Couleur et Spectraux</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau II.6 — Comparaison des capteurs de couleur et spectraux</p>
+        <table>
+            <thead>
+                <tr><th>Capteur</th><th>Canaux spectraux</th><th>Plage (nm)</th><th>Plastiques identifiables</th><th>Prix</th><th>Retenu</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>TCS34725</strong></td>
+                    <td>4 (RGBC)</td>
+                    <td>380-700</td>
+                    <td>Couleur uniquement, pas type</td>
+                    <td>€5-8</td>
+                    <td class="td-center td-good">✅ Couleur</td>
+                </tr>
+                <tr>
+                    <td><strong>AS7265x</strong></td>
+                    <td>18 (VIS+NIR)</td>
+                    <td>410-940</td>
+                    <td>PET, HDPE, PP, Papier (~70-80%)</td>
+                    <td>€25-35</td>
+                    <td class="td-center td-good">✅ Spectral</td>
+                </tr>
+                <tr>
+                    <td><strong>AS7341</strong></td>
+                    <td>11</td>
+                    <td>350-1000</td>
+                    <td>Limité NIR</td>
+                    <td>€10-15</td>
+                    <td class="td-center td-medium">⚠️</td>
+                </tr>
+                <tr>
+                    <td><strong>NIR Industriel</strong><br>(TOMRA)</td>
+                    <td>Hyperspectral</td>
+                    <td>900-1700</td>
+                    <td>Tous types plastiques 98%+</td>
+                    <td>€10K-50K</td>
+                    <td class="td-center td-bad">❌ Budget</td>
+                </tr>
+                <tr>
+                    <td><strong>Spectromètre USB</strong><br>(C12880MA)</td>
+                    <td>288</td>
+                    <td>340-850</td>
+                    <td>Bonne précision VIS</td>
+                    <td>€100-300</td>
+                    <td class="td-center td-medium">⚠️ V2</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="component-card">
+        <div class="component-header">
+            <div class="component-icon" style="background:#8e44ad;">🌈</div>
+            <div>
+                <div class="component-name">AS7265x Spectral Sensor <span class="winner-badge">✅ CHOISI</span></div>
+                <div class="component-model">SparkFun — 3 chips AS7265x — 18 canaux (410-940 nm)</div>
+            </div>
+        </div>
+        <div style="margin-top:15px;">
+            <p>L'AS7265x est une combinaison de trois puces spectrales (AS72651, AS72652, AS72653) offrant 18 canaux de mesure couvrant le spectre de 410 nm à 940 nm. Sa particularité est d'intégrer une partie du proche infrarouge (730-940 nm), zone spectrale déterminante pour l'identification des polymères plastiques.</p>
+            <div class="table-container" style="margin-top:15px;">
+                <table>
+                    <thead><tr><th>Canal</th><th>Longueur d'onde</th><th>Information fournie</th><th>Utilité tri déchets</th></tr></thead>
+                    <tbody>
+                        <tr><td>A</td><td>410 nm</td><td>Violet — fluorescence</td><td>Détection blanchissants optiques (papier)</td></tr>
+                        <tr><td>B-D</td><td>435-485 nm</td><td>Bleu profond</td><td>Signature verre coloré</td></tr>
+                        <tr><td>E-F</td><td>510-535 nm</td><td>Vert</td><td>Matières organiques (chlorophylle)</td></tr>
+                        <tr><td>G-I</td><td>560-645 nm</td><td>Jaune-Orange-Rouge</td><td>Couleur générale</td></tr>
+                        <tr><td>R,S</td><td>610-680 nm</td><td>Rouge profond</td><td>Discrimination PET coloré</td></tr>
+                        <tr><td>T-U</td><td>730-760 nm</td><td>NIR début</td><td><strong>Signature PET / HDPE début</strong></td></tr>
+                        <tr><td>V-W</td><td>810-860 nm</td><td>NIR moyen</td><td><strong>Signature PP / HDPE</strong></td></tr>
+                        <tr><td>X-Y</td><td>900-940 nm</td><td>NIR profond</td><td><strong>Absorption eau / PET absolu</strong></td></tr>
+                    </tbody>
+                </table>
+            </div>
+        </div>
+    </div>
+
+    <h2>4.3 Capteurs de Détection Métallique</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau II.7 — Comparaison des technologies de détection métallique</p>
+        <table>
+            <thead>
+                <tr><th>Technologie</th><th>Métaux détectés</th><th>Portée</th><th>Batterie?</th><th>Complexité</th><th>Prix</th><th>Retenu</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>Capteur inductif NPN</strong></td>
+                    <td>Ferreux + non-ferreux (proche)</td>
+                    <td>4-15 mm</td>
+                    <td>⚠️ Partiel</td>
+                    <td>Très simple</td>
+                    <td>€4-8</td>
+                    <td class="td-center td-good">✅ ×3</td>
+                </tr>
+                <tr>
+                    <td><strong>Détecteur Hall (A3144)</strong></td>
+                    <td>Ferreux seulement</td>
+                    <td>Quelques mm</td>
+                    <td>❌</td>
+                    <td>Simple</td>
+                    <td>€0.5-2</td>
+                    <td class="td-center td-bad">❌</td>
+                </tr>
+                <tr>
+                    <td><strong>Détecteur métal BFO</strong></td>
+                    <td>Tous métaux</td>
+                    <td>5-20 cm</td>
+                    <td>✅ Meilleur</td>
+                    <td>Moyen</td>
+                    <td>€15-40</td>
+                    <td class="td-center td-medium">⚠️ V2</td>
+                </tr>
+                <tr>
+                    <td><strong>ECS Eddy Current</strong></td>
+                    <td>Non-ferreux (alu, cuivre)</td>
+                    <td>Conveyor-scale</td>
+                    <td>❌</td>
+                    <td>Élevée + HV</td>
+                    <td>€5K-50K</td>
+                    <td class="td-center td-bad">❌ Budget</td>
+                </tr>
+                <tr>
+                    <td><strong>Overband Magnet</strong></td>
+                    <td>Ferreux seulement</td>
+                    <td>Conveyor-scale</td>
+                    <td>❌</td>
+                    <td>Simple</td>
+                    <td>€500-5K</td>
+                    <td class="td-center td-bad">❌ Taille</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="choice-box">
+        <div class="choice-box-title">🎯 Choix : 3× Capteurs Inductifs NPN (8mm + 12mm)</div>
+        <p>Trois capteurs inductifs de portées différentes (4mm, 8mm, 12mm) sont déployés en cascade. La combinaison de leurs signaux permet d'estimer la <strong>"force" du signal métallique</strong> et donc la proportion de métal dans l'objet :</p>
+        <ul class="check-list" style="margin-top:8px;">
+            <li>3 capteurs déclenchés → métal massif (conserve, aluminium pur)</li>
+            <li>1-2 capteurs déclenchés → métal partiel → possible batterie ou objet composite</li>
+            <li>Combiné avec MLX90614 (température) → confirmation batterie si temp > 45°C</li>
+        </ul>
+    </div>
+
+    <h2>4.4 Capteurs Thermiques — Détection Batteries</h2>
+
+    <div class="component-card">
+        <div class="component-header">
+            <div class="component-icon" style="background:#e74c3c;">🌡️</div>
+            <div>
+                <div class="component-name">MLX90614 — Capteur Infrarouge Non-Contact <span class="winner-badge">✅ CHOISI</span></div>
+                <div class="component-model">Melexis — I2C, -70°C à +380°C, résolution 0.02°C</div>
+            </div>
+        </div>
+        <div class="component-body">
+            <div class="component-specs">
+                <div class="spec-row"><span class="spec-label">Interface</span><span class="spec-value">I2C (10-bit PWM aussi)</span></div>
+                <div class="spec-row"><span class="spec-label">Plage objet</span><span class="spec-value">-70 à +380°C</span></div>
+                <div class="spec-row"><span class="spec-label">Résolution</span><span class="spec-value">0.02°C</span></div>
+                <div class="spec-row"><span class="spec-label">Précision</span><span class="spec-value">±0.5°C (0-50°C)</span></div>
+                <div class="spec-row"><span class="spec-label">Champ visuel</span><span class="spec-value">90° (FOV)</span></div>
+                <div class="spec-row"><span class="spec-label">Distance mesure</span><span class="spec-value">1-10 cm optimal</span></div>
+                <div class="spec-row"><span class="spec-label">Prix</span><span class="spec-value">€8-12</span></div>
+            </div>
+            <div>
+                <p style="font-size:10.5pt;">Le MLX90614 est utilisé en détection de batteries endommagées. Une batterie Li-ion en emballement thermique précoce présentera une température de surface anormalement élevée (>45°C delta par rapport à l'ambiant) bien avant tout signe visuel.</p>
+                <p style="margin-top:10px; font-size:10.5pt;"><strong>Logique de détection :</strong><br>
+                <code style="background:#f0f0f0; padding:2px 5px; font-size:9pt;">battery_suspect = metal_partial AND (T_object - T_ambient > 20°C)</code></p>
+            </div>
+        </div>
+    </div>
+
+    <h2>4.5 Capteurs de Poids — Estimation Masse</h2>
+
+    <div class="component-card">
+        <div class="component-header">
+            <div class="component-icon" style="background:#2c3e50;">⚖️</div>
+            <div>
+                <div class="component-name">HX711 + Cellule de Charge 200g <span class="winner-badge">✅ CHOISI</span></div>
+                <div class="component-model">Amplificateur ADC 24-bit différentiel dédié pont de Wheatstone</div>
+            </div>
+        </div>
+        <div class="component-body">
+            <div class="component-specs">
+                <div class="spec-row"><span class="spec-label">Résolution ADC</span><span class="spec-value">24-bit</span></div>
+                <div class="spec-row"><span class="spec-label">Taux échantillonnage</span><span class="spec-value">10 ou 80 SPS</span></div>
+                <div class="spec-row"><span class="spec-label">Interface</span><span class="spec-value">SPI (2 fils)</span></div>
+                <div class="spec-row"><span class="spec-label">Alimentation</span><span class="spec-value">2.6-5.5V</span></div>
+                <div class="spec-row"><span class="spec-label">Résolution masse</span><span class="spec-value">0.1g (avec cellule 200g)</span></div>
+                <div class="spec-row"><span class="spec-label">Prix ensemble</span><span class="spec-value">€5-8</span></div>
+            </div>
+            <div>
+                <p style="font-size:10.5pt;">La mesure de masse fournit une information complémentaire précieuse pour la fusion de données. La densité estimée (masse/volume calculé via ultrason) permet de distinguer :</p>
+                <ul class="custom" style="font-size:10.5pt; margin-top:8px;">
+                    <li>Plastique : 0.9-1.4 g/cm³</li>
+                    <li>Verre : 2.5 g/cm³</li>
+                    <li>Aluminium : 2.7 g/cm³</li>
+                    <li>Acier : 7.8 g/cm³</li>
+                </ul>
+            </div>
+        </div>
+    </div>
+
+    <h1 id="ch2-actuators">5. Actionneurs et Systèmes d'Éjection</h1>
+
+    <h2>5.1 Moteurs de Convoyeur</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau — Comparaison des types de moteurs pour convoyeur</p>
+        <table>
+            <thead>
+                <tr><th>Type</th><th>Contrôle vitesse</th><th>Retour encodeur</th><th>Couple</th><th>Complexité</th><th>Prix</th><th>Choix</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>DC brushed + encodeur</strong></td><td>PWM simple</td><td>✅ Natif</td><td>Moyen-fort</td><td>Moyenne</td><td>€8-15</td><td class="td-center td-good">✅ Convoyeur</td></tr>
+                <tr><td><strong>Stepper NEMA 17</strong></td><td>Pas discrets</td><td>⚠️ Open-loop</td><td>Bon (basse vitesse)</td><td>Simple</td><td>€8-12</td><td class="td-center td-good">✅ Vibration</td></tr>
+                <tr><td><strong>DC brushless (BLDC)</strong></td><td>ESC requis</td><td>Optionnel</td><td>Très fort</td><td>Élevée</td><td>€20-50</td><td class="td-center td-bad">❌</td></tr>
+                <tr><td><strong>Servo continu</strong></td><td>PWM position</td><td>❌</td><td>Faible</td><td>Très simple</td><td>€5-10</td><td class="td-center td-medium">⚠️ Auxiliaire</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>5.2 Système d'Éjection — Air Jets</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau — Comparaison des systèmes d'éjection</p>
+        <table>
+            <thead>
+                <tr><th>Technologie</th><th>Vitesse</th><th>Précision</th><th>Douceur</th><th>Multi-sorties</th><th>Prix</th><th>Choix</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>Jets d'air (solénoïdes)</strong></td><td class="td-good">5-10/s</td><td class="td-good">95%</td><td class="td-good">Très douce</td><td class="td-good">6+</td><td>€8-15</td><td class="td-center td-good">✅ Principal</td></tr>
+                <tr><td><strong>Bras robotisé</strong></td><td class="td-bad">1-2/s</td><td class="td-good">99%</td><td class="td-good">Excellente</td><td class="td-good">Illimité</td><td>€500+</td><td class="td-center td-bad">❌ Budget</td></tr>
+                <tr><td><strong>Déflecteur servo</strong></td><td class="td-medium">3/s</td><td class="td-medium">90%</td><td class="td-medium">Bonne</td><td class="td-bad">2</td><td>€5-8</td><td class="td-center td-good">✅ Backup</td></tr>
+                <tr><td><strong>Bande divergente</strong></td><td class="td-good">Continu</td><td class="td-bad">70%</td><td class="td-good">Très douce</td><td class="td-bad">2</td><td>€30-50</td><td class="td-center td-bad">❌</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="warning-box">
+        <div class="box-title">⚠️ Considération Sécurité pour l'Éjection</div>
+        Les jets d'air sont choisis notamment pour leur <strong>absence de contact mécanique</strong> avec les objets éjectés. Cette propriété est cruciale pour les déchets dangereux : un bras robotisé ou un déflecteur mécanique pourrait comprimer une batterie Li-ion endommagée et déclencher un emballement thermique. Le jet d'air éjecte sans contact, éliminant ce risque.
+    </div>
+
+    <h1 id="ch2-ai">6. Intelligence Artificielle — Vision par Ordinateur</h1>
+
+    <h2>6.1 Comparaison des Modèles de Détection d'Objets</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau II.8 — Comparaison des modèles de détection d'objets pour systèmes embarqués</p>
+        <table>
+            <thead>
+                <tr><th>Modèle</th><th>mAP@0.5</th><th>Jetson Nano FPS</th><th>Taille modèle</th><th>Facilité d'entraînement</th><th>Retenu</th></tr>
+            </thead>
+            <tbody>
+                <tr><td><strong>YOLOv5n</strong></td><td>28.0</td><td>25-40 FPS</td><td>3.8 MB</td><td>Bonne</td><td class="td-center td-medium">⚠️</td></tr>
+                <tr><td><strong>YOLOv8n</strong></td><td>37.3</td><td>30-60 FPS (TRT)</td><td>6.3 MB</td><td>Excellente</td><td class="td-center td-good">✅ CHOISI</td></tr>
+                <tr><td><strong>YOLOv8s</strong></td><td>44.9</td><td>15-25 FPS (TRT)</td><td>22.5 MB</td><td>Excellente</td><td class="td-center td-medium">⚠️ Si plus lent ok</td></tr>
+                <tr><td><strong>SSD MobileNetV2</strong></td><td>22.1</td><td>40-60 FPS</td><td>16.1 MB</td><td>Bonne</td><td class="td-center td-bad">❌ mAP insuffisant</td></tr>
+                <tr><td><strong>EfficientDet-D0</strong></td><td>33.8</td><td>20-30 FPS</td><td>15.9 MB</td><td>Complexe</td><td class="td-center td-bad">❌</td></tr>
+                <tr><td><strong>RT-DETR</strong></td><td>53.1</td><td>5-10 FPS</td><td>67 MB</td><td>Complexe</td><td class="td-center td-bad">❌ Trop lourd</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="choice-box">
+        <div class="choice-box-title">🎯 Choix : YOLOv8 Nano (YOLOv8n) + Export TensorRT FP16</div>
+        YOLOv8n offre le meilleur compromis précision/vitesse pour le Jetson Nano. Exporté en TensorRT avec précision FP16, il atteint <strong>30-60 FPS</strong> — largement suffisant pour traiter 1-3 objets/seconde. Son API Python (Ultralytics) est la plus simple pour l'entraînement personnalisé sur un dataset de déchets locaux. Le pipeline d'entraînement → export → déploiement est entièrement documenté et reproductible en moins de 24 heures de calcul.
+    </div>
+
+    <h2>6.2 Pipeline de Fusion Multi-Capteurs</h2>
+
+    <p>La fusion des données de l'IA visuelle avec les informations provenant des capteurs physiques constitue l'innovation principale de notre système par rapport à un simple classifieur d'images. Cette fusion permet de corriger les faiblesses inhérentes à chaque modalité :</p>
+
+    <div class="arch-diagram">
+        <div style="text-align:center; font-weight:bold; margin-bottom:20px;">Pipeline de Fusion Multi-Capteurs</div>
+        <div class="arch-row">
+            <div class="arch-block" style="font-size:9pt;">📷 RGB Camera<br>Forme, couleur</div>
+            <div class="arch-block" style="font-size:9pt;">🌈 AS7265x<br>18 canaux spectraux</div>
+            <div class="arch-block" style="font-size:9pt;">🧲 Inductif ×3<br>Signal métal</div>
+            <div class="arch-block" style="font-size:9pt;">🌡️ MLX90614<br>Température</div>
+            <div class="arch-block" style="font-size:9pt;">⚖️ HX711<br>Masse</div>
+        </div>
+        <div class="arch-arrow-down">↓</div>
+        <div class="arch-row">
+            <div class="arch-block" style="background:#6c3483; min-width:300px; padding:15px;">
+                🧠 AI Fusion Engine (Jetson Nano)<br>
+                <small>Confidence Weighting + Rule Engine + Final Classification</small>
+            </div>
+        </div>
+        <div class="arch-arrow-down">↓</div>
+        <div class="arch-row">
+            <div class="arch-block green" style="font-size:9.5pt;">✅ Classification<br>Haute confiance</div>
+            <div class="arch-block yellow" style="font-size:9.5pt;">🟡 Classification<br>Revue nécessaire</div>
+            <div class="arch-block red" style="font-size:9.5pt;">🔴 DANGER<br>Éjection prioritaire</div>
+        </div>
+    </div>
+    <div class="figure-caption">Figure II.11 — Pipeline de fusion multi-capteurs du système de tri</div>
+
+    <h1 id="ch2-communication">7. Protocoles de Communication Inter-Nœuds</h1>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau II.9 — Comparaison des protocoles de communication</p>
+        <table>
+            <thead>
+                <tr><th>Protocole</th><th>Débit</th><th>Latence</th><th>Câblage</th><th>Fiabilité</th><th>Usage retenu</th></tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>UART (USB-Serial)</strong></td>
+                    <td>115200 bps</td>
+                    <td>~1-5 ms</td>
+                    <td>2 fils (TX/RX)</td>
+                    <td>Haute</td>
+                    <td class="td-center td-good">✅ Jetson↔MCU</td>
+                </tr>
+                <tr>
+                    <td><strong>I2C</strong></td>
+                    <td>400 kbps</td>
+                    <td>~0.1 ms</td>
+                    <td>2 fils (SDA/SCL)</td>
+                    <td>Haute</td>
+                    <td class="td-center td-good">✅ ESP32↔Capteurs</td>
+                </tr>
+                <tr>
+                    <td><strong>SPI</strong></td>
+                    <td>10+ Mbps</td>
+                    <td>~0.01 ms</td>
+                    <td>4 fils</td>
+                    <td>Très haute</td>
+                    <td class="td-center td-good">✅ HX711</td>
+                </tr>
+                <tr>
+                    <td><strong>WiFi (ESP32)</strong></td>
+                    <td>150 Mbps</td>
+                    <td>~10-50 ms</td>
+                    <td>Sans fil</td>
+                    <td>Variable</td>
+                    <td class="td-center td-medium">⚠️ Dashboard seul</td>
+                </tr>
+                <tr>
+                    <td><strong>CAN Bus</strong></td>
+                    <td>1 Mbps</td>
+                    <td>~0.1 ms</td>
+                    <td>2 fils diff.</td>
+                    <td>Industrielle</td>
+                    <td class="td-center td-medium">⚠️ V industrielle</td>
+                </tr>
+                <tr>
+                    <td><strong>RS-485</strong></td>
+                    <td>10 Mbps</td>
+                    <td>~1 ms</td>
+                    <td>2 fils diff.</td>
+                    <td>Industrielle</td>
+                    <td class="td-center td-medium">⚠️ V industrielle</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="info-box">
+        <div class="box-title">📡 Format de Communication : JSON over UART</div>
+        Tous les échanges entre le Jetson Nano et les microcontrôleurs utilisent le format JSON (ligne terminée par <code>\n</code>) à 115200 bauds. Ce choix permet : (1) une lisibilité humaine facilitant le débogage, (2) une extensibilité aisée (ajout de nouveaux champs sans modifier le protocole), (3) une compatibilité avec tout langage de programmation. La latence UART à 115200 bauds pour un paquet JSON de 200 caractères est de ~17ms, compatible avec le budget temporel du système.
+    </div>
+
+    <h1>8. Conclusion</h1>
+    <div class="conclusion-box">
+        Ce chapitre a présenté une analyse comparative rigoureuse de l'ensemble des technologies composant le système. Les choix retenus — Jetson Nano pour l'IA, STM32F411 pour le contrôle moteur, deux ESP32 pour les capteurs et la sécurité, AS7265x pour la spectroscopie bas coût, capteurs inductifs pour la détection métallique, MLX90614 pour la sécurité thermique, et YOLOv8n optimisé TensorRT pour la vision — forment un écosystème cohérent maximisant les performances dans les contraintes budgétaires du prototype académique. Le chapitre suivant décrit la mise en œuvre concrète de ces choix.
+    </div>
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     CHAPITRE III
+════════════════════════════════════════════════════════ -->
+<div id="chapitre3" class="chapter-cover page-break" data-chapter="III">
+    <div class="chapter-number">Chapitre III</div>
+    <div class="chapter-title">Réalisation et Évaluation du Système</div>
+    <div class="chapter-desc">Mise en œuvre concrète du prototype — schémas de câblage, environnements logiciels, tests de performance et résultats expérimentaux</div>
+</div>
+
+<section class="content-section">
+    <h1>1. Introduction</h1>
+    <div class="intro-box">
+        Ce chapitre documente la réalisation pratique du prototype de station de tri intelligent. Il présente l'environnement matériel complet avec les schémas de câblage détaillés, les environnements logiciels et frameworks utilisés, le processus de réalisation mécanique et électronique, et enfin les résultats des tests de performance permettant d'évaluer l'atteinte des objectifs fixés au Chapitre I.
+    </div>
+
+    <h1>2. Démarche de Développement du Système</h1>
+
+    <p>La démarche adoptée est une approche de développement itératif en 5 phases, permettant de valider chaque sous-système indépendamment avant intégration. Cette stratégie réduit les risques d'échec et facilite le débogage en isolant les sources de problèmes.</p>
+
+    <div class="arch-diagram">
+        <div style="text-align:center; font-weight:bold; margin-bottom:20px;">Démarche de Développement Itératif</div>
+        <div class="arch-row">
+            <div class="arch-block green" style="font-size:10pt;">Phase 1<br>IA & Dataset</div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-block" style="font-size:10pt;">Phase 2<br>ESP32 Sensors</div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-block" style="background:#8e44ad; font-size:10pt;">Phase 3<br>STM32 Motors</div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-block orange" style="font-size:10pt;">Phase 4<br>Mécanique</div>
+            <div class="arch-arrow">→</div>
+            <div class="arch-block red" style="font-size:10pt;">Phase 5<br>Intégration</div>
+        </div>
+        <div style="text-align:center; margin-top:15px; font-size:10pt; color:#5d6d7e;">
+            ↺ Boucle de retour : chaque phase peut déclencher une révision de la précédente
+        </div>
+    </div>
+
+    <h1 id="ch3-materiel">3. Environnement Matériel</h1>
+
+    <h2>3.1 Unité Centrale — NVIDIA Jetson Nano 4GB</h2>
+
+    <div class="spec-grid">
+        <div class="spec-card">
+            <div class="spec-card-title">🚀 Jetson Nano — Specs</div>
+            <div class="spec-row"><span class="spec-label">CPU</span><span class="spec-value">4× ARM A57 @ 1.43GHz</span></div>
+            <div class="spec-row"><span class="spec-label">GPU</span><span class="spec-value">128 CUDA Maxwell</span></div>
+            <div class="spec-row"><span class="spec-label">RAM</span><span class="spec-value">4GB LPDDR4</span></div>
+            <div class="spec-row"><span class="spec-label">Stockage</span><span class="spec-value">32GB MicroSD</span></div>
+            <div class="spec-row"><span class="spec-label">OS</span><span class="spec-value">Ubuntu + JetPack 4.6</span></div>
+            <div class="spec-row"><span class="spec-label">Alimentation</span><span class="spec-value">5V/4A barrel jack</span></div>
+            <div class="spec-row"><span class="spec-label">YOLOv8n FPS</span><span class="spec-value">~45 FPS (TensorRT)</span></div>
+        </div>
+        <div class="spec-card">
+            <div class="spec-card-title">🔗 Connexions Jetson Nano</div>
+            <div class="spec-row"><span class="spec-label">USB 3.0 #1</span><span class="spec-value">→ STM32 (UART)</span></div>
+            <div class="spec-row"><span class="spec-label">USB 3.0 #2</span><span class="spec-value">→ ESP32 #1 (UART)</span></div>
+            <div class="spec-row"><span class="spec-label">USB 3.0 #3</span><span class="spec-value">→ ESP32 #2 (UART)</span></div>
+            <div class="spec-row"><span class="spec-label">CSI Port</span><span class="spec-value">→ IMX219 Camera</span></div>
+            <div class="spec-row"><span class="spec-label">USB 2.0</span><span class="spec-value">→ Camera USB backup</span></div>
+            <div class="spec-row"><span class="spec-label">WiFi (USB)</span><span class="spec-value">→ Dashboard web</span></div>
+            <div class="spec-row"><span class="spec-label">HDMI</span><span class="spec-value">→ Moniteur debug</span></div>
+        </div>
+    </div>
+
+    <h2>3.2 Contrôleur Moteur — STM32F411 BlackPill</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau III.2 — Affectation complète des broches STM32F411</p>
+        <table>
+            <thead>
+                <tr><th>Broche STM32</th><th>Fonction</th><th>Timer/Périph.</th><th>Connecté à</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>PA0</td><td>PWM Motor 1</td><td>TIM2_CH1</td><td>L298N ENA</td><td>Convoyeur principal</td></tr>
+                <tr><td>PA1</td><td>GPIO OUT</td><td>—</td><td>L298N IN1</td><td>Direction M1</td></tr>
+                <tr><td>PA2</td><td>GPIO OUT</td><td>—</td><td>L298N IN2</td><td>Direction M1</td></tr>
+                <tr><td>PB0</td><td>Encoder A</td><td>TIM3_CH3</td><td>Encodeur M1 A</td><td>Interruption quadrature</td></tr>
+                <tr><td>PB1</td><td>Encoder B</td><td>TIM3_CH4</td><td>Encodeur M1 B</td><td>Interruption quadrature</td></tr>
+                <tr><td>PA3</td><td>PWM Motor 2</td><td>TIM2_CH4</td><td>L298N ENB</td><td>Belt accélération 1</td></tr>
+                <tr><td>PA4</td><td>GPIO OUT</td><td>—</td><td>L298N IN3</td><td>Direction M2</td></tr>
+                <tr><td>PA5</td><td>GPIO OUT</td><td>—</td><td>L298N IN4</td><td>Direction M2</td></tr>
+                <tr><td>PB3</td><td>Encoder A</td><td>TIM2_CH2</td><td>Encodeur M2 A</td><td>—</td></tr>
+                <tr><td>PB4</td><td>Encoder B</td><td>TIM2_CH3</td><td>Encodeur M2 B</td><td>—</td></tr>
+                <tr><td>PB6</td><td>PWM Motor 3</td><td>TIM4_CH1</td><td>L298N #2 EN</td><td>Belt accélération 2</td></tr>
+                <tr><td>PB7</td><td>GPIO OUT</td><td>—</td><td>L298N #2 IN</td><td>Direction M3</td></tr>
+                <tr><td>PC0</td><td>STEP Stepper 1</td><td>TIM8</td><td>A4988 STEP</td><td>Vibration bowl</td></tr>
+                <tr><td>PC1</td><td>DIR Stepper 1</td><td>—</td><td>A4988 DIR</td><td>—</td></tr>
+                <tr><td>PC2</td><td>EN Stepper 1</td><td>—</td><td>A4988 EN</td><td>Actif bas</td></tr>
+                <tr><td>PC8</td><td>PWM Vibration</td><td>TIM3_CH3</td><td>MOSFET → Vibro</td><td>0-100% PWM</td></tr>
+                <tr><td>PA9 (TX1)</td><td>UART TX</td><td>USART1</td><td>Jetson Nano RX</td><td>Niveau 3.3V direct</td></tr>
+                <tr><td>PA10 (RX1)</td><td>UART RX</td><td>USART1</td><td>Jetson Nano TX</td><td>115200 bps</td></tr>
+                <tr><td>PC13</td><td>LED Heartbeat</td><td>—</td><td>LED embarquée</td><td>Clignotement 1 Hz</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>3.3 Nœuds Capteurs — ESP32 #1 et #2</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau III.3 — Affectation des broches ESP32 #1 (Capteurs)</p>
+        <table>
+            <thead>
+                <tr><th>GPIO</th><th>Fonction</th><th>Capteur/Module</th><th>Interface</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>GPIO21</td><td>I2C SDA</td><td>TCS34725 + AS7265x</td><td>I2C</td><td>Bus partagé, adresses diff.</td></tr>
+                <tr><td>GPIO22</td><td>I2C SCL</td><td>TCS34725 + AS7265x</td><td>I2C</td><td>Pull-up 4.7kΩ vers 3.3V</td></tr>
+                <tr><td>GPIO23</td><td>LED TCS</td><td>TCS34725 LED pin</td><td>GPIO OUT</td><td>Active la LED blanche</td></tr>
+                <tr><td>GPIO16</td><td>HX711 DOUT</td><td>HX711 + Load Cell</td><td>SPI 2-fils</td><td>Donnée sérielle</td></tr>
+                <tr><td>GPIO17</td><td>HX711 SCK</td><td>HX711</td><td>SPI 2-fils</td><td>Horloge</td></tr>
+                <tr><td>GPIO34</td><td>IR Sensor 1</td><td>Capteur IR obstacle</td><td>GPIO IN</td><td>Entrée convoyeur</td></tr>
+                <tr><td>GPIO35</td><td>IR Sensor 2</td><td>Capteur IR obstacle</td><td>GPIO IN</td><td>Pré-caméra</td></tr>
+                <tr><td>GPIO36</td><td>IR Sensor 3</td><td>Capteur IR obstacle</td><td>GPIO IN</td><td>Zone caméra</td></tr>
+                <tr><td>GPIO39</td><td>IR Sensor 4</td><td>Capteur IR obstacle</td><td>GPIO IN</td><td>Post-éjection</td></tr>
+                <tr><td>GPIO13</td><td>HC-SR04 TRIG</td><td>Ultrasonique</td><td>GPIO OUT</td><td>Pulse 10µs</td></tr>
+                <tr><td>GPIO12</td><td>HC-SR04 ECHO</td><td>Ultrasonique</td><td>GPIO IN</td><td>Mesure hauteur</td></tr>
+                <tr><td>GPIO1 (TX)</td><td>UART TX</td><td>→ Jetson Nano</td><td>UART0</td><td>115200 bps, JSON</td></tr>
+                <tr><td>GPIO3 (RX)</td><td>UART RX</td><td>← Jetson Nano</td><td>UART0</td><td>115200 bps, JSON</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau III.4 — Affectation des broches ESP32 #2 (Sécurité + Éjection)</p>
+        <table>
+            <thead>
+                <tr><th>GPIO</th><th>Fonction</th><th>Composant</th><th>Interface</th><th>Notes</th></tr>
+            </thead>
+            <tbody>
+                <tr><td>GPIO34</td><td>Inductif 1 (4mm)</td><td>Capteur inductif NPN</td><td>GPIO IN</td><td>Pull-up 10kΩ → 3.3V</td></tr>
+                <tr><td>GPIO35</td><td>Inductif 2 (8mm)</td><td>Capteur inductif NPN</td><td>GPIO IN</td><td>Pull-up 10kΩ → 3.3V</td></tr>
+                <tr><td>GPIO36</td><td>Inductif 3 (12mm)</td><td>Capteur inductif NPN</td><td>GPIO IN</td><td>Pull-up 10kΩ → 3.3V</td></tr>
+                <tr><td>GPIO21</td><td>I2C SDA</td><td>MLX90614 ×2</td><td>I2C</td><td>Adresses 0x5A et 0x5B</td></tr>
+                <tr><td>GPIO22</td><td>I2C SCL</td><td>MLX90614 ×2</td><td>I2C</td><td>—</td></tr>
+                <tr><td>GPIO32</td><td>ADC Gaz</td><td>MQ-2 AOUT</td><td>ADC1_CH4</td><td>Seuil : >400 → alarme</td></tr>
+                <tr><td>GPIO25</td><td>Jet 1 — PET</td><td>Relais → Solénoïde</td><td>GPIO OUT</td><td>Actif haut, 80ms pulse</td></tr>
+                <tr><td>GPIO26</td><td>Jet 2 — HDPE/PP</td><td>Relais → Solénoïde</td><td>GPIO OUT</td><td>Actif haut, 80ms pulse</td></tr>
+                <tr><td>GPIO27</td><td>Jet 3 — Papier</td><td>Relais → Solénoïde</td><td>GPIO OUT</td><td>Actif haut, 80ms pulse</td></tr>
+                <tr><td>GPIO14</td><td>Jet 4 — Métal</td><td>Relais → Solénoïde</td><td>GPIO OUT</td><td>Actif haut, 80ms pulse</td></tr>
+                <tr><td>GPIO12</td><td>Jet 5 — Verre</td><td>Relais → Solénoïde</td><td>GPIO OUT</td><td>Actif haut, 80ms pulse</td></tr>
+                <tr><td>GPIO13</td><td>Jet 6 — DANGER ⚠️</td><td>Relais → Solénoïde</td><td>GPIO OUT</td><td>200ms pulse + alarme</td></tr>
+                <tr><td>GPIO4</td><td>Arrêt d'urgence</td><td>Bouton NF</td><td>INT (FALLING)</td><td>ISR immédiate</td></tr>
+                <tr><td>GPIO5</td><td>Relais E-Stop</td><td>Relais NC → Rail 12V</td><td>GPIO OUT</td><td>Coupe alimentation moteurs</td></tr>
+                <tr><td>GPIO18</td><td>Buzzer alarme</td><td>Buzzer piézo</td><td>GPIO OUT/PWM</td><td>1-3 kHz selon alarme</td></tr>
+                <tr><td>GPIO19</td><td>LED Rouge danger</td><td>LED + résistance</td><td>GPIO OUT</td><td>—</td></tr>
+                <tr><td>GPIO23</td><td>LED Verte OK</td><td>LED + résistance</td><td>GPIO OUT</td><td>—</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>3.4 Système de Détection Optique</h2>
+
+    <div class="spec-grid">
+        <div class="spec-card">
+            <div class="spec-card-title">📷 Caméra IMX219 (CSI)</div>
+            <div class="spec-row"><span class="spec-label">Résolution</span><span class="spec-value">8 Mégapixels</span></div>
+            <div class="spec-row"><span class="spec-label">Résolution capture</span><span class="spec-value">1280×720 (AI)</span></div>
+            <div class="spec-row"><span class="spec-label">FPS</span><span class="spec-value">30 FPS @ 720p</span></div>
+            <div class="spec-row"><span class="spec-label">Interface</span><span class="spec-value">MIPI CSI-2</span></div>
+            <div class="spec-row"><span class="spec-label">FOV</span><span class="spec-value">62.2°</span></div>
+            <div class="spec-row"><span class="spec-label">Hauteur montage</span><span class="spec-value">25 cm au-dessus du convoyeur</span></div>
+            <div class="spec-row"><span class="spec-label">Éclairage</span><span class="spec-value">Anneau LED blanc diffus</span></div>
+        </div>
+        <div class="spec-card">
+            <div class="spec-card-title">💡 Système d'Éclairage</div>
+            <div class="spec-row"><span class="spec-label">Type</span><span class="spec-value">LED 5050 blanc neutre</span></div>
+            <div class="spec-row"><span class="spec-label">Température couleur</span><span class="spec-value">5000-5500K</span></div>
+            <div class="spec-row"><span class="spec-label">Montage</span><span class="spec-value">Anneau diffuseur 45°</span></div>
+            <div class="spec-row"><span class="spec-label">Alimentation</span><span class="spec-value">12V (buck converti)</span></div>
+            <div class="spec-row"><span class="spec-label">Rôle</span><span class="spec-value">Illumination uniforme sans reflet</span></div>
+            <div class="spec-row"><span class="spec-label">Tunnel fermé</span><span class="spec-value">Oui — conditions stables</span></div>
+        </div>
+    </div>
+
+    <div class="info-box">
+        <div class="box-title">💡 Tunnel de Vision Fermé — Choix Architectural Important</div>
+        La caméra est installée dans un tunnel fermé (boîte noire) encadrant le convoyeur. Cet aménagement, inspiré des scanners industriels, garantit des conditions d'illumination <strong>parfaitement contrôlées et reproductibles</strong> quelle que soit la luminosité ambiante. Il permet également de positionner les capteurs spectraux (AS7265x) à distance fixe de l'objet, critère essentiel pour la répétabilité des mesures spectrales.
+    </div>
+
+    <h1 id="ch3-logiciel">4. Environnement Logiciel</h1>
+
+    <h2>4.1 Stack Logiciel Jetson Nano</h2>
+
+    <div class="spec-grid">
+        <div class="spec-card">
+            <div class="spec-card-title">🐧 Système d'exploitation</div>
+            <div class="spec-row"><span class="spec-label">OS</span><span class="spec-value">Ubuntu 18.04 LTS</span></div>
+            <div class="spec-row"><span class="spec-label">JetPack</span><span class="spec-value">4.6.4 (CUDA 10.2)</span></div>
+            <div class="spec-row"><span class="spec-label">CUDA</span><span class="spec-value">10.2</span></div>
+            <div class="spec-row"><span class="spec-label">cuDNN</span><span class="spec-value">8.2.1</span></div>
+            <div class="spec-row"><span class="spec-label">TensorRT</span><span class="spec-value">8.2.1</span></div>
+        </div>
+        <div class="spec-card">
+            <div class="spec-card-title">🐍 Stack Python IA</div>
+            <div class="spec-row"><span class="spec-label">Python</span><span class="spec-value">3.8</span></div>
+            <div class="spec-row"><span class="spec-label">PyTorch</span><span class="spec-value">1.13.0+cu102</span></div>
+            <div class="spec-row"><span class="spec-label">Ultralytics</span><span class="spec-value">YOLOv8 (latest)</span></div>
+            <div class="spec-row"><span class="spec-label">OpenCV</span><span class="spec-value">4.8 (CUDA)</span></div>
+            <div class="spec-row"><span class="spec-label">pyserial</span><span class="spec-value">3.5</span></div>
+        </div>
+        <div class="spec-card">
+            <div class="spec-card-title">⚙️ Stack STM32</div>
+            <div class="spec-row"><span class="spec-label">IDE</span><span class="spec-value">STM32CubeIDE 1.14</span></div>
+            <div class="spec-row"><span class="spec-label">HAL</span><span class="spec-value">STM32Cube HAL F4</span></div>
+            <div class="spec-row"><span class="spec-label">RTOS</span><span class="spec-value">FreeRTOS 10.4.6</span></div>
+            <div class="spec-row"><span class="spec-label">Langage</span><span class="spec-value">C (C99)</span></div>
+            <div class="spec-row"><span class="spec-label">Debug</span><span class="spec-value">ST-Link V2 SWD</span></div>
+        </div>
+        <div class="spec-card">
+            <div class="spec-card-title">📡 Stack ESP32</div>
+            <div class="spec-label-value">
+            <div class="spec-row"><span class="spec-label">IDE</span><span class="spec-value">Arduino IDE 2.3</span></div>
+            <div class="spec-row"><span class="spec-label">Framework</span><span class="spec-value">Arduino ESP32 3.0</span></div>
+            <div class="spec-row"><span class="spec-label">ArduinoJson</span><span class="spec-value">v7</span></div>
+            <div class="spec-row"><span class="spec-label">Adafruit TCS</span><span class="spec-value">Lib officielle</span></div>
+            <div class="spec-row"><span class="spec-label">SparkFun AS7265x</span><span class="spec-value">Lib officielle</span></div>
+            </div>
+        </div>
+    </div>
+
+    <h2>4.2 Dataset et Entraînement du Modèle IA</h2>
+
+    <p>L'entraînement du modèle YOLOv8 repose sur un dataset composite constitué de trois sources complémentaires :</p>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">Source 1 : TACO Dataset (public)</div>
+            <div class="timeline-content">Dataset open-source de 1500 images de déchets annotés en conditions réelles (COCO format). Couvre 60 catégories réduites à nos 16 classes cibles par remapping. Fournit une base de généralisation importante.</div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">Source 2 : Roboflow Waste Datasets</div>
+            <div class="timeline-content">Plusieurs datasets publics sur Roboflow Universe (recyclable materials, garbage classification) augmentant le corpus à ~5000 images annotées après filtrage et normalisation.</div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">Source 3 : Collecte locale (critique)</div>
+            <div class="timeline-content">500+ images capturées directement avec la caméra du prototype sur le convoyeur (mêmes conditions d'éclairage, même angle, mêmes objets locaux). Ce dataset local représente la fraction la plus déterminante pour les performances en conditions réelles car il reproduit exactement l'environnement de déploiement.</div>
+        </div>
+    </div>
+
+   
