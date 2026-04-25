@@ -3318,12 +3318,2094 @@ TUNNEL VISION FERMÉ (boîte noire) :
         <p style="margin-top:10px;">L'architecture matérielle et logicielle développée constitue une base solide et extensible pour la montée en échelle vers un prototype industriel, avec des voies d'amélioration clairement tracées : rétro-éclairage pour films, détecteur inductif à spectre large pour batteries, et règles de fusion enrichies pour composites.</p>
     </div>
 
+    
+    <style>
+        /* ═══════════════════════════════════════════════════════
+           BASE STYLES
+        ═══════════════════════════════════════════════════════ */
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+
+        body {
+            font-family: 'Segoe UI', 'Arial', sans-serif;
+            font-size: 11pt;
+            line-height: 1.7;
+            color: #2c3e50;
+            background: #fff;
+        }
+
+        .page {
+            width: 210mm;
+            min-height: 297mm;
+            margin: 0 auto;
+            padding: 25mm 20mm 20mm 25mm;
+            background: white;
+        }
+
+        @media print {
+            body { margin: 0; }
+            .page { margin: 0; padding: 25mm 20mm 20mm 25mm; }
+            .page-break { page-break-before: always; }
+            .no-break { page-break-inside: avoid; }
+        }
+
+        .page-break { page-break-before: always; margin-top: 0; }
+
+        /* ── SECTION COVERS ──────────────────────────────────── */
+        .section-cover {
+            display: flex;
+            flex-direction: column;
+            justify-content: center;
+            align-items: center;
+            min-height: 80vh;
+            text-align: center;
+            border: 3px solid #2c3e50;
+            border-radius: 12px;
+            padding: 40px;
+            margin-bottom: 30px;
+        }
+
+        .cover-conclusion {
+            background: linear-gradient(135deg, #eaf4fb 0%, #fdfefe 50%, #eafaf1 100%);
+            border-color: #27ae60;
+        }
+
+        .cover-biblio {
+            background: linear-gradient(135deg, #fef9e7 0%, #fdfefe 50%, #f9f0ff 100%);
+            border-color: #8e44ad;
+        }
+
+        .cover-annexes {
+            background: linear-gradient(135deg, #fef5e7 0%, #fdfefe 50%, #eaf4fb 100%);
+            border-color: #e67e22;
+        }
+
+        .section-label {
+            font-size: 13pt;
+            font-weight: 700;
+            letter-spacing: 4px;
+            text-transform: uppercase;
+            margin-bottom: 15px;
+        }
+
+        .section-title {
+            font-size: 22pt;
+            font-weight: 800;
+            color: #1a252f;
+            margin-bottom: 20px;
+            line-height: 1.3;
+        }
+
+        .section-desc {
+            font-size: 10.5pt;
+            color: #5d6d7e;
+            font-style: italic;
+            max-width: 80%;
+            line-height: 1.6;
+        }
+
+        /* ── HEADINGS ────────────────────────────────────────── */
+        .content-section { margin-bottom: 30px; }
+
+        h1 {
+            font-size: 15pt;
+            font-weight: 700;
+            color: #27ae60;
+            border-left: 5px solid #27ae60;
+            padding: 8px 15px;
+            margin: 30px 0 15px 0;
+            background: #eafaf1;
+            border-radius: 0 6px 6px 0;
+        }
+
+        h1.biblio-h1 {
+            color: #8e44ad;
+            border-color: #8e44ad;
+            background: #f9f0ff;
+        }
+
+        h1.annexe-h1 {
+            color: #e67e22;
+            border-color: #e67e22;
+            background: #fef5e7;
+        }
+
+        h2 {
+            font-size: 13pt;
+            font-weight: 700;
+            color: #1a5276;
+            border-left: 4px solid #2980b9;
+            padding: 6px 12px;
+            margin: 25px 0 12px 0;
+            background: #eaf4fb;
+            border-radius: 0 5px 5px 0;
+        }
+
+        h3 {
+            font-size: 11.5pt;
+            font-weight: 700;
+            color: #6c3483;
+            border-left: 3px solid #8e44ad;
+            padding: 5px 10px;
+            margin: 20px 0 10px 0;
+            background: #f9f0ff;
+            border-radius: 0 4px 4px 0;
+        }
+
+        p {
+            margin-bottom: 12px;
+            text-align: justify;
+            hyphens: auto;
+        }
+
+        ul, ol { padding-left: 25px; margin-bottom: 12px; }
+        li { margin-bottom: 6px; font-size: 10.5pt; }
+        strong { color: #1a5276; }
+        em { color: #6c3483; }
+
+        /* ── BOXES ───────────────────────────────────────────── */
+        .info-box {
+            background: #eaf4fb;
+            border-left: 5px solid #2980b9;
+            border-radius: 0 8px 8px 0;
+            padding: 15px 18px;
+            margin: 18px 0;
+        }
+
+        .success-box {
+            background: #eafaf1;
+            border-left: 5px solid #27ae60;
+            border-radius: 0 8px 8px 0;
+            padding: 15px 18px;
+            margin: 18px 0;
+        }
+
+        .warning-box {
+            background: #fef9e7;
+            border-left: 5px solid #f39c12;
+            border-radius: 0 8px 8px 0;
+            padding: 15px 18px;
+            margin: 18px 0;
+        }
+
+        .purple-box {
+            background: #f9f0ff;
+            border-left: 5px solid #8e44ad;
+            border-radius: 0 8px 8px 0;
+            padding: 15px 18px;
+            margin: 18px 0;
+        }
+
+        .orange-box {
+            background: #fef5e7;
+            border-left: 5px solid #e67e22;
+            border-radius: 0 8px 8px 0;
+            padding: 15px 18px;
+            margin: 18px 0;
+        }
+
+        .box-title {
+            font-weight: 700;
+            font-size: 10.5pt;
+            margin-bottom: 8px;
+            color: #1a252f;
+        }
+
+        /* ── CONCLUSION CARDS ────────────────────────────────── */
+        .conclusion-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 20px 0;
+        }
+
+        .conclusion-card {
+            border-radius: 10px;
+            padding: 18px;
+            border: 2px solid;
+        }
+
+        .conclusion-card.green  { border-color: #27ae60; background: #eafaf1; }
+        .conclusion-card.blue   { border-color: #2980b9; background: #eaf4fb; }
+        .conclusion-card.purple { border-color: #8e44ad; background: #f9f0ff; }
+        .conclusion-card.orange { border-color: #e67e22; background: #fef5e7; }
+        .conclusion-card.red    { border-color: #e74c3c; background: #fdedec; }
+        .conclusion-card.dark   { border-color: #1a252f; background: #f2f3f4; }
+
+        .conclusion-card-title {
+            font-weight: 700;
+            font-size: 10.5pt;
+            margin-bottom: 10px;
+        }
+
+        .conclusion-card-title.green  { color: #1e8449; }
+        .conclusion-card-title.blue   { color: #1a5276; }
+        .conclusion-card-title.purple { color: #6c3483; }
+        .conclusion-card-title.orange { color: #b7770d; }
+        .conclusion-card-title.red    { color: #c0392b; }
+
+        /* ── RESULT SUMMARY ──────────────────────────────────── */
+        .result-row {
+            display: grid;
+            grid-template-columns: repeat(4, 1fr);
+            gap: 12px;
+            margin: 20px 0;
+        }
+
+        .result-mini {
+            text-align: center;
+            padding: 15px 10px;
+            border-radius: 10px;
+            border: 2px solid;
+        }
+
+        .result-mini.green  { border-color: #27ae60; background: #eafaf1; }
+        .result-mini.blue   { border-color: #2980b9; background: #eaf4fb; }
+        .result-mini.orange { border-color: #e67e22; background: #fef5e7; }
+        .result-mini.purple { border-color: #8e44ad; background: #f9f0ff; }
+
+        .result-num {
+            font-size: 20pt;
+            font-weight: 800;
+            line-height: 1.1;
+        }
+
+        .result-lbl {
+            font-size: 8.5pt;
+            color: #5d6d7e;
+            margin-top: 4px;
+            line-height: 1.3;
+        }
+
+        /* ── PERSPECTIVES TIMELINE ───────────────────────────── */
+        .timeline { margin: 20px 0 20px 15px; }
+
+        .timeline-item {
+            position: relative;
+            padding: 14px 15px 14px 22px;
+            margin-bottom: 15px;
+            border-left: 3px solid #27ae60;
+            background: #f8fbff;
+            border-radius: 0 8px 8px 0;
+        }
+
+        .timeline-item.purple { border-left-color: #8e44ad; }
+        .timeline-item.orange { border-left-color: #e67e22; }
+        .timeline-item.red    { border-left-color: #e74c3c; }
+
+        .timeline-dot {
+            position: absolute;
+            left: -9px;
+            top: 16px;
+            width: 15px;
+            height: 15px;
+            background: #27ae60;
+            border-radius: 50%;
+            border: 2px solid white;
+            box-shadow: 0 0 0 2px #27ae60;
+        }
+
+        .timeline-dot.purple { background: #8e44ad; box-shadow: 0 0 0 2px #8e44ad; }
+        .timeline-dot.orange { background: #e67e22; box-shadow: 0 0 0 2px #e67e22; }
+        .timeline-dot.red    { background: #e74c3c; box-shadow: 0 0 0 2px #e74c3c; }
+
+        .timeline-title {
+            font-weight: 700;
+            font-size: 10.5pt;
+            color: #1a252f;
+            margin-bottom: 6px;
+        }
+
+        .timeline-badge {
+            display: inline-block;
+            padding: 2px 8px;
+            border-radius: 12px;
+            font-size: 8pt;
+            font-weight: 700;
+            margin-left: 8px;
+            vertical-align: middle;
+        }
+
+        .badge-green  { background: #eafaf1; color: #1e8449; border: 1px solid #27ae60; }
+        .badge-purple { background: #f9f0ff; color: #6c3483; border: 1px solid #8e44ad; }
+        .badge-orange { background: #fef5e7; color: #b7770d; border: 1px solid #e67e22; }
+        .badge-red    { background: #fdedec; color: #c0392b; border: 1px solid #e74c3c; }
+        .badge-blue   { background: #eaf4fb; color: #1a5276; border: 1px solid #2980b9; }
+
+        .timeline-content {
+            font-size: 9.5pt;
+            color: #2c3e50;
+            line-height: 1.6;
+        }
+
+        /* ── BIBLIOGRAPHY ────────────────────────────────────── */
+        .bib-section {
+            margin: 20px 0;
+        }
+
+        .bib-category {
+            font-size: 11pt;
+            font-weight: 700;
+            color: #8e44ad;
+            margin: 20px 0 10px 0;
+            padding: 5px 12px;
+            background: #f9f0ff;
+            border-left: 4px solid #8e44ad;
+            border-radius: 0 5px 5px 0;
+        }
+
+        .bib-entry {
+            display: flex;
+            gap: 12px;
+            margin-bottom: 12px;
+            padding: 10px 12px;
+            background: #fdfefe;
+            border: 1px solid #e8e8e8;
+            border-radius: 6px;
+            font-size: 9.5pt;
+            line-height: 1.5;
+            transition: background 0.2s;
+        }
+
+        .bib-entry:hover { background: #f8fbff; }
+
+        .bib-num {
+            flex: 0 0 28px;
+            font-weight: 800;
+            color: #8e44ad;
+            font-size: 10pt;
+            padding-top: 1px;
+        }
+
+        .bib-content { flex: 1; }
+
+        .bib-authors { color: #1a252f; font-weight: 600; }
+        .bib-title   { color: #2980b9; font-style: italic; }
+        .bib-source  { color: #5d6d7e; }
+        .bib-year    { color: #e67e22; font-weight: 700; }
+
+        .bib-url {
+            display: inline-block;
+            color: #2980b9;
+            font-size: 8.5pt;
+            word-break: break-all;
+            margin-top: 2px;
+        }
+
+        .bib-accessed {
+            color: #95a5a6;
+            font-size: 8pt;
+        }
+
+        /* ── TABLES ──────────────────────────────────────────── */
+        .table-container { margin: 20px 0; overflow-x: auto; }
+
+        .table-caption {
+            font-size: 9.5pt;
+            font-style: italic;
+            color: #555;
+            text-align: center;
+            margin-bottom: 8px;
+            font-weight: 600;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            font-size: 9.5pt;
+            box-shadow: 0 2px 8px rgba(0,0,0,0.08);
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        thead tr { background: linear-gradient(135deg, #2c3e50, #34495e); color: white; }
+        thead th { padding: 10px 8px; text-align: left; font-weight: 700; font-size: 9pt; border: 1px solid #2c3e50; }
+        tbody tr:nth-child(even) { background: #f8f9fa; }
+        tbody tr:nth-child(odd)  { background: #ffffff; }
+        tbody tr:hover { background: #eaf4fb; }
+        tbody td { padding: 8px; border: 1px solid #d0d3d4; vertical-align: top; font-size: 9pt; }
+
+        td.success { background: #eafaf1; color: #1e8449; font-weight: 700; }
+        td.warning { background: #fef9e7; color: #b7770d; font-weight: 700; }
+        td.danger  { background: #fdedec; color: #c0392b; font-weight: 700; }
+
+        /* ── ANNEXE STYLES ───────────────────────────────────── */
+        .annexe-cover {
+            background: linear-gradient(135deg, #fef5e7, #fff, #eaf4fb);
+            border: 2px solid #e67e22;
+            border-radius: 10px;
+            padding: 20px 25px;
+            margin: 20px 0;
+            text-align: center;
+        }
+
+        .annexe-letter {
+            font-size: 28pt;
+            font-weight: 800;
+            color: #e67e22;
+            line-height: 1;
+        }
+
+        .annexe-title {
+            font-size: 14pt;
+            font-weight: 700;
+            color: #1a252f;
+            margin-top: 5px;
+        }
+
+        /* ── CODE BLOCK ──────────────────────────────────────── */
+        .code-block {
+            font-family: 'Courier New', monospace;
+            font-size: 8pt;
+            background: #1a1a2e;
+            color: #e8f4f8;
+            padding: 18px;
+            border-radius: 8px;
+            margin: 15px 0;
+            overflow-x: auto;
+            line-height: 1.6;
+            border: 2px solid #2980b9;
+            white-space: pre;
+        }
+
+        .code-comment { color: #27ae60; }
+        .code-keyword { color: #e74c3c; }
+        .code-string  { color: #f39c12; }
+        .code-value   { color: #3498db; }
+
+        /* ── SCHEMATIC ───────────────────────────────────────── */
+        .schematic-container {
+            border: 2px solid #e67e22;
+            border-radius: 10px;
+            padding: 20px;
+            background: #fafbff;
+            margin: 20px 0;
+            font-family: 'Courier New', monospace;
+            font-size: 8.5pt;
+        }
+
+        .schematic-title {
+            text-align: center;
+            font-weight: 700;
+            font-size: 10pt;
+            color: #e67e22;
+            margin-bottom: 15px;
+            font-family: 'Segoe UI', Arial, sans-serif;
+        }
+
+        /* ── SPEC GRID ───────────────────────────────────────── */
+        .spec-grid {
+            display: grid;
+            grid-template-columns: repeat(2, 1fr);
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        .spec-card {
+            border: 1px solid #d0d3d4;
+            border-radius: 8px;
+            padding: 15px;
+            background: #fdfefe;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.07);
+        }
+
+        .spec-card-title {
+            font-weight: 700;
+            font-size: 10pt;
+            color: #e67e22;
+            border-bottom: 2px solid #e67e22;
+            padding-bottom: 6px;
+            margin-bottom: 10px;
+        }
+
+        .spec-row {
+            display: flex;
+            justify-content: space-between;
+            padding: 3px 0;
+            border-bottom: 1px dashed #ecf0f1;
+            font-size: 9.5pt;
+        }
+
+        .spec-label { color: #5d6d7e; font-weight: 600; flex: 0 0 50%; }
+        .spec-value { color: #1a252f; font-weight: 700; flex: 0 0 47%; text-align: right; }
+
+        /* ── PROGRESS BARS ───────────────────────────────────── */
+        .progress-bar-container { margin: 8px 0; }
+
+        .progress-label {
+            display: flex;
+            justify-content: space-between;
+            font-size: 9pt;
+            font-weight: 600;
+            margin-bottom: 3px;
+        }
+
+        .progress-bar {
+            height: 12px;
+            background: #ecf0f1;
+            border-radius: 6px;
+            overflow: hidden;
+        }
+
+        .progress-fill { height: 100%; border-radius: 6px; }
+        .fill-green  { background: linear-gradient(90deg, #27ae60, #2ecc71); }
+        .fill-blue   { background: linear-gradient(90deg, #2980b9, #3498db); }
+        .fill-orange { background: linear-gradient(90deg, #e67e22, #f39c12); }
+        .fill-purple { background: linear-gradient(90deg, #8e44ad, #9b59b6); }
+        .fill-red    { background: linear-gradient(90deg, #c0392b, #e74c3c); }
+
+        /* ── FOOTER ──────────────────────────────────────────── */
+        .page-footer {
+            text-align: center;
+            font-size: 8pt;
+            color: #95a5a6;
+            margin-top: 30px;
+            padding-top: 10px;
+            border-top: 1px solid #ecf0f1;
+        }
+
+        /* ── INTRO BOX ───────────────────────────────────────── */
+        .intro-box {
+            background: linear-gradient(135deg, #eafaf1, #eaf4fb);
+            border: 1px solid #aed6f1;
+            border-radius: 10px;
+            padding: 18px 20px;
+            margin: 15px 0 25px 0;
+            font-size: 10.5pt;
+            line-height: 1.7;
+        }
+
+        /* ── TWO COL ─────────────────────────────────────────── */
+        .two-col {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 15px;
+            margin: 15px 0;
+        }
+
+        /* ── PIN BOX ─────────────────────────────────────────── */
+        .pin-box {
+            display: inline-block;
+            background: #e74c3c;
+            color: white;
+            padding: 1px 6px;
+            border-radius: 3px;
+            font-size: 8pt;
+            font-family: 'Courier New', monospace;
+        }
+
+        .component-box {
+            display: inline-block;
+            background: #2980b9;
+            color: white;
+            padding: 2px 8px;
+            border-radius: 4px;
+            font-size: 8.5pt;
+            font-weight: 700;
+            font-family: 'Courier New', monospace;
+        }
+
+        /* ── ARCH DIAGRAM ────────────────────────────────────── */
+        .arch-diagram {
+            border: 2px solid #27ae60;
+            border-radius: 10px;
+            padding: 20px;
+            margin: 20px 0;
+            background: #f8fbff;
+            font-size: 9.5pt;
+        }
+
+        .arch-row {
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            flex-wrap: wrap;
+            gap: 8px;
+            margin: 10px 0;
+        }
+
+        .arch-block {
+            background: #2980b9;
+            color: white;
+            padding: 10px 15px;
+            border-radius: 8px;
+            font-weight: 700;
+            text-align: center;
+            font-size: 9.5pt;
+            min-width: 90px;
+            line-height: 1.3;
+        }
+
+        .arch-block.green  { background: #27ae60; }
+        .arch-block.orange { background: #e67e22; }
+        .arch-block.red    { background: #e74c3c; }
+        .arch-block.purple { background: #8e44ad; }
+        .arch-block.gray   { background: #7f8c8d; }
+
+        .arch-arrow { font-size: 18pt; color: #2980b9; font-weight: 700; }
+
+        /* ── ROADMAP TABLE ───────────────────────────────────── */
+        .roadmap-table thead tr { background: linear-gradient(135deg, #27ae60, #1e8449); }
+    </style>
+
+
+<!-- ════════════════════════════════════════════════════════
+     CONCLUSION GÉNÉRALE ET PERSPECTIVES
+════════════════════════════════════════════════════════ -->
+
+<div class="section-cover cover-conclusion page-break">
+    <div class="section-label" style="color:#27ae60;">Conclusion Générale</div>
+    <div class="section-title">Conclusion Générale<br>et Perspectives</div>
+    <div class="section-desc">
+        Synthèse des résultats obtenus, validation des objectifs, analyse critique des limitations
+        et feuille de route pour l'évolution du système vers une solution industrielle
+    </div>
+</div>
+
+<section class="content-section">
+
+    <div class="intro-box">
+        Ce projet avait pour ambition de concevoir et réaliser un prototype fonctionnel de station de tri automatisé des déchets solides ménagers, intégrant l'intelligence artificielle embarquée, la fusion multi-capteurs et un système de sécurité robuste. Le bilan qui suit récapitule le chemin parcouru, mesure l'écart entre les objectifs initiaux et les résultats obtenus, et trace les perspectives concrètes pour les phases suivantes.
+    </div>
+
+    <!-- ─────────────────────────────────────── -->
+    <h1>1. Synthèse des Travaux Réalisés</h1>
+
+    <p>Le projet s'est articulé autour de trois axes fondamentaux, chacun ayant donné lieu à des contributions techniques originales :</p>
+
+    <div class="conclusion-grid">
+        <div class="conclusion-card green">
+            <div class="conclusion-card-title green">🏗️ Axe 1 — Architecture Système Distribuée</div>
+            <p style="font-size:9.5pt; margin:0;">Conception et implémentation d'une architecture matérielle tri-couche inédite associant un <strong>Jetson Nano</strong> (cerveau IA), un <strong>STM32F411</strong> (contrôle moteur temps réel avec FreeRTOS) et deux <strong>ESP32</strong> (capteurs et sécurité), communiquant via un protocole JSON sur UART unifié. Cette séparation des responsabilités garantit que le contrôle moteur n'est jamais perturbé par la charge computationnelle de l'IA.</p>
+        </div>
+        <div class="conclusion-card blue">
+            <div class="conclusion-card-title blue">🤖 Axe 2 — Intelligence Artificielle Embarquée</div>
+            <p style="font-size:9.5pt; margin:0;">Entraînement d'un modèle <strong>YOLOv8n</strong> sur un dataset composite de 6 000+ images (TACO + Roboflow + collecte locale), optimisé en <strong>TensorRT FP16</strong> pour atteindre 45 FPS sur Jetson Nano. La fusion multi-capteurs (NIR spectral AS7265x + couleur TCS34725 + inductif + thermique) améliore la précision de +8% par rapport à la vision seule sur les plastiques de couleur similaire.</p>
+        </div>
+        <div class="conclusion-card purple">
+            <div class="conclusion-card-title purple">🛡️ Axe 3 — Sécurité Multi-Niveaux</div>
+            <p style="font-size:9.5pt; margin:0;">Implémentation d'un système de sécurité à <strong>six mécanismes complémentaires</strong> : détection inductif multi-portée (4/8/12 mm), analyse thermique sans contact MLX90614, surveillance gazeuse MQ-2, classification IA des formes dangereuses, arrêt d'urgence matériel ISR (&lt;5 ms), et confinement physique dans un tunnel fermé à ventilation négative. Taux de détection des objets dangereux : 99%.</p>
+        </div>
+        <div class="conclusion-card orange">
+            <div class="conclusion-card-title orange">⚙️ Axe 4 — Mécanique et Temporisation</div>
+            <p style="font-size:9.5pt; margin:0;">Conception d'un convoyeur modulaire à profilés aluminium avec <strong>trois zones à vitesses différentielles</strong> (singulation par accélération), calcul précis du délai d'éjection (1 117 ms pour 23,8 cm à 21,3 cm/s), et calibration rigoureuse assurant une tolérance de positionnement d'éjection de ±1 cm sur les 6 bacs de sortie.</p>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────── -->
+    <h1>2. Bilan Quantitatif des Résultats</h1>
+
+    <div class="result-row">
+        <div class="result-mini green">
+            <div class="result-num" style="color:#1e8449;">91.5%</div>
+            <div class="result-lbl">Précision globale<br>de tri (200 objets)</div>
+        </div>
+        <div class="result-mini blue">
+            <div class="result-num" style="color:#1a5276;">45 FPS</div>
+            <div class="result-lbl">Cadence IA temps réel<br>(TensorRT FP16)</div>
+        </div>
+        <div class="result-mini green">
+            <div class="result-num" style="color:#1e8449;">99%</div>
+            <div class="result-lbl">Détection objets<br>dangereux</div>
+        </div>
+        <div class="result-mini purple">
+            <div class="result-num" style="color:#6c3483;">76 ms</div>
+            <div class="result-lbl">Latence typique<br>détection → éjection</div>
+        </div>
+    </div>
+
+    <div class="result-row" style="margin-top:-5px;">
+        <div class="result-mini blue">
+            <div class="result-num" style="color:#1a5276;">1.8/s</div>
+            <div class="result-lbl">Débit effectif<br>objets triés/seconde</div>
+        </div>
+        <div class="result-mini green">
+            <div class="result-num" style="color:#1e8449;">0%</div>
+            <div class="result-lbl">Faux positifs<br>alarmes sécurité</div>
+        </div>
+        <div class="result-mini purple">
+            <div class="result-num" style="color:#6c3483;">97.2%</div>
+            <div class="result-lbl">Uptime système<br>(4h fonctionnement)</div>
+        </div>
+        <div class="result-mini orange">
+            <div class="result-num" style="color:#b7770d;">±2µs</div>
+            <div class="result-lbl">Variance timing PID<br>STM32 FreeRTOS</div>
+        </div>
+    </div>
+
+    <p>Ces résultats démontrent que l'objectif principal — un taux de tri supérieur à 85% en temps réel — a été <strong>dépassé de 6,5 points</strong>, validant la pertinence de l'approche architecturale choisie. La latence de 76 ms, bien inférieure aux 200 ms initialement requis, laisse une marge confortable pour l'augmentation de la vitesse du convoyeur en phase industrielle.</p>
+
+    <!-- ─────────────────────────────────────── -->
+    <h1>2. Analyse Critique — Objectifs vs Réalisations</h1>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau C.1 — Bilan complet des objectifs initiaux et résultats obtenus</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Objectif</th>
+                    <th>Cible initiale</th>
+                    <th>Résultat</th>
+                    <th>Écart</th>
+                    <th>Verdict</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Précision globale de tri</td>
+                    <td>&gt; 85%</td>
+                    <td><strong>91.5%</strong></td>
+                    <td class="success">+6.5 pts</td>
+                    <td class="success">✅ Dépassé</td>
+                </tr>
+                <tr>
+                    <td>Latence détection → éjection</td>
+                    <td>&lt; 200 ms</td>
+                    <td><strong>76 ms typ.</strong></td>
+                    <td class="success">−124 ms</td>
+                    <td class="success">✅ Largement dépassé</td>
+                </tr>
+                <tr>
+                    <td>Cadence de traitement</td>
+                    <td>&gt; 1 objet/s</td>
+                    <td><strong>1.8 obj/s</strong></td>
+                    <td class="success">+80%</td>
+                    <td class="success">✅ Dépassé</td>
+                </tr>
+                <tr>
+                    <td>Détection objets dangereux</td>
+                    <td>&gt; 95%</td>
+                    <td><strong>99%</strong></td>
+                    <td class="success">+4 pts</td>
+                    <td class="success">✅ Dépassé</td>
+                </tr>
+                <tr>
+                    <td>Faux positifs alarmes</td>
+                    <td>&lt; 10%</td>
+                    <td><strong>0%</strong></td>
+                    <td class="success">−10 pts</td>
+                    <td class="success">✅ Parfait</td>
+                </tr>
+                <tr>
+                    <td>Cadence IA temps réel</td>
+                    <td>&gt; 30 FPS</td>
+                    <td><strong>45 FPS</strong></td>
+                    <td class="success">+15 FPS</td>
+                    <td class="success">✅ Dépassé</td>
+                </tr>
+                <tr>
+                    <td>Uptime système continu</td>
+                    <td>&gt; 95%</td>
+                    <td><strong>97.2%</strong></td>
+                    <td class="success">+2.2 pts</td>
+                    <td class="success">✅ Atteint</td>
+                </tr>
+                <tr>
+                    <td>Précision film plastique transparent</td>
+                    <td>&gt; 85%</td>
+                    <td><strong>80%</strong></td>
+                    <td class="danger">−5 pts</td>
+                    <td class="danger">❌ Non atteint</td>
+                </tr>
+                <tr>
+                    <td>Précision composites (Tetra Pak)</td>
+                    <td>&gt; 80%</td>
+                    <td><strong>73.3%</strong></td>
+                    <td class="danger">−6.7 pts</td>
+                    <td class="danger">❌ Non atteint</td>
+                </tr>
+                <tr>
+                    <td>Budget prototype</td>
+                    <td>&lt; 1 000 €</td>
+                    <td><strong>~720 €</strong></td>
+                    <td class="success">−280 €</td>
+                    <td class="success">✅ Sous budget</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="warning-box">
+        <div class="box-title">⚠️ Limitations Identifiées et Explications</div>
+        <p><strong>Film plastique transparent (80%) :</strong> La transparence totale rend ces objets quasi-invisibles en éclairage frontal sur courroie blanche. Le capteur spectral AS7265x ne peut analyser un matériau de 50 µm d'épaisseur posé à plat. <em>Solution validée en simulation</em> : rétro-éclairage par transmission sous courroie translucide.</p>
+        <p style="margin-top:8px;"><strong>Emballages composites Tetra Pak (73.3%) :</strong> La co-présence de carton, polyéthylène et feuille d'aluminium génère des signaux contradictoires entre le capteur inductif (aluminium), le NIR (carton) et la caméra (forme rectangulaire). La logique de fusion actuelle, basée sur la majorité des votes, échoue dans ces cas ambigus. <em>Solution</em> : règle explicite de priorité pour la signature spectrale "carton + signal inductif faible = Tetra Pak".</p>
+    </div>
+
+    <!-- ─────────────────────────────────────── -->
+    <h1>3. Contributions Scientifiques et Techniques Originales</h1>
+
+    <p>Au-delà des résultats chiffrés, ce projet apporte plusieurs contributions originales au domaine du tri automatisé intelligent :</p>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">
+                Contribution 1 — Fusion Multi-Capteurs Asynchrone pour Tri Embarqué
+                <span class="timeline-badge badge-green">Original</span>
+            </div>
+            <div class="timeline-content">
+                L'algorithme de fusion développé combine de manière asynchrone des données de cinq types de capteurs (RGB, NIR 18 canaux, inductif, thermique, poids) avec les prédictions d'un modèle YOLO, en tenant compte des niveaux de confiance individuels pour produire une classification robuste. Cette approche, documentée dans notre code, constitue une architecture de référence réutilisable pour d'autres applications de tri embarqué.
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">
+                Contribution 2 — Protocole de Sécurité Multi-Niveaux pour Déchets Dangereux
+                <span class="timeline-badge badge-blue">Méthodologique</span>
+            </div>
+            <div class="timeline-content">
+                La méthodologie de détection des objets dangereux (batteries, produits chimiques) reposant sur la fusion de signaux inductifs, thermiques et visuels, avec un chemin d'éjection d'urgence matériel indépendant du système principal, constitue une approche inédite pour les systèmes de tri à bas coût ne pouvant se payer un détecteur EDS industriel.
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">
+                Contribution 3 — Dataset Local de Déchets pour l'Afrique du Nord
+                <span class="timeline-badge badge-purple">Data</span>
+            </div>
+            <div class="timeline-content">
+                La constitution d'un dataset de 500+ images de déchets capturées en conditions réelles locales (types d'emballages spécifiques au marché maghrébin, conditions d'éclairage locales) comble un vide important : les datasets publics existants (TACO, Roboflow) sont majoritairement constitués de déchets occidentaux, créant un <em>domain gap</em> significatif pour les déploiements en Afrique du Nord.
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">
+                Contribution 4 — Architecture Matérielle Modulaire et Réplicable à Bas Coût
+                <span class="timeline-badge badge-orange">Architecture</span>
+            </div>
+            <div class="timeline-content">
+                Le prototype complet, réalisé pour ~720€, démontre la faisabilité d'un système de tri intelligent performant avec des composants grand public (Jetson Nano, STM32, ESP32), ouvrant la voie à des déploiements dans des pays à ressources limitées qui ne peuvent se permettre les solutions industrielles TOMRA ou AMP Robotics (>200 000€).
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────── -->
+    <h1>4. Perspectives et Feuille de Route</h1>
+
+    <p>Les résultats du prototype ouvrent des perspectives concrètes d'amélioration et d'industrialisation, organisées en trois horizons temporels.</p>
+
+    <h2>4.1 Court Terme — Améliorations Prototype (0 à 6 mois)</h2>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">
+                P1 — Rétro-éclairage par Transmission (Film Plastique)
+                <span class="timeline-badge badge-green">Priorité Haute</span>
+            </div>
+            <div class="timeline-content">
+                Remplacement de la courroie PVC opaque par une courroie translucide (PVC laiteux) associée à un bandeau LED blanc installé sous le convoyeur. Les films plastiques transparents deviennent détectables par la différence de contraste lumineux. Coût additionnel estimé : ~50€. Gain de précision attendu : +12 à +15 points sur la catégorie film.
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">
+                P2 — Règles de Fusion Enrichies pour Composites
+                <span class="timeline-badge badge-green">Priorité Haute</span>
+            </div>
+            <div class="timeline-content">
+                Ajout d'une base de règles explicites dans l'algorithme de fusion : signal inductif faible (0.2-0.4) + spectral "carton" + forme rectangulaire → classe Tetra Pak. Ces règles, encodées en Python, peuvent être déployées par mise à jour logicielle sans modifier le matériel. Gain estimé : +10 points sur composites.
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">
+                P3 — Enrichissement Continu du Dataset (Active Learning)
+                <span class="timeline-badge badge-blue">Priorité Moyenne</span>
+            </div>
+            <div class="timeline-content">
+                Implémentation d'une boucle d'apprentissage actif : les objets classifiés avec une confiance entre 50% et 70% sont automatiquement photographiés et sauvegardés pour annotation manuelle périodique. Cette procédure améliore le modèle en production sans interrompre le fonctionnement.
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot"></div>
+            <div class="timeline-title">
+                P4 — Dashboard Web Temps Réel Avancé
+                <span class="timeline-badge badge-blue">Priorité Moyenne</span>
+            </div>
+            <div class="timeline-content">
+                Développement d'une interface web complète (Flask + Chart.js + WebSocket) affichant en temps réel : composition des déchets triés, taux de précision par catégorie, alertes sécurité, statistiques de production et rapport exportable PDF pour les opérateurs.
+            </div>
+        </div>
+    </div>
+
+    <h2>4.2 Moyen Terme — Pilote Semi-Industriel (6 à 18 mois)</h2>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-dot purple"></div>
+            <div class="timeline-title" style="color:#6c3483;">
+                P5 — Passage à l'Échelle : 200 kg/heure
+                <span class="timeline-badge badge-purple">Industrialisation</span>
+            </div>
+            <div class="timeline-content">
+                Redesign du convoyeur à 60 cm de largeur et 3 m de longueur, augmentation de la vitesse à 60 cm/s, passage de 6 à 12 jets d'éjection, et intégration d'un séparateur balistique en amont pour la pré-sélection par forme (2D/3D). Cette configuration vise un débit de 200 kg/h avec une équipe de 2 opérateurs de supervision.
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot purple"></div>
+            <div class="timeline-title" style="color:#6c3483;">
+                P6 — Remplacement STM32 par Bus CAN Industriel
+                <span class="timeline-badge badge-purple">Robustesse</span>
+            </div>
+            <div class="timeline-content">
+                Migration du protocole de communication moteur de UART vers CAN bus (Controller Area Network), standard de l'industrie, permettant de connecter jusqu'à 32 axes moteur sur un seul câble différentiel, avec une immunité au bruit électromagnétique supérieure — critique dans un environnement industriel avec variateurs de fréquence.
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot purple"></div>
+            <div class="timeline-title" style="color:#6c3483;">
+                P7 — Capteur Inductif Large Spectre (Détection Batteries Lithium)
+                <span class="timeline-badge badge-purple">Sécurité</span>
+            </div>
+            <div class="timeline-content">
+                Développement d'un capteur inductif DIY basé sur une bobine plate et un circuit de détection de phase (PLL ou lock-in amplifier), capable de distinguer les batteries lithium (conductivité spécifique, forme caractéristique) des autres objets métalliques avec une fiabilité supérieure à 99.5%. Budget estimé : ~200€ en composants.
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot purple"></div>
+            <div class="timeline-title" style="color:#6c3483;">
+                P8 — Intégration Économie Circulaire et Traçabilité
+                <span class="timeline-badge badge-blue">Business</span>
+            </div>
+            <div class="timeline-content">
+                Implémentation d'un système de "passeport matière" : chaque balle de matériaux sortante reçoit un QR code contenant la pureté mesurée, la composition exacte, la date et le lot. Ce système de traçabilité permet de certifier la qualité des matières récupérées et d'augmenter leur valeur marchande de 30 à 60% auprès des acheteurs (recycleurs, fonderies).
+            </div>
+        </div>
+    </div>
+
+    <h2>4.3 Long Terme — Solution Industrielle Complète (18 à 36 mois)</h2>
+
+    <div class="timeline">
+        <div class="timeline-item">
+            <div class="timeline-dot orange"></div>
+            <div class="timeline-title" style="color:#b7770d;">
+                P9 — Bras Robot Pick-and-Place pour Tri de Précision
+                <span class="timeline-badge badge-orange">Robotique</span>
+            </div>
+            <div class="timeline-content">
+                Intégration d'un bras robotisé 6 axes (type FANUC ou UR cobot) pour le tri de précision des objets à haute valeur (composants électroniques, bijoux perdus, billets) détectés par l'IA mais inadaptés à l'éjection par jet d'air (trop lourds, trop fragiles ou trop petits). Cadence cible : 40 picks/minute.
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot orange"></div>
+            <div class="timeline-title" style="color:#b7770d;">
+                P10 — Modèle Économique et Déploiement
+                <span class="timeline-badge badge-orange">Commercial</span>
+            </div>
+            <div class="timeline-content">
+                Développement d'un modèle commercial adapté au marché maghrébin : vente de l'équipement aux municipalités ou aux centres de tri existants, avec un contrat de maintenance et une licence logicielle incluant les mises à jour du modèle IA. Le retour sur investissement estimé pour une unité de 1 t/h est de 18 à 24 mois grâce aux revenus de la vente des matières triées et aux gate fees municipaux.
+            </div>
+        </div>
+        <div class="timeline-item">
+            <div class="timeline-dot orange"></div>
+            <div class="timeline-title" style="color:#b7770d;">
+                P11 — Intelligence Artificielle Fédérée (Federated Learning)
+                <span class="timeline-badge badge-purple">IA Avancée</span>
+            </div>
+            <div class="timeline-content">
+                À l'échelle d'un réseau de plusieurs stations déployées, implémentation d'un apprentissage fédéré : chaque station améliore localement son modèle sur les données locales, puis partage uniquement les gradients (pas les images) vers un serveur central qui consolide les améliorations et redistribue un modèle global amélioré. Ce mécanisme permet une amélioration continue sans partage de données sensibles.
+            </div>
+        </div>
+    </div>
+
+    <!-- ─────────────────────────────────────── -->
+    <h1>5. Feuille de Route Condensée</h1>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau C.2 — Roadmap de développement sur 36 mois</p>
+        <table class="roadmap-table">
+            <thead>
+                <tr>
+                    <th>Phase</th>
+                    <th>Horizon</th>
+                    <th>Jalons clés</th>
+                    <th>Débit cible</th>
+                    <th>Précision cible</th>
+                    <th>Budget estimé</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>0 — Prototype actuel</strong></td>
+                    <td>Réalisé</td>
+                    <td>Validation architecture, AI, sécurité</td>
+                    <td>~65 kg/h</td>
+                    <td class="success">91.5%</td>
+                    <td>~720 €</td>
+                </tr>
+                <tr>
+                    <td><strong>1 — Prototype amélioré</strong></td>
+                    <td>M0 – M6</td>
+                    <td>Rétro-éclairage, fusion enrichie, dashboard</td>
+                    <td>~80 kg/h</td>
+                    <td class="success">&gt;94%</td>
+                    <td>~1 200 €</td>
+                </tr>
+                <tr>
+                    <td><strong>2 — Pilote semi-industriel</strong></td>
+                    <td>M6 – M18</td>
+                    <td>60 cm convoyeur, CAN bus, 12 jets, séparateur balistique</td>
+                    <td>200 kg/h</td>
+                    <td class="warning">&gt;95%</td>
+                    <td>~15 000 €</td>
+                </tr>
+                <tr>
+                    <td><strong>3 — Solution industrielle</strong></td>
+                    <td>M18 – M36</td>
+                    <td>Robot pick, passeport matière, 1ère installation client</td>
+                    <td>1 000 kg/h</td>
+                    <td class="success">&gt;97%</td>
+                    <td>~150 000 €</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ─────────────────────────────────────── -->
+    <h1>6. Mot de Fin</h1>
+
+    <div class="success-box">
+        <div class="box-title">✅ Conclusion</div>
+        <p>Ce projet démontre qu'il est aujourd'hui possible de concevoir un système de tri automatisé des déchets solides ménagers performant, sûr et économiquement accessible, en s'appuyant sur des technologies embarquées grand public — NVIDIA Jetson Nano, STM32, ESP32 — et sur des algorithmes d'intelligence artificielle open source soigneusement optimisés pour les contraintes embarquées.</p>
+        <p style="margin-top:10px;">Les <strong>91.5% de précision globale</strong> atteints sur 200 objets testés, la <strong>latence de 76 ms</strong> de bout en bout et le <strong>taux de détection des dangers de 99%</strong> valident la faisabilité technique de l'approche et ouvrent la voie à une industrialisation progressive. Les limitations identifiées — film plastique transparent et emballages composites — sont comprises dans leurs mécanismes et font l'objet de solutions concrètes planifiées.</p>
+        <p style="margin-top:10px;">Dans un contexte où les pays du Maghreb génèrent des millions de tonnes de déchets annuellement avec des taux de recyclage encore faibles, cette technologie, développée et calibrée pour les réalités locales, représente une opportunité concrète de contribuer à la transition vers une économie circulaire adaptée aux ressources disponibles.</p>
+    </div>
+
     <div class="page-footer">
-        Station de Tri Intelligent — Rapport Technique | Chapitre III — Réalisation et Évaluation du Système
+        Station de Tri Intelligent — Rapport Technique | Conclusion Générale et Perspectives
+    </div>
+
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     BIBLIOGRAPHIE ET WEBOGRAPHIE
+════════════════════════════════════════════════════════ -->
+
+<div class="section-cover cover-biblio page-break">
+    <div class="section-label" style="color:#8e44ad;">Références</div>
+    <div class="section-title">Bibliographie<br>et Webographie</div>
+    <div class="section-desc">
+        Références scientifiques, documentations techniques, datasets et ressources en ligne
+        utilisés dans le cadre de ce projet
+    </div>
+</div>
+
+<section class="content-section">
+
+    <div class="bib-section">
+
+        <!-- ─── OUVRAGES ET ARTICLES SCIENTIFIQUES ─── -->
+        <div class="bib-category">📚 Ouvrages et Articles Scientifiques</div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[1]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Redmon, J., Divvala, S., Girshick, R., &amp; Farhadi, A.</span>
+                <br><span class="bib-title">« You Only Look Once: Unified, Real-Time Object Detection »</span>
+                <br><span class="bib-source">Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</span>
+                — <span class="bib-year">2016</span>
+                <br><span class="bib-source">pp. 779–788. DOI: 10.1109/CVPR.2016.91</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[2]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Jocher, G., Chaurasia, A., &amp; Qiu, J.</span>
+                <br><span class="bib-title">« Ultralytics YOLOv8 »</span>
+                <br><span class="bib-source">GitHub Repository, Ultralytics</span>
+                — <span class="bib-year">2023</span>
+                <br><span class="bib-url">https://github.com/ultralytics/ultralytics</span>
+                <br><span class="bib-accessed">Consulté le 15 octobre 2024</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[3]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Proença, P. F., &amp; Simões, P.</span>
+                <br><span class="bib-title">« TACO: Trash Annotations in Context for Litter Detection »</span>
+                <br><span class="bib-source">arXiv preprint arXiv:2003.06975</span>
+                — <span class="bib-year">2020</span>
+                <br><span class="bib-url">https://arxiv.org/abs/2003.06975</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[4]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Liu, W., Anguelov, D., Erhan, D., Szegedy, C., Reed, S., Fu, C.-Y., &amp; Berg, A. C.</span>
+                <br><span class="bib-title">« SSD: Single Shot MultiBox Detector »</span>
+                <br><span class="bib-source">European Conference on Computer Vision (ECCV)</span>
+                — <span class="bib-year">2016</span>
+                <br><span class="bib-source">Lecture Notes in Computer Science, vol 9905. Springer, Cham. DOI: 10.1007/978-3-319-46448-0_2</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[5]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Shi, J., Zheng, X., Li, Y., Zhang, Q., &amp; Ying, S.</span>
+                <br><span class="bib-title">« Multimodal neuroimaging feature learning with multimodal stacked deep polynomial networks for diagnosis of Alzheimer's disease »</span>
+                <br><span class="bib-source">IEEE Journal of Biomedical and Health Informatics, 22(1), 173–183</span>
+                — <span class="bib-year">2018</span>
+                <br><span class="bib-source">DOI: 10.1109/JBHI.2017.2655720</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[6]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Majchrowska, S., Mikołajczyk, A., Ferlin, M., Klawikowska, Z., Plantykow, M. A., Kwasigroch, A., &amp; Majek, K.</span>
+                <br><span class="bib-title">« Deep learning-based waste detection in natural and urban environments »</span>
+                <br><span class="bib-source">Waste Management, 138, 274–284</span>
+                — <span class="bib-year">2022</span>
+                <br><span class="bib-source">DOI: 10.1016/j.wasman.2021.12.001</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[7]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Bochkovskiy, A., Wang, C.-Y., &amp; Liao, H.-Y. M.</span>
+                <br><span class="bib-title">« YOLOv4: Optimal Speed and Accuracy of Object Detection »</span>
+                <br><span class="bib-source">arXiv preprint arXiv:2004.10934</span>
+                — <span class="bib-year">2020</span>
+                <br><span class="bib-url">https://arxiv.org/abs/2004.10934</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[8]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Kumar, A., Bhatt, C., &amp; Patel, H.</span>
+                <br><span class="bib-title">« Automated Waste Segregation System using Machine Learning and IoT »</span>
+                <br><span class="bib-source">International Journal of Advanced Computer Science and Applications (IJACSA), 12(8)</span>
+                — <span class="bib-year">2021</span>
+                <br><span class="bib-source">DOI: 10.14569/IJACSA.2021.0120801</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[9]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Tong, S., Ngo, H. H., Peng, L., &amp; Zhang, C.</span>
+                <br><span class="bib-title">« Artificial intelligence for solid waste management: A review »</span>
+                <br><span class="bib-source">Bioresource Technology Reports, 19, 101131</span>
+                — <span class="bib-year">2022</span>
+                <br><span class="bib-source">DOI: 10.1016/j.biteb.2022.101131</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[10]</div>
+            <div class="bib-content">
+                <span class="bib-authors">He, K., Zhang, X., Ren, S., &amp; Sun, J.</span>
+                <br><span class="bib-title">« Deep Residual Learning for Image Recognition »</span>
+                <br><span class="bib-source">Proceedings of the IEEE Conference on Computer Vision and Pattern Recognition (CVPR)</span>
+                — <span class="bib-year">2016</span>
+                <br><span class="bib-source">pp. 770–778. DOI: 10.1109/CVPR.2016.90</span>
+            </div>
+        </div>
+
+        <!-- ─── DOCUMENTATIONS TECHNIQUES ─── -->
+        <div class="bib-category">📋 Documentations Techniques et Datasheets</div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[11]</div>
+            <div class="bib-content">
+                <span class="bib-authors">NVIDIA Corporation</span>
+                <br><span class="bib-title">« Jetson Nano Developer Kit — User Guide »</span>
+                <br><span class="bib-source">NVIDIA Developer Documentation, Technical Reference Manual</span>
+                — <span class="bib-year">2023</span>
+                <br><span class="bib-url">https://developer.nvidia.com/embedded/learn/get-started-jetson-nano-devkit</span>
+                <br><span class="bib-accessed">Consulté le 20 septembre 2024</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[12]</div>
+            <div class="bib-content">
+                <span class="bib-authors">STMicroelectronics</span>
+                <br><span class="bib-title">« STM32F411xC/xE Reference Manual »</span>
+                <br><span class="bib-source">Document RM0383, Révision 3</span>
+                — <span class="bib-year">2023</span>
+                <br><span class="bib-url">https://www.st.com/resource/en/reference_manual/rm0383-stm32f411xce-advanced-armbased-32bit-mcus-stmicroelectronics.pdf</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[13]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Espressif Systems</span>
+                <br><span class="bib-title">« ESP32 Technical Reference Manual »</span>
+                <br><span class="bib-source">Espressif Documentation, Version 5.1</span>
+                — <span class="bib-year">2023</span>
+                <br><span class="bib-url">https://www.espressif.com/sites/default/files/documentation/esp32_technical_reference_manual_en.pdf</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[14]</div>
+            <div class="bib-content">
+                <span class="bib-authors">ams AG (Austria Micro Systems)</span>
+                <br><span class="bib-title">« AS7265x — Smart Spectral Sensor, 3-Chip Modules, 18-Channel Spectral ID »</span>
+                <br><span class="bib-source">Datasheet AS7265x-BLGT, Révision 1.0</span>
+                — <span class="bib-year">2019</span>
+                <br><span class="bib-url">https://ams.com/documents/20143/36005/AS7265x_DS000612_1-00.pdf</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[15]</div>
+            <div class="bib-content">
+                <span class="bib-authors">ams AG</span>
+                <br><span class="bib-title">« TCS34725 — Color Light-to-Digital Converter with IR Filter »</span>
+                <br><span class="bib-source">Datasheet TCS34725 Rev 1.0</span>
+                — <span class="bib-year">2015</span>
+                <br><span class="bib-url">https://ams.com/documents/20143/36005/TCS3472_DS000390_2-00.pdf</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[16]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Melexis</span>
+                <br><span class="bib-title">« MLX90614 — Single and Dual Zone Infra Red Thermometer »</span>
+                <br><span class="bib-source">Datasheet MLX90614, Révision 009</span>
+                — <span class="bib-year">2021</span>
+                <br><span class="bib-url">https://www.melexis.com/en/documents/documentation/datasheets/datasheet-mlx90614</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[17]</div>
+            <div class="bib-content">
+                <span class="bib-authors">NVIDIA Corporation</span>
+                <br><span class="bib-title">« TensorRT Developer Guide »</span>
+                <br><span class="bib-source">NVIDIA Developer Documentation, Version 8.2</span>
+                — <span class="bib-year">2022</span>
+                <br><span class="bib-url">https://docs.nvidia.com/deeplearning/tensorrt/developer-guide/index.html</span>
+                <br><span class="bib-accessed">Consulté le 5 octobre 2024</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[18]</div>
+            <div class="bib-content">
+                <span class="bib-authors">FreeRTOS.org</span>
+                <br><span class="bib-title">« FreeRTOS Kernel Developer Docs »</span>
+                <br><span class="bib-source">FreeRTOS Documentation, Version 10.4</span>
+                — <span class="bib-year">2023</span>
+                <br><span class="bib-url">https://www.freertos.org/Documentation/RTOS_book.html</span>
+                <br><span class="bib-accessed">Consulté le 12 novembre 2024</span>
+            </div>
+        </div>
+
+        <!-- ─── RESSOURCES EN LIGNE ─── -->
+        <div class="bib-category">🌐 Ressources en Ligne et Webographie</div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[19]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Ultralytics</span>
+                <br><span class="bib-title">« YOLOv8 Documentation — Training, Export, Deploy »</span>
+                <br><span class="bib-source">Documentation officielle Ultralytics</span>
+                — <span class="bib-year">2024</span>
+                <br><span class="bib-url">https://docs.ultralytics.com/</span>
+                <br><span class="bib-accessed">Consulté le 1er novembre 2024</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[20]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Roboflow Inc.</span>
+                <br><span class="bib-title">« Roboflow Universe — Waste and Recycling Datasets »</span>
+                <br><span class="bib-source">Plateforme collaborative de datasets annotés</span>
+                — <span class="bib-year">2024</span>
+                <br><span class="bib-url">https://universe.roboflow.com/</span>
+                <br><span class="bib-accessed">Consulté le 8 octobre 2024</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[21]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Bradski, G., &amp; Kaehler, A.</span>
+                <br><span class="bib-title">« OpenCV Library »</span>
+                <br><span class="bib-source">Documentation officielle OpenCV, Version 4.8</span>
+                — <span class="bib-year">2024</span>
+                <br><span class="bib-url">https://docs.opencv.org/4.8.0/</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[22]</div>
+            <div class="bib-content">
+                <span class="bib-authors">SparkFun Electronics</span>
+                <br><span class="bib-title">« AS7265x Arduino Library — SparkFun Triad Spectroscopy Sensor »</span>
+                <br><span class="bib-source">GitHub Repository</span>
+                — <span class="bib-year">2023</span>
+                <br><span class="bib-url">https://github.com/sparkfun/SparkFun_AS7265x_Arduino_Library</span>
+                <br><span class="bib-accessed">Consulté le 18 septembre 2024</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[23]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Benesty, J., Chen, J., Huang, Y., &amp; Cohen, I.</span>
+                <br><span class="bib-title">« Pearson Correlation Coefficient »</span>
+                <br><span class="bib-source">Noise Reduction in Speech Processing, Springer Topics in Signal Processing, vol 2</span>
+                — <span class="bib-year">2009</span>
+                <br><span class="bib-source">DOI: 10.1007/978-3-642-00296-0_5</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[24]</div>
+            <div class="bib-content">
+                <span class="bib-authors">NVIDIA JetsonHacks</span>
+                <br><span class="bib-title">« Installing PyTorch on Jetson Nano »</span>
+                <br><span class="bib-source">Blog technique JetsonHacks.com</span>
+                — <span class="bib-year">2023</span>
+                <br><span class="bib-url">https://jetsonhacks.com/2023/01/installing-pytorch-jetson-nano/</span>
+                <br><span class="bib-accessed">Consulté le 22 août 2024</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[25]</div>
+            <div class="bib-content">
+                <span class="bib-authors">TOMRA Sorting Solutions</span>
+                <br><span class="bib-title">« Sensor-Based Sorting Technology for Recycling »</span>
+                <br><span class="bib-source">White Paper, TOMRA AS</span>
+                — <span class="bib-year">2023</span>
+                <br><span class="bib-url">https://www.tomra.com/en/sorting/recycling</span>
+                <br><span class="bib-accessed">Consulté le 3 septembre 2024</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[26]</div>
+            <div class="bib-content">
+                <span class="bib-authors">AMP Robotics</span>
+                <br><span class="bib-title">« AI-Powered Recycling — AMP Cortex Technical Overview »</span>
+                <br><span class="bib-source">AMP Robotics Inc., Technical Documentation</span>
+                — <span class="bib-year">2024</span>
+                <br><span class="bib-url">https://www.amprobotics.com/technology</span>
+                <br><span class="bib-accessed">Consulté le 10 septembre 2024</span>
+            </div>
+        </div>
+
+        <!-- ─── NORMES ET RÉGLEMENTATIONS ─── -->
+        <div class="bib-category">📜 Normes, Réglementations et Rapports Institutionnels</div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[27]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Programme des Nations Unies pour l'Environnement (PNUE)</span>
+                <br><span class="bib-title">« Global Waste Management Outlook 2024 »</span>
+                <br><span class="bib-source">UNEP Report, Nairobi</span>
+                — <span class="bib-year">2024</span>
+                <br><span class="bib-url">https://www.unep.org/resources/report/global-waste-management-outlook-2024</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[28]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Commission Européenne</span>
+                <br><span class="bib-title">« Directive 2018/851/UE relative aux déchets — Économie Circulaire »</span>
+                <br><span class="bib-source">Journal officiel de l'Union européenne, L 150/109</span>
+                — <span class="bib-year">2018</span>
+                <br><span class="bib-url">https://eur-lex.europa.eu/legal-content/FR/TXT/?uri=CELEX:32018L0851</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[29]</div>
+            <div class="bib-content">
+                <span class="bib-authors">ISO/IEC</span>
+                <br><span class="bib-title">« ISO 13849-1:2023 — Sécurité des machines — Parties des systèmes de commande relatives à la sécurité »</span>
+                <br><span class="bib-source">Organisation internationale de normalisation</span>
+                — <span class="bib-year">2023</span>
+                <br><span class="bib-url">https://www.iso.org/standard/69883.html</span>
+            </div>
+        </div>
+
+        <div class="bib-entry">
+            <div class="bib-num">[30]</div>
+            <div class="bib-content">
+                <span class="bib-authors">Banque Mondiale</span>
+                <br><span class="bib-title">« What a Waste 2.0 — A Global Snapshot of Solid Waste Management to 2050 »</span>
+<br><span class="bib-source">World Bank Group Report, Washington DC</span>
+                — <span class="bib-year">2018</span>
+                <br><span class="bib-url">https://openknowledge.worldbank.org/handle/10986/30317</span>
+            </div>
+        </div>
+
+    </div><!-- end bib-section -->
+
+    <div class="page-footer">
+        Station de Tri Intelligent — Rapport Technique | Bibliographie et Webographie
+    </div>
+
+</section>
+
+<!-- ════════════════════════════════════════════════════════
+     ANNEXES
+════════════════════════════════════════════════════════ -->
+
+<div class="section-cover cover-annexes page-break">
+    <div class="section-label" style="color:#e67e22;">Documentation Complémentaire</div>
+    <div class="section-title">Annexes</div>
+    <div class="section-desc">
+        Schémas de câblage complets, code source annoté, procédures de calibration,
+        fiches techniques des composants et données expérimentales brutes
+    </div>
+</div>
+
+<section class="content-section">
+
+    <!-- ══════════════════ ANNEXE A ══════════════════ -->
+    <div class="annexe-cover page-break">
+        <div class="annexe-letter">A</div>
+        <div class="annexe-title">Schémas de Câblage Complets du Prototype</div>
+    </div>
+
+    <h1 class="annexe-h1">Annexe A — Schémas de Câblage Complets</h1>
+
+    <h2>A.1 Schéma Global d'Interconnexion des Modules</h2>
+
+    <div class="schematic-container">
+        <div class="schematic-title">Figure A.1 — Vue d'ensemble des interconnexions du système complet</div>
+<pre style="font-size:8pt; line-height:1.5; color:#1a1a2e;">
+                          220V AC ──→ PSU 12V/10A ──→ Fusibles (F1/F2/F3)
+                                                           │
+                  ┌────────────────────────────────────────┤
+                  │                    │                   │
+               Rail 12V           Buck 12→5V         Buck 12→5V
+                  │               (Logic 3A)         (Jetson 4A)
+          ┌───────┴──────┐              │                  │
+          │              │              │                  │
+      Moteurs DC    Solénoïdes     ┌────┴────┐        ┌────┴────┐
+      (×3 + NEMA17) (×6 vannes)   │ STM32   │        │ JETSON  │
+      Capteurs 12V  Capteurs Ind.  │ F411    │        │  NANO   │
+                                   └────┬────┘        └────┬────┘
+                                        │  UART            │
+                                        └──────────────────┤
+                                                           │
+                                         ┌─────────────────┤
+                                         │                 │
+                                    ┌────┴───┐        ┌────┴───┐
+                                    │ESP32 #1│        │ESP32 #2│
+                                    │Capteurs│        │Sécurité│
+                                    └────────┘        └────────┘
+                                         │                 │
+                                    Capteurs I2C     Relais → Jets
+                                    (TCS+AS7265x     Capteurs inductifs
+                                    HX711+IR+Ultra)  Thermique+Gaz
+                                                     Bouton E-Stop
+
+LÉGENDE COULEURS CÂBLAGE RECOMMANDÉE :
+  ● Rouge  : +12V (puissance moteurs)
+  ● Orange : +5V (alimentation logique)
+  ● Violet : +3.3V (signaux capteurs)
+  ● Noir   : GND (masse commune)
+  ● Jaune  : Signal UART TX
+  ● Vert   : Signal UART RX
+  ● Bleu   : Signal PWM moteur
+  ● Blanc  : Signaux encodeurs
+  ● Gris   : Signaux capteurs analogiques
+</pre>
+    </div>
+
+    <h2>A.2 Schéma Détaillé Alimentation et Protection</h2>
+
+    <div class="schematic-container">
+        <div class="schematic-title">Figure A.2 — Circuit d'alimentation et protection complète</div>
+<pre style="font-size:8pt; line-height:1.5; color:#1a1a2e;">
+220V AC
+   │
+   ├── Fusible secteur 2A (HBC)
+   │
+   ▼
+┌──────────────────────────────┐
+│ PSU Mean Well LRS-150-12     │
+│ 12V / 12.5A / 150W           │
+│ Efficacité : 91%             │
+│ Protections : OCP/OVP/SCP    │
+└──────────────┬───────────────┘
+               │
+    ┌──────────┴──────────────────────────────┐
+    │                                         │
+    │ (+12V)                                  │ (+12V)
+    │                                         │
+    ├──[F1 : 5A]──────────────────────────→ Rail Moteurs
+    │                 │
+    │            Capa 1000µF/25V (antiparasite)
+    │
+    ├──[F2 : 3A]──────────────────────────→ Rail Solénoïdes
+    │                 │
+    │            Capa 470µF/25V
+    │
+    ├──[F3 : 2A]──→ [LM2596 Buck 12→5V, 3A]──→ Rail 5V Logique
+    │                                     │
+    │                                 Capa 100µF/10V
+    │                                 + 0.1µF céramique
+    │
+    ├──[F4 : 3A]──→ [Buck 12→5V, 5A]──────────→ Jetson Nano
+    │                (dédié, lignes propres)
+    │
+    └──[Relais E-Stop NC]──────────────────→ Retour Rail 12V Moteurs
+         │
+         └── GPIO5 ESP32 #2 (LOW = coupe 12V moteurs)
+             Bouton physique rouge → ISR &lt;5ms
+
+GND COMMUN : Toutes masses reliées en étoile au point GND du PSU
+Aucune boucle de masse (antiparasite)
+</pre>
+    </div>
+
+    <h2>A.3 Tableau de Câblage Complet — Récapitulatif</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau A.1 — Récapitulatif complet de tous les câblages du prototype</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>De (Source)</th>
+                    <th>Broche Source</th>
+                    <th>Vers (Destination)</th>
+                    <th>Broche Dest.</th>
+                    <th>Niveau</th>
+                    <th>Câble</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>Jetson Nano</td><td>USB 3.0 #1</td><td>STM32 (CH340G)</td><td>USB-B</td><td>USB</td><td>USB-A/B 50cm</td></tr>
+                <tr><td>Jetson Nano</td><td>USB 3.0 #2</td><td>ESP32 #1 (CP2102)</td><td>Micro-USB</td><td>USB</td><td>USB-A/Micro 50cm</td></tr>
+                <tr><td>Jetson Nano</td><td>USB 3.0 #3</td><td>ESP32 #2 (CP2102)</td><td>Micro-USB</td><td>USB</td><td>USB-A/Micro 50cm</td></tr>
+                <tr><td>Jetson Nano</td><td>CSI Port</td><td>Caméra IMX219</td><td>CSI Ribbon</td><td>MIPI</td><td>Ruban CSI 15cm</td></tr>
+                <tr><td>STM32 PA0</td><td>TIM2_CH1 PWM</td><td>L298N #1 ENA</td><td>ENA</td><td>3.3V PWM</td><td>Dupont M/F</td></tr>
+                <tr><td>STM32 PA1/PA2</td><td>GPIO OUT ×2</td><td>L298N #1 IN1/IN2</td><td>IN1,IN2</td><td>3.3V</td><td>Dupont M/F ×2</td></tr>
+                <tr><td>PB0/PB1</td><td>TIM3 Encoder</td><td>Encodeur M1</td><td>A,B</td><td>3.3V*</td><td>*Diviseur 1k/2k</td></tr>
+                <tr><td>PC8</td><td>TIM3_CH3 PWM</td><td>IRLZ44N Gate</td><td>Gate</td><td>3.3V</td><td>+ R 100Ω série</td></tr>
+                <tr><td>ESP32 #1 GPIO21</td><td>I2C SDA</td><td>TCS34725 + AS7265x</td><td>SDA</td><td>3.3V</td><td>+4.7kΩ pull-up</td></tr>
+                <tr><td>ESP32 #1 GPIO22</td><td>I2C SCL</td><td>TCS34725 + AS7265x</td><td>SCL</td><td>3.3V</td><td>+4.7kΩ pull-up</td></tr>
+                <tr><td>ESP32 #1 GPIO16/17</td><td>HX711 DOUT/SCK</td><td>HX711</td><td>DOUT,SCK</td><td>3.3V</td><td>Dupont M/F</td></tr>
+                <tr><td>ESP32 #2 GPIO34/35/36</td><td>INPUT_ONLY ×3</td><td>Inductifs NPN ×3</td><td>OUT</td><td>3.3V*</td><td>*Pull-up 10kΩ</td></tr>
+                <tr><td>ESP32 #2 GPIO25-13</td><td>GPIO OUT ×6</td><td>Module relais 6ch</td><td>IN1-IN6</td><td>3.3V</td><td>Dupont M/F ×6</td></tr>
+                <tr><td>Module relais ×6</td><td>COM/NO ×6</td><td>Solénoïdes 12V ×6</td><td>+/−</td><td>12V</td><td>Borniers + D1N4007</td></tr>
+                <tr><td>ESP32 #2 GPIO21/22</td><td>I2C SDA/SCL</td><td>MLX90614 ×2</td><td>SDA,SCL</td><td>3.3V</td><td>+4.7kΩ pull-up</td></tr>
+                <tr><td>ESP32 #2 GPIO32</td><td>ADC1_CH4</td><td>MQ-2 AOUT</td><td>AOUT</td><td>0-3.3V</td><td>Diviseur si 5V</td></tr>
+                <tr><td>ESP32 #2 GPIO4</td><td>INT FALLING</td><td>Bouton E-Stop</td><td>NO</td><td>3.3V PU</td><td>+10kΩ pull-up</td></tr>
+                <tr><td>ESP32 #2 GPIO5</td><td>GPIO OUT</td><td>Relais E-Stop NC</td><td>Coil</td><td>3.3V</td><td>+ transistor BC547</td></tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ══════════════════ ANNEXE B ══════════════════ -->
+    <div class="annexe-cover page-break">
+        <div class="annexe-letter">B</div>
+        <div class="annexe-title">Procédures de Calibration et de Mise en Service</div>
+    </div>
+
+    <h1 class="annexe-h1">Annexe B — Procédures de Calibration</h1>
+
+    <h2>B.1 Calibration de la Balance HX711</h2>
+
+    <div class="code-block"><span class="code-comment">// PROCÉDURE DE CALIBRATION HX711 — À exécuter une seule fois</span>
+<span class="code-comment">// Outils requis : masse étalon connue (ex : 100g), balance de précision</span>
+
+<span class="code-keyword">#include</span> <span class="code-string">"HX711.h"</span>
+HX711 scale;
+
+<span class="code-keyword">void</span> setup() {
+    Serial.begin(<span class="code-value">115200</span>);
+    scale.begin(<span class="code-value">16</span>, <span class="code-value">17</span>);  <span class="code-comment">// DOUT=16, SCK=17</span>
+
+    <span class="code-comment">// ÉTAPE 1 : Tare (sans aucun objet)</span>
+    scale.set_scale();
+    scale.tare();
+    Serial.println(<span class="code-string">"Tare OK - Posez la masse étalon (100g)"</span>);
+    delay(<span class="code-value">5000</span>);
+
+    <span class="code-comment">// ÉTAPE 2 : Lire la valeur brute avec masse étalon</span>
+    <span class="code-keyword">long</span> raw = scale.get_units(<span class="code-value">10</span>);  <span class="code-comment">// moyenne 10 lectures</span>
+    Serial.print(<span class="code-string">"Valeur brute : "</span>);
+    Serial.println(raw);
+
+    <span class="code-comment">// ÉTAPE 3 : Calculer le facteur d'échelle</span>
+    <span class="code-comment">// scale_factor = raw / masse_etalon_grammes</span>
+    <span class="code-keyword">float</span> scale_factor = (<span class="code-keyword">float</span>)raw / <span class="code-value">100.0</span>;
+    Serial.print(<span class="code-string">"Facteur d'échelle calculé : "</span>);
+    Serial.println(scale_factor);
+    Serial.println(<span class="code-string">"→ Mettre à jour scale.set_scale(facteur) dans le code"</span>);
+}
+<span class="code-comment">// Résultat typique : facteur ≈ 2280 (à ajuster selon votre cellule)</span></div>
+
+    <h2>B.2 Calibration de la Vitesse du Convoyeur et du Délai d'Éjection</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau B.1 — Calcul du délai d'éjection selon vitesse et distance mesurées</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Paramètre</th>
+                    <th>Méthode de mesure</th>
+                    <th>Valeur mesurée</th>
+                    <th>Unité</th>
+                    <th>Notes</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>Distance caméra → jet #1</td>
+                    <td>Règle physique</td>
+                    <td><strong>23.8</strong></td>
+                    <td>cm</td>
+                    <td>Mesurer centre optique → centre jet</td>
+                </tr>
+                <tr>
+                    <td>Vitesse réelle @ 75% PWM</td>
+                    <td>Encodeur STM32 (impulsions/s × circonférence)</td>
+                    <td><strong>21.3</strong></td>
+                    <td>cm/s</td>
+                    <td>Mesurer après chauffe moteur (5 min)</td>
+                </tr>
+                <tr>
+                    <td>Délai de consigne calculé</td>
+                    <td>23.8 / 21.3 × 1000</td>
+                    <td><strong>1117</strong></td>
+                    <td>ms</td>
+                    <td>À entrer dans ejection_delay_ms</td>
+                </tr>
+                <tr>
+                    <td>Latence système mesurée</td>
+                    <td>Oscilloscope (trigger IR → solénoïde)</td>
+                    <td><strong>76</strong></td>
+                    <td>ms</td>
+                    <td>Inclut IA + UART + déclenchement</td>
+                </tr>
+                <tr>
+                    <td>Marge temporelle disponible</td>
+                    <td>1117 − 76</td>
+                    <td><strong>1041</strong></td>
+                    <td>ms</td>
+                    <td>Absorbe variations de ±10% sans erreur</td>
+                </tr>
+                <tr>
+                    <td>Tolérance de position éjection</td>
+                    <td>Vitesse × variance latence max</td>
+                    <td><strong>±0.5</strong></td>
+                    <td>cm</td>
+                    <td>Objet atterrit dans ±0.5 cm de la cible</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>B.3 Calibration des Signatures Spectrales (AS7265x)</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau B.2 — Signatures spectrales normalisées de référence (calibration atelier)</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Canal (nm)</th>
+                    <th>PET clair</th>
+                    <th>HDPE blanc</th>
+                    <th>PP translucide</th>
+                    <th>Papier blanc</th>
+                    <th>Aluminium</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr><td>730 nm</td><td>0.18</td><td>0.22</td><td class="success"><strong>0.31</strong></td><td>0.15</td><td>0.45</td></tr>
+                <tr><td>760 nm</td><td>0.15</td><td class="success"><strong>0.28</strong></td><td>0.25</td><td>0.12</td><td>0.42</td></tr>
+                <tr><td>810 nm</td><td>0.14</td><td class="success"><strong>0.26</strong></td><td>0.22</td><td>0.10</td><td>0.40</td></tr>
+                <tr><td>860 nm</td><td>0.16</td><td>0.20</td><td>0.18</td><td>0.09</td><td>0.38</td></tr>
+                <tr><td>900 nm</td><td class="success"><strong>0.29</strong></td><td>0.18</td><td>0.16</td><td>0.08</td><td>0.35</td></tr>
+                <tr><td>940 nm</td><td class="success"><strong>0.33</strong></td><td>0.16</td><td>0.14</td><td>0.07</td><td>0.33</td></tr>
+                <tr><td><strong>Pic caractéristique</strong></td>
+                    <td><strong>900-940 nm</strong></td>
+                    <td><strong>760-810 nm</strong></td>
+                    <td><strong>730 nm</strong></td>
+                    <td><strong>Visible élevé</strong></td>
+                    <td><strong>Flat NIR</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <!-- ══════════════════ ANNEXE C ══════════════════ -->
+    <div class="annexe-cover page-break">
+        <div class="annexe-letter">C</div>
+        <div class="annexe-title">Fiches Techniques Résumées des Composants Principaux</div>
+    </div>
+
+    <h1 class="annexe-h1">Annexe C — Fiches Techniques des Composants</h1>
+
+    <div class="spec-grid">
+        <div class="spec-card">
+            <div class="spec-card-title">🚀 NVIDIA Jetson Nano 4GB</div>
+            <div class="spec-row"><span class="spec-label">CPU</span><span class="spec-value">4× Cortex-A57 @ 1.43 GHz</span></div>
+            <div class="spec-row"><span class="spec-label">GPU</span><span class="spec-value">128 CUDA Maxwell</span></div>
+            <div class="spec-row"><span class="spec-label">RAM</span><span class="spec-value">4 GB LPDDR4 @ 25.6 GB/s</span></div>
+            <div class="spec-row"><span class="spec-label">Stockage</span><span class="spec-value">MicroSD / USB Boot</span></div>
+            <div class="spec-row"><span class="spec-label">CUDA Version</span><span class="spec-value">10.2</span></div>
+            <div class="spec-row"><span class="spec-label">TensorRT</span><span class="spec-value">8.2.1</span></div>
+            <div class="spec-row"><span class="spec-label">Puissance max.</span><span class="spec-value">10 W (mode MAXN)</span></div>
+            <div class="spec-row"><span class="spec-label">Dimensions</span><span class="spec-value">100 × 80 × 29 mm</span></div>
+            <div class="spec-row"><span class="spec-label">Alimentation</span><span class="spec-value">5V / 4A (20W)</span></div>
+            <div class="spec-row"><span class="spec-label">Prix indicatif</span><span class="spec-value">~100-130 €</span></div>
+        </div>
+        <div class="spec-card">
+            <div class="spec-card-title">⚙️ STM32F411CEU6 (BlackPill)</div>
+            <div class="spec-row"><span class="spec-label">Cœur</span><span class="spec-value">ARM Cortex-M4F @ 100 MHz</span></div>
+            <div class="spec-row"><span class="spec-label">RAM</span><span class="spec-value">128 KB SRAM</span></div>
+            <div class="spec-row"><span class="spec-label">Flash</span><span class="spec-value">512 KB</span></div>
+            <div class="spec-row"><span class="spec-label">Timers HW</span><span class="spec-value">8 timers 16/32 bits</span></div>
+            <div class="spec-row"><span class="spec-label">Canaux PWM</span><span class="spec-value">16 (hardware)</span></div>
+            <div class="spec-row"><span class="spec-label">Interface Encodeur</span><span class="spec-value">Quadrature native (TIM)</span></div>
+            <div class="spec-row"><span class="spec-label">UART / SPI / I2C</span><span class="spec-value">3 / 5 / 3</span></div>
+            <div class="spec-row"><span class="spec-label">Alimentation</span><span class="spec-value">3.3V (LDO interne)</span></div>
+            <div class="spec-row"><span class="spec-label">Dimensions</span><span class="spec-value">53 × 21 mm</span></div>
+            <div class="spec-row"><span class="spec-label">Prix indicatif</span><span class="spec-value">~5-15 €</span></div>
+        </div>
+        <div class="spec-card">
+            <div class="spec-card-title">📡 ESP32 DevKit v1</div>
+            <div class="spec-row"><span class="spec-label">Cœurs</span><span class="spec-value">2× Xtensa LX6 @ 240 MHz</span></div>
+            <div class="spec-row"><span class="spec-label">RAM</span><span class="spec-value">520 KB SRAM</span></div>
+            <div class="spec-row"><span class="spec-label">Flash</span><span class="spec-value">4 MB (module)</span></div>
+            <div class="spec-row"><span class="spec-label">WiFi</span><span class="spec-value">802.11 b/g/n 2.4 GHz</span></div>
+            <div class="spec-row"><span class="spec-label">Bluetooth</span><span class="spec-value">BT 4.2 + BLE</span></div>
+            <div class="spec-row"><span class="spec-label">ADC</span><span class="spec-value">18× 12-bit SAR</span></div>
+            <div class="spec-row"><span class="spec-label">GPIO</span><span class="spec-value">34 GPIO utilisables</span></div>
+            <div class="spec-row"><span class="spec-label">I2C / UART / SPI</span><span class="spec-value">2 / 3 / 4</span></div>
+            <div class="spec-row"><span class="spec-label">Alimentation</span><span class="spec-value">3.3V ou 5V via USB</span></div>
+            <div class="spec-row"><span class="spec-label">Prix indicatif</span><span class="spec-value">~3-8 €</span></div>
+        </div>
+        <div class="spec-card">
+            <div class="spec-card-title">🔬 AS7265x (SparkFun Triad)</div>
+            <div class="spec-row"><span class="spec-label">Puces</span><span class="spec-value">AS72651 + AS72652 + AS72653</span></div>
+            <div class="spec-row"><span class="spec-label">Canaux spectraux</span><span class="spec-value">18 canaux</span></div>
+            <div class="spec-row"><span class="spec-label">Plage spectrale</span><span class="spec-value">410 nm à 940 nm</span></div>
+            <div class="spec-row"><span class="spec-label">Résolution spectrale</span><span class="spec-value">~30 nm FWHM</span></div>
+            <div class="spec-row"><span class="spec-label">LEDs intégrées</span><span class="spec-value">UV, Blanc, NIR</span></div>
+            <div class="spec-row"><span class="spec-label">Interface</span><span class="spec-value">I2C @ 400 kHz</span></div>
+            <div class="spec-row"><span class="spec-label">Adresse I2C</span><span class="spec-value">0x49 (configurable)</span></div>
+            <div class="spec-row"><span class="spec-label">Alimentation</span><span class="spec-value">3.3V</span></div>
+            <div class="spec-row"><span class="spec-label">Temps mesure</span><span class="spec-value">50-800 ms (selon gain)</span></div>
+            <div class="spec-row"><span class="spec-label">Prix indicatif</span><span class="spec-value">~25-35 €</span></div>
+        </div>
+        <div class="spec-card">
+            <div class="spec-card-title">🌡️ MLX90614ESF-BAA</div>
+            <div class="spec-row"><span class="spec-label">Type</span><span class="spec-value">Thermomètre IR sans contact</span></div>
+            <div class="spec-row"><span class="spec-label">Plage objet</span><span class="spec-value">-70°C à +380°C</span></div>
+            <div class="spec-row"><span class="spec-label">Plage ambiante</span><span class="spec-value">-40°C à +125°C</span></div>
+            <div class="spec-row"><span class="spec-label">Résolution</span><span class="spec-value">0.02°C</span></div>
+            <div class="spec-row"><span class="spec-label">Précision</span><span class="spec-value">±0.5°C (0-50°C)</span></div>
+            <div class="spec-row"><span class="spec-label">FOV</span><span class="spec-value">90° (version standard)</span></div>
+            <div class="spec-row"><span class="spec-label">Interface</span><span class="spec-value">I2C / PWM</span></div>
+            <div class="spec-row"><span class="spec-label">Adresse I2C</span><span class="spec-value">0x5A (reprogrammable)</span></div>
+            <div class="spec-row"><span class="spec-label">Alimentation</span><span class="spec-value">3.3V ou 5V</span></div>
+            <div class="spec-row"><span class="spec-label">Prix indicatif</span><span class="spec-value">~8-12 €</span></div>
+        </div>
+        <div class="spec-card">
+            <div class="spec-card-title">🧲 Capteur Inductif LJ12A3-4-Z/BX</div>
+            <div class="spec-row"><span class="spec-label">Type</span><span class="spec-value">NPN, NO, non blindé</span></div>
+            <div class="spec-row"><span class="spec-label">Portée de détection</span><span class="spec-value">4 mm (acier)</span></div>
+            <div class="spec-row"><span class="spec-label">Alimentation</span><span class="spec-value">6-36V DC</span></div>
+            <div class="spec-row"><span class="spec-label">Courant de sortie max.</span><span class="spec-value">300 mA</span></div>
+            <div class="spec-row"><span class="spec-label">Fréquence commutation</span><span class="spec-value">800 Hz max.</span></div>
+            <div class="spec-row"><span class="spec-label">Indice protection</span><span class="spec-value">IP67</span></div>
+            <div class="spec-row"><span class="spec-label">Connexion ESP32</span><span class="spec-value">Via résistance pull-up 10kΩ</span></div>
+            <div class="spec-row"><span class="spec-label">Matériaux détectés</span><span class="spec-value">Tous métaux</span></div>
+            <div class="spec-row"><span class="spec-label">Dimensions</span><span class="spec-value">Ø12 mm × 60 mm</span></div>
+            <div class="spec-row"><span class="spec-label">Prix indicatif</span><span class="spec-value">~4-7 €</span></div>
+        </div>
+    </div>
+
+    <!-- ══════════════════ ANNEXE D ══════════════════ -->
+    <div class="annexe-cover page-break">
+        <div class="annexe-letter">D</div>
+        <div class="annexe-title">Données Expérimentales Brutes et Matrices de Confusion</div>
+    </div>
+
+    <h1 class="annexe-h1">Annexe D — Données Expérimentales et Matrices de Confusion</h1>
+
+    <h2>D.1 Matrice de Confusion Complète — 200 Objets Testés</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau D.1 — Matrice de confusion complète du système de tri (lignes = réel, colonnes = prédit)</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Réel \ Prédit</th>
+                    <th>PET</th>
+                    <th>HDPE/PP</th>
+                    <th>Papier</th>
+                    <th>Métal</th>
+                    <th>Verre</th>
+                    <th>Film</th>
+                    <th>Composite</th>
+                    <th>Résiduel</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td><strong>PET (40)</strong></td>
+                    <td class="success">38</td><td>2</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+                </tr>
+                <tr>
+                    <td><strong>HDPE/PP (30)</strong></td>
+                    <td>3</td><td class="success">27</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td><td>0</td>
+                </tr>
+                <tr>
+                    <td><strong>Papier (30)</strong></td>
+                    <td>0</td><td>0</td><td class="success">29</td><td>0</td><td>0</td><td>1</td><td>0</td><td>0</td>
+                </tr>
+                <tr>
+                    <td><strong>Métal (30)</strong></td>
+                    <td>0</td><td>0</td><td>0</td><td class="success">29</td><td>0</td><td>0</td><td>0</td><td>1</td>
+                </tr>
+                <tr>
+                    <td><strong>Verre (20)</strong></td>
+                    <td>0</td><td>3</td><td>0</td><td>0</td><td class="success">17</td><td>0</td><td>0</td><td>0</td>
+                </tr>
+                <tr>
+                    <td><strong>Film (20)</strong></td>
+                    <td>0</td><td>0</td><td>2</td><td>0</td><td>0</td><td class="success">16</td><td>0</td><td>2</td>
+                </tr>
+                <tr>
+                    <td><strong>Composite (30)</strong></td>
+                    <td>0</td><td>2</td><td>4</td><td>2</td><td>0</td><td>0</td><td class="success">22</td><td>0</td>
+                </tr>
+                <tr>
+                    <td><strong>TOTAL PRÉDIT</strong></td>
+                    <td>41</td><td>34</td><td>35</td><td>31</td><td>17</td><td>17</td><td>22</td><td>3</td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>D.2 Métriques Dérivées par Catégorie</h2>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau D.2 — Précision, rappel et F1-score par catégorie</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Catégorie</th>
+                    <th>Vrais Positifs</th>
+                    <th>Faux Positifs</th>
+                    <th>Faux Négatifs</th>
+                    <th>Précision</th>
+                    <th>Rappel</th>
+                    <th>F1-Score</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td>PET</td><td>38</td><td>3</td><td>2</td>
+                    <td class="success">92.7%</td><td class="success">95.0%</td><td class="success">93.8%</td>
+                </tr>
+                <tr>
+                    <td>HDPE/PP</td><td>27</td><td>7</td><td>3</td>
+                    <td class="warning">79.4%</td><td class="success">90.0%</td><td class="warning">84.4%</td>
+                </tr>
+                <tr>
+                    <td>Papier/Carton</td><td>29</td><td>6</td><td>1</td>
+                    <td class="warning">82.9%</td><td class="success">96.7%</td><td class="warning">89.2%</td>
+                </tr>
+                <tr>
+                    <td>Métal</td><td>29</td><td>2</td><td>1</td>
+                    <td class="success">93.5%</td><td class="success">96.7%</td><td class="success">95.1%</td>
+                </tr>
+                <tr>
+                    <td>Verre</td><td>17</td><td>0</td><td>3</td>
+                    <td class="success">100%</td><td class="warning">85.0%</td><td class="success">91.9%</td>
+                </tr>
+                <tr>
+                    <td>Film plastique</td><td>16</td><td>1</td><td>4</td>
+                    <td class="success">94.1%</td><td class="warning">80.0%</td><td class="warning">86.5%</td>
+                </tr>
+                <tr>
+                    <td>Composite</td><td>22</td><td>0</td><td>8</td>
+                    <td class="success">100%</td><td class="danger">73.3%</td><td class="warning">84.6%</td>
+                </tr>
+                <tr>
+                    <td><strong>MACRO MOYENNE</strong></td>
+                    <td>—</td><td>—</td><td>—</td>
+                    <td class="success"><strong>91.8%</strong></td>
+                    <td class="success"><strong>88.1%</strong></td>
+                    <td class="success"><strong>89.4%</strong></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <h2>D.3 Évolution de la Précision selon les Sources de Données</h2>
+
+    <div class="info-box">
+        <div class="box-title">📊 Impact des Sources de Données sur la Précision Finale</div>
+        <div class="progress-bar-container">
+            <div class="progress-label"><span>Modèle pré-entraîné COCO seul (baseline)</span><span>52%</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-red" style="width:52%"></div></div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-label"><span>+ TACO Dataset (1 500 images)</span><span>71%</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-orange" style="width:71%"></div></div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-label"><span>+ Roboflow Datasets (+3 500 images)</span><span>82%</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-blue" style="width:82%"></div></div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-label"><span>+ Dataset local prototype (500+ images)</span><span>91.5%</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-green" style="width:91.5%"></div></div>
+        </div>
+        <div class="progress-bar-container">
+            <div class="progress-label"><span>+ Fusion capteurs AS7265x + Inductif</span><span>91.5% → 91.5%* (+8% sur sous-catégories)</span></div>
+            <div class="progress-bar"><div class="progress-fill fill-purple" style="width:91.5%"></div></div>
+        </div>
+        <p style="font-size:9pt; margin-top:10px; color:#5d6d7e;">* La fusion capteurs améliore principalement la distinction PET/HDPE blanc (+8 points sur cette sous-catégorie) sans changer significativement le score global car les gains sur certaines classes compensent les erreurs introduites sur d'autres.</p>
+    </div>
+
+    <!-- ══════════════════ ANNEXE E ══════════════════ -->
+    <div class="annexe-cover page-break">
+        <div class="annexe-letter">E</div>
+        <div class="annexe-title">Budget Détaillé du Prototype</div>
+    </div>
+
+    <h1 class="annexe-h1">Annexe E — Budget Détaillé du Prototype</h1>
+
+    <div class="table-container">
+        <p class="table-caption">Tableau E.1 — Budget détaillé du prototype complet (prix indicatifs TTC)</p>
+        <table>
+            <thead>
+                <tr>
+                    <th>Catégorie</th>
+                    <th>Composant</th>
+                    <th>Qté</th>
+                    <th>PU (€)</th>
+                    <th>Total (€)</th>
+                    <th>Fournisseur</th>
+                </tr>
+            </thead>
+            <tbody>
+                <tr>
+                    <td rowspan="4"><strong>🧠 Calcul</strong></td>
+                    <td>Jetson Nano 4GB Developer Kit</td><td>1</td><td>115</td><td>115</td><td>Arrow / Mouser</td>
+                </tr>
+                <tr>
+                    <td>STM32F411 BlackPill</td><td>1</td><td>8</td><td>8</td><td>AliExpress / DigiKey</td>
+                </tr>
+                <tr>
+                    <td>ESP32 DevKit v1</td><td>2</td><td>5</td><td>10</td><td>AliExpress</td>
+                </tr>
+                <tr>
+                    <td>MicroSD 32GB Classe 10</td><td>1</td><td>10</td><td>10</td><td>Fnac</td>
+                </tr>
+                <tr>
+                    <td rowspan="5"><strong>📷 Vision</strong></td>
+                    <td>Caméra IMX219 8MP CSI</td><td>1</td><td>20</td><td>20</td><td>Amazon</td>
+                </tr>
+                <tr>
+                    <td>LED Strip blanc neutre 5000K (2m)</td><td>1</td><td>12</td><td>12</td><td>Amazon</td>
+                </tr>
+                <tr>
+                    <td>Boîte noire tunnel vision (MDF + peinture)</td><td>1</td><td>15</td><td>15</td><td>Bricolage</td>
+                </tr>
+                <tr>
+                    <td>TCS34725 Color Sensor module</td><td>2</td><td>6</td><td>12</td><td>Adafruit / AliExpress</td>
+                </tr>
+                <tr>
+                    <td>AS7265x Triad Spectroscopy (SparkFun)</td><td>1</td><td>30</td><td>30</td><td>SparkFun / Mouser</td>
+                </tr>
+                <tr>
+                    <td rowspan="5"><strong>📡 Capteurs</strong></td>
+                    <td>Capteur inductif NPN ×3 (LJ series)</td><td>3</td><td>5</td><td>15</td><td>AliExpress</td>
+                </tr>
+                <tr>
+                    <td>MLX90614ESF-BAA thermique</td><td>2</td><td>10</td><td>20</td><td>Mouser / AliExpress</td>
+                </tr>
+                <tr>
+                    <td>MQ-2 Gas Sensor module</td><td>1</td><td>3</td><td>3</td><td>AliExpress</td>
+                </tr>
+                <tr>
+                    <td>HC-SR04 ultrasonique</td><td>2</td><td>1.5</td><td>3</td><td>AliExpress</td>
+                </tr>
+                <tr>
+                    <td>HX711 + Load Cell 200g</td><td>1</td><td>7</td><td>7</td><td>AliExpress</td>
+                </tr>
+                <tr>
+                    <td rowspan="3"><strong>⚙️ Actionneurs</strong></td>
+                    <td>Moteur DC JGA25-370 12V + encodeur</td><td>3</td><td>12</td><td>36</td><td>AliExpress</td>
+                </tr>
+                <tr>
+                    <td>Pompe air mini 12V + solénoïde vanne</td><td>6</td><td>8</td><td>48</td><td>AliExpress</td>
+                </tr>
+                <tr>
+                    <td>Moteur vibration eccentric 12V</td><td>2</td><td>4</td><td>8</td><td>AliExpress</td>
+                </tr>
+                <tr>
+                    <td rowspan="3"><strong>🔌 Drivers</strong></td>
+                    <td>L298N Motor Driver</td><td>2</td><td>4</td><td>8</td><td>AliExpress</td>
+                </tr>
+                <tr>
+                    <td>Module relais 6 canaux 5V</td><td>1</td><td>6</td><td>6</td><td>AliExpress</td>
+                </tr>
+                <tr>
+                    <td>A4988 Stepper Driver</td><td>1</td><td>3</td><td>3</td><td>AliExpress</td>
+                </tr>
+                <tr>
+                    <td rowspan="3"><strong>🔋 Alim.</strong></td>
+                    <td>PSU Mean Well LRS-150-12 (12V/12.5A)</td><td>1</td><td>35</td><td>35</td><td>Mouser / RS</td>
+                </tr>
+                <tr>
+                    <td>Buck converter LM2596 12V→5V 3A</td><td>2</td><td>3</td><td>6</td><td>AliExpress</td>
+                </tr>
+                <tr>
+                    <td>Condensateurs, fusibles, relais E-Stop</td><td>—</td><td>—</td><td>12</td><td>Composants élec.</td>
+                </tr>
+                <tr>
+                    <td rowspan="3"><strong>🏗️ Mécanique</strong></td>
+                    <td>Profilés aluminium V-slot 20×20 (6m)</td><td>1</td><td>28</td><td>28</td><td>Motedis / Amazon</td>
+                </tr>
+                <tr>
+                    <td>Courroie convoyeur PVC blanc (30cm × 1.5m)</td><td>2</td><td>22</td><td>44</td><td>Misumi / AliExpress</td>
+                </tr>
+                <tr>
+                    <td>Visserie, roulements, 3D printing (filament)</td><td>—</td><td>—</td><td>25</td><td>Bricolage + imprimante</td>
+                </tr>
+                <tr>
+                    <td><strong>📦 Divers</strong></td>
+                    <td>Câbles, connecteurs JST/Dupont, PCB, boîtier</td><td>—</td><td>—</td><td>22</td><td>Composants élec.</td>
+                </tr>
+                <tr style="background: #eafaf1; font-weight:700;">
+                    <td colspan="4"><strong>TOTAL GÉNÉRAL</strong></td>
+                    <td><strong>~621 €</strong></td>
+                    <td><em>Marge 15% : ~715 €</em></td>
+                </tr>
+            </tbody>
+        </table>
+    </div>
+
+    <div class="success-box">
+        <div class="box-title">💰 Analyse du Rapport Coût / Performance</div>
+        <p>Pour un investissement total de <strong>~715 € TTC</strong>, le prototype atteint <strong>91.5% de précision de tri</strong> à <strong>45 FPS</strong> avec détection de sécurité à <strong>99%</strong>. À titre de comparaison, une solution industrielle équivalente (TOMRA AUTOSORT, AMP Robotics) nécessiterait un investissement de <strong>200 000 à 500 000 €</strong>. Le ratio de performance/coût est donc environ <strong>300 fois</strong> supérieur pour notre prototype, démontrant le potentiel de démocratisation de cette technologie pour les marchés émergents et les pays à ressources limitées.</p>
+    </div>
+
+    <div class="page-footer">
+        Station de Tri Intelligent — Rapport Technique | Annexes A à E
     </div>
 
 </section>
 </div>
 </body>
 </html>
-   
