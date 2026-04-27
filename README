@@ -1,0 +1,443 @@
+═══════════════════════════════════════════════════════
+  MASTER ARCHITECTURE
+═══════════════════════════════════════════════════════
+
+  ┌─────────────────────────────────────────────────────────┐
+  │                    JETSON NANO                          │
+  │                  (Master Brain 🧠)                      │
+  │                                                         │
+  │  ┌─────────────┐  ┌─────────────┐  ┌─────────────┐    │
+  │  │ Camera CSI  │  │ AI Model    │  │ Web Dashboard│    │
+  │  │ (vision)    │  │ (YOLO v8)   │  │ (monitoring) │    │
+  │  └─────────────┘  └─────────────┘  └─────────────┘    │
+  │                                                         │
+  │  Communication: USB Serial / UART / SPI               │
+  └──────────┬──────────────┬───────────────┬──────────────┘
+             │              │               │
+      UART/USB       UART/USB          UART/USB
+             │              │               │
+             ▼              ▼               ▼
+  ┌─────────────────┐ ┌──────────────┐ ┌──────────────────┐
+  │   STM32F4       │ │   ESP32 #1   │ │    ESP32 #2      │
+  │  (Motor Ctrl)   │ │  (Sensors)   │ │  (Safety+Eject)  │
+  │                 │ │              │ │                  │
+  │ • Conveyor      │ │ • NIR basic  │ │ • Metal detect   │
+  │   motors        │ │ • Color      │ │ • Air jets ctrl  │
+  │ • Timing belt   │ │   sensor     │ │ • Emergency stop │
+  │ • Bowl vibrator │ │ • Weight     │ │ • Gas sensor     │
+  │ • Encoders      │ │ • Presence   │ │ • Thermal basic  │
+  │ • PID control   │ │   sensors    │ │                  │
+  └─────────────────┘ └──────────────┘ └──────────────────┘
+
+═══════════════════════════════════════════════════════
+  WHY STM32 + ESP32 + JETSON NANO?
+═══════════════════════════════════════════════════════
+
+  ┌──────────────┬────────────────────────────────────┐
+  │ BOARD        │ WHY WE CHOSE IT                    │
+  ├──────────────┼────────────────────────────────────┤
+  │              │                                    │
+  │ JETSON NANO  │ • 128 CUDA cores → AI inference   │
+  │              │ • يشغل YOLO v8 real-time          │
+  │              │ • CSI camera interface             │
+  │              │ • Linux → OpenCV, PyTorch          │
+  │              │ • USB Host → connect everything    │
+  │              │ ✅ الوحيد القادر على real-time AI  │
+  │              │ ❌ ما يتحكمش في motors مباشرة     │
+  │              │ ❌ ما عندوش real-time guarantees   │
+  │              │                                    │
+  ├──────────────┼────────────────────────────────────┤
+  │              │                                    │
+  │ STM32F4      │ • Real-time OS (FreeRTOS)         │
+  │              │ • Hardware timers دقيقة جداً      │
+  │              │ • PWM متعدد للـ motors             │
+  │              │ • Encoder interface مدمج          │
+  │              │ • DMA → لا يضيع وقت               │
+  │              │ ✅ أحسن لـ motor control           │
+  │              │ ✅ deterministic timing            │
+  │              │ ❌ ما عندوش WiFi                   │
+  │              │                                    │
+  ├──────────────┼────────────────────────────────────┤
+  │              │                                    │
+  │ ESP32        │ • WiFi + BT مدمج                  │
+  │              │ • Dual core (240MHz)               │
+  │              │ • ADC 12-bit                       │
+  │              │ • رخيص (€3-5)                     │
+  │              │ ✅ sensors + communication         │
+  │              │ ✅ web interface                   │
+  │              │ ❌ ما عندوش real-time guarantees   │
+  │              │ ❌ ADC مش دقيق 100%               │
+  │              │                                    │
+  └──────────────┴────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════
+  COMPLETE BOM - قائمة كل المكونات
+═══════════════════════════════════════════════════════
+
+  🧠 MAIN CONTROLLERS
+  ┌─────────────────────────────────┬──────┬─────────┐
+  │ Component                       │ Qty  │ Price   │
+  ├─────────────────────────────────┼──────┼─────────┤
+  │ Jetson Nano 4GB Developer Kit   │  1   │ €90-130 │
+  │ STM32F411 BlackPill (or NUCLEO) │  1   │ €5-15   │
+  │ ESP32 DevKit v1                 │  2   │ €5-8 ea │
+  │ MicroSD 32GB (Jetson)           │  1   │ €8-12   │
+  └─────────────────────────────────┴──────┴─────────┘
+
+  📷 VISION SYSTEM
+  ┌─────────────────────────────────┬──────┬─────────┐
+  │ IMX219 Camera (CSI, 8MP)        │  1   │ €15-25  │
+  │ USB Camera backup (1080p)       │  1   │ €15-20  │
+  │ Camera mount + lighting (LEDs)  │  1   │ €10-15  │
+  │ Diffuse LED strip (white)       │  2m  │ €8-12   │
+  └─────────────────────────────────┴──────┴─────────┘
+
+  📡 SENSORS
+  ┌─────────────────────────────────┬──────┬─────────┐
+  │ TCS34725 Color Sensor           │  2   │ €5-8 ea │
+  │ Inductive Proximity (8mm,NPN)   │  3   │ €4-6 ea │
+  │ IR Obstacle Sensor (presence)   │  6   │ €1-2 ea │
+  │ HX711 + Load Cell (200g)        │  1   │ €5-8    │
+  │ AS7265x Spectral Sensor (NIR)   │  1   │ €25-35  │
+  │ MQ-2/MQ-135 Gas Sensor         │  1   │ €3-5    │
+  │ MLX90614 IR Temp (thermal)      │  2   │ €8-12ea │
+  │ HC-SR04 Ultrasonic              │  4   │ €1-2 ea │
+  └─────────────────────────────────┴──────┴─────────┘
+
+  ⚙️ MOTORS & ACTUATORS
+  ┌─────────────────────────────────┬──────┬─────────┐
+  │ DC Motor 12V + Encoder (JGA25)  │  3   │ €8-15ea │
+  │ NEMA 17 Stepper (belt/vibrator) │  2   │ €8-12ea │
+  │ Servo Motor MG996R              │  4   │ €5-8 ea │
+  │ Mini Air Pump 12V               │  3   │ €8-12ea │
+  │ 5V Mini Solenoid Valve          │  3   │ €5-8 ea │
+  │ Vibration Motor (eccentric)     │  2   │ €3-5 ea │
+  └─────────────────────────────────┴──────┴─────────┘
+
+  🔌 MOTOR DRIVERS
+  ┌─────────────────────────────────┬──────┬─────────┐
+  │ L298N Motor Driver              │  2   │ €3-5 ea │
+  │ A4988 Stepper Driver            │  2   │ €2-4 ea │
+  │ IBT-2 (BTS7960) High Current    │  1   │ €5-8    │
+  │ Relay Module 8-channel 5V       │  1   │ €5-8    │
+  └─────────────────────────────────┴──────┴─────────┘
+
+  🔋 POWER SUPPLY
+  ┌─────────────────────────────────┬──────┬─────────┐
+  │ PSU 12V 10A (switching)         │  1   │ €15-25  │
+  │ PSU 5V 5A (for logic)           │  1   │ €8-12   │
+  │ DC-DC Buck 12V→5V (backup)      │  2   │ €2-4 ea │
+  │ Capacitors 1000µF 25V           │  5   │ €0.5 ea │
+  └─────────────────────────────────┴──────┴─────────┘
+
+  🏗️ MECHANICAL
+  ┌─────────────────────────────────┬──────┬─────────┐
+  │ Conveyor belt (30cm wide, 1m)   │  2   │ €20-40ea│
+  │ Aluminum profiles 20x20 (6m)   │  1   │ €20-30  │
+  │ 3D printed parts (filament)     │  -   │ €15-25  │
+  │ Bearings, rollers, screws       │  -   │ €15-25  │
+  │ Plywood 12mm (structure)        │  -   │ €15-20  │
+  └─────────────────────────────────┴──────┴─────────┘
+
+  📦 MISC
+  ┌─────────────────────────────────┬──────┬─────────┐
+  │ Wires, connectors, JST          │  -   │ €10-15  │
+  │ PCB prototype boards            │  5   │ €2-3 ea │
+  │ Terminal blocks                 │  -   │ €5-8    │
+  │ Emergency stop button           │  2   │ €3-5 ea │
+  │ Status LEDs + buzzer            │  -   │ €5-8    │
+  └─────────────────────────────────┴──────┴─────────┘
+
+  ═══════════════════════════════════════════════════
+  TOTAL ESTIMATE:         €500 - €900
+  With Jetson Nano:       €600 - €1050
+  ═══════════════════════════════════════════════════
+═══════════════════════════════════════════════════════
+  POWER ARCHITECTURE - توزيع الطاقة
+═══════════════════════════════════════════════════════
+
+  220V AC
+      │
+      ▼
+  ┌───────────┐    ┌────────────────────────────────┐
+  │PSU 12V/10A│    │         FUSE BOX               │
+  │           │────│  F1: 5A  → Motors              │
+  └───────────┘    │  F2: 3A  → Solenoids/Pumps     │
+                   │  F3: 2A  → Logic/Sensors        │
+                   │  F4: 1A  → Safety systems       │
+                   └────────────────────────────────┘
+                                │
+          ┌─────────────────────┼─────────────────────┐
+          │                     │                     │
+          ▼                     ▼                     ▼
+  ┌──────────────┐    ┌──────────────┐    ┌──────────────────┐
+  │ 12V RAIL     │    │ Buck 12→5V   │    │ Buck 12→5V       │
+  │              │    │ (5V/3A)      │    │ (5V/5A)          │
+  │ • DC Motors  │    │              │    │                  │
+  │ • Air Pumps  │    │ • STM32      │    │ • Jetson Nano    │
+  │ • Solenoids  │    │ • ESP32 x2   │    │   (via barrel)   │
+  │ • LED strips │    │ • Sensors    │    │ • USB devices    │
+  └──────────────┘    │ • Servos     │    └──────────────────┘
+                      └──────────────┘
+
+  ⚠️ IMPORTANT:
+  • Common GND بين كل الأجهزة
+  • Capacitors على كل motor (noise filter)
+  • Optocouplers بين high/low power sections
+  • Emergency stop يقطع 12V rail كامل
+4.2 STM32 Connections
+text
+
+═══════════════════════════════════════════════════════
+  STM32F411 - MOTOR CONTROLLER WIRING
+═══════════════════════════════════════════════════════
+
+  STM32F411 BlackPill
+  ┌─────────────────────────────────────────────┐
+  │                                             │
+  │  CONVEYOR MOTORS (DC + Encoder):            │
+  │  ┌─────────────────────────────────┐        │
+  │  │ Motor 1 (Main conveyor)         │        │
+  │  │ PA0  → PWM → L298N ENA          │        │
+  │  │ PA1  → GPIO → L298N IN1         │        │
+  │  │ PA2  → GPIO → L298N IN2         │        │
+  │  │ PB0  → Encoder A (TIM3_CH1)    │        │
+  │  │ PB1  → Encoder B (TIM3_CH2)    │        │
+  │  └─────────────────────────────────┘        │
+  │  ┌─────────────────────────────────┐        │
+  │  │ Motor 2 (Acceleration belt 1)   │        │
+  │  │ PA3  → PWM → L298N ENB          │        │
+  │  │ PA4  → GPIO → L298N IN3         │        │
+  │  │ PA5  → GPIO → L298N IN4         │        │
+  │  │ PB3  → Encoder A (TIM2_CH2)    │        │
+  │  │ PB4  → Encoder B (TIM2_CH3)    │        │
+  │  └─────────────────────────────────┘        │
+  │  ┌─────────────────────────────────┐        │
+  │  │ Motor 3 (Acceleration belt 2)   │        │
+  │  │ PB6  → PWM (TIM4_CH1)          │        │
+  │  │ PB7  → GPIO → direction         │        │
+  │  └─────────────────────────────────┘        │
+  │                                             │
+  │  STEPPER MOTORS:                            │
+  │  ┌─────────────────────────────────┐        │
+  │  │ Stepper 1 (Bowl Vibrator feed)  │        │
+  │  │ PC0  → STEP → A4988            │        │
+  │  │ PC1  → DIR  → A4988            │        │
+  │  │ PC2  → EN   → A4988            │        │
+  │  └─────────────────────────────────┘        │
+  │  ┌─────────────────────────────────┐        │
+  │  │ Stepper 2 (Timing belt drive)   │        │
+  │  │ PC3  → STEP → A4988            │        │
+  │  │ PC4  → DIR  → A4988            │        │
+  │  │ PC5  → EN   → A4988            │        │
+  │  └─────────────────────────────────┘        │
+  │                                             │
+  │  VIBRATION:                                 │
+  │  PC8  → PWM → MOSFET → Vibration Motor 1   │
+  │  PC9  → PWM → MOSFET → Vibration Motor 2   │
+  │                                             │
+  │  COMMUNICATION:                             │
+  │  PA9  (TX1) → Jetson Nano RX (via 3.3V)   │
+  │  PA10 (RX1) → Jetson Nano TX               │
+  │  BAUD: 115200                               │
+  │                                             │
+  │  STATUS:                                    │
+  │  PC13 → Onboard LED (heartbeat)            │
+  │  PA8  → External status LED               │
+  │                                             │
+  └─────────────────────────────────────────────┘
+4.3 ESP32 #1 - Sensor Node
+text
+
+═══════════════════════════════════════════════════════
+  ESP32 #1 - SENSORS CONTROLLER
+═══════════════════════════════════════════════════════
+
+  ESP32 DevKit v1
+  ┌─────────────────────────────────────────────┐
+  │                                             │
+  │  COLOR SENSOR (TCS34725) - I2C:            │
+  │  GPIO21 (SDA) → TCS34725 SDA               │
+  │  GPIO22 (SCL) → TCS34725 SCL               │
+  │  3.3V → VCC,  GND → GND                   │
+  │  GPIO23 → LED pin (TCS34725)               │
+  │                                             │
+  │  SPECTRAL SENSOR (AS7265x) - I2C:          │
+  │  (same I2C bus, different address)          │
+  │  GPIO21 (SDA) → AS7265x SDA                │
+  │  GPIO22 (SCL) → AS7265x SCL                │
+  │  ⚠️ AS7265x = 3 chips (18 channels!)       │
+  │  → أقرب حاجة لـ NIR في budget صغير        │
+  │                                             │
+  │  WEIGHT SENSOR (HX711):                    │
+  │  GPIO16 → HX711 DOUT                       │
+  │  GPIO17 → HX711 SCK                        │
+  │                                             │
+  │  PRESENCE SENSORS (IR):                    │
+  │  GPIO34 → IR Sensor 1 (entry detect)       │
+  │  GPIO35 → IR Sensor 2 (pre-camera)         │
+  │  GPIO36 → IR Sensor 3 (post-camera)        │
+  │  GPIO39 → IR Sensor 4 (ejection point)     │
+  │                                             │
+  │  ULTRASONIC (HC-SR04):                     │
+  │  GPIO13 → Trig, GPIO12 → Echo              │
+  │  (item height/size estimation)             │
+  │                                             │
+  │  COMMUNICATION:                             │
+  │  GPIO1 (TX0) → Jetson Nano RX              │
+  │  GPIO3 (RX0) → Jetson Nano TX              │
+  │  UART0, BAUD: 115200                        │
+  │                                             │
+  └─────────────────────────────────────────────┘
+
+  ┌─────────────────────────────────────────────┐
+  │  AS7265x - THE TRICK للـ NIR البسيط:       │
+  │                                             │
+  │  Channel  Wavelength   What it detects      │
+  │  ─────────────────────────────────────────  │
+  │  410nm    Violet       General              │
+  │  435nm    Violet       General              │
+  │  460nm    Blue         General              │
+  │  485nm    Blue         General              │
+  │  510nm    Green        Chlorophyll          │
+  │  535nm    Green        General              │
+  │  560nm    Yellow       General              │
+  │  585nm    Orange       General              │
+  │  610nm    Orange       General              │
+  │  645nm    Red          General              │
+  │  680nm    Red          Chlorophyll          │
+  │  705nm    NIR start    Plastic start        │
+  │  730nm    NIR          PET signature        │
+  │  760nm    NIR          HDPE signature       │
+  │  810nm    NIR          PP signature         │
+  │  860nm    NIR          Moisture             │
+  │  900nm    NIR          Plastic types        │
+  │  940nm    NIR          Water absorption     │
+  │                                             │
+  │  ✅ يقدر يفرق PET/HDPE/PP بنسبة 70-80%    │
+  │  (مش 100% كيما NIR industrial لكن يبدا)   │
+  └─────────────────────────────────────────────┘
+
+═══════════════════════════════════════════════════════
+  ESP32 #2 - SAFETY & EJECTION CONTROLLER
+═══════════════════════════════════════════════════════
+
+  ESP32 DevKit v1
+  ┌─────────────────────────────────────────────┐
+  │                                             │
+  │  INDUCTIVE SENSORS (Metal Detection):       │
+  │  GPIO34 → Inductive 1 (NPN, 8mm range)     │
+  │  GPIO35 → Inductive 2 (12mm range)         │
+  │  GPIO36 → Inductive 3 (ferrous check)      │
+  │  ⚠️ NPN sensors: pull-up 10kΩ to 3.3V     │
+  │                                             │
+  │  THERMAL SENSORS (MLX90614) - I2C:         │
+  │  GPIO21 (SDA) → MLX90614 #1 SDA            │
+  │  GPIO22 (SCL) → MLX90614 #1 SCL            │
+  │  (Battery detection: temp > 45°C = alert)  │
+  │                                             │
+  │  GAS SENSOR (MQ-2):                        │
+  │  GPIO32 (ADC) → MQ-2 AOUT                  │
+  │  (LPG, methane, smoke detection)           │
+  │                                             │
+  │  AIR JET EJECTORS (via Relay):             │
+  │  GPIO25 → Relay 1 → Solenoid → Jet 1 (PET)│
+  │  GPIO26 → Relay 2 → Solenoid → Jet 2 (HDPE│
+  │  GPIO27 → Relay 3 → Solenoid → Jet 3 (Paper│
+  │  GPIO14 → Relay 4 → Solenoid → Jet 4 (Metal│
+  │  GPIO12 → Relay 5 → Solenoid → Jet 5 (HAZRD│
+  │  GPIO13 → Relay 6 → Solenoid → Jet 6 (Other│
+  │                                             │
+  │  SERVO EJECTORS (backup):                  │
+  │  GPIO16 → Servo 1 PWM (deflector 1)        │
+  │  GPIO17 → Servo 2 PWM (deflector 2)        │
+  │                                             │
+  │  SAFETY:                                   │
+  │  GPIO4  → Emergency Stop Button            │
+  │  GPIO5  → E-Stop Relay (cuts 12V rail)     │
+  │  GPIO18 → Buzzer (alarm)                   │
+  │  GPIO19 → Red LED (danger)                 │
+  │  GPIO23 → Green LED (ok)                   │
+  │                                             │
+  │  COMMUNICATION:                             │
+  │  GPIO1  (TX) → Jetson Nano                 │
+  │  GPIO3  (RX) → Jetson Nano                 │
+  │                                             │
+  └─────────────────────────────────────────────┘
+
+  ⚡ EJECTION TIMING - مهم جداً!
+  ┌─────────────────────────────────────────────┐
+  │                                             │
+  │  Item detected → Camera sees it            │
+  │       │                                    │
+  │       ▼                                    │
+  │  AI classifies → result sent to ESP32 #2   │
+  │       │                                    │
+  │       ▼                                    │
+  │  Calculate travel time:                    │
+  │  distance_to_jet / belt_speed = delay_ms   │
+  │       │                                    │
+  │  Example:                                  │
+  │  Camera at 20cm from jet                   │
+  │  Belt speed: 20cm/sec                      │
+  │  Delay = 1000ms exactly                    │
+  │       │                                    │
+  │       ▼                                    │
+  │  Timer fires → Solenoid ON (50-100ms)      │
+  │            → Solenoid OFF                  │
+  │                                            │
+  │  ⚠️ Latency budget:                        │
+  │  AI inference:     50-100ms                │
+  │  Communication:    5-20ms                  │
+  │  Solenoid delay:   5-10ms                  │
+  │  Total system lag: ~60-130ms               │
+  │                                            │
+  │  → Adjust camera-to-jet distance!          │
+  └─────────────────────────────────────────────┘
+═══════════════════════════════════════════════════════
+  PROTOTYPE MECHANICAL LAYOUT (Top View)
+═══════════════════════════════════════════════════════
+
+  ┌─────────────────────────────────────────────────┐
+  │ 60cm                                            │
+  │ ┌───────────────────────────────────────────┐   │
+  │ │           CONVEYOR #1 (Main)              │   │ 20cm
+  │ │  ←←←←←←←←←←←←←←←←←←←←←←←←←←←←←←  30cm/s │
+  │ └───────────────────────────────────────────┘   │
+  │                   │                              │
+  │           SENSOR ZONE                           │
+  │  ┌────────────────────────────────────────┐     │
+  │  │ [COLOR] [SPECTRAL] [ULTRASONIC] [IR]  │     │
+  │  │           ↕ 15cm above belt            │     │
+  │  └────────────────────────────────────────┘     │
+  │                   │                              │
+  │           CAMERA ZONE (from above)              │
+  │  ┌────────────────────────────────────────┐     │
+  │  │           📷 CAMERA                   │     │
+  │  │         25cm above belt               │     │
+  │  │      LED ring lighting                │     │
+  │  └────────────────────────────────────────┘     │
+  │                   │                              │
+  │           AIR JET ARRAY                         │
+  │  ┌──┐┌──┐┌──┐┌──┐┌──┐┌──┐                      │
+  │  │J1││J2││J3││J4││J5││J6│  ← 6 jets           │
+  │  └──┘└──┘└──┘└──┘└──┘└──┘                      │
+  │                   │                              │
+  │  ┌──┐┌──┐┌──┐┌──┐┌──┐┌──┐                      │
+  │  │B1││B2││B3││B4││B5││B6│  ← output bins       │
+  │  │PT││HD││PP││PA││MT││HZ│                      │
+  │  └──┘└──┘└──┘└──┘└──┘└──┘                      │
+  └─────────────────────────────────────────────────┘
+
+  PT=PET, HD=HDPE, PP=PP, PA=Paper, MT=Metal, HZ=Hazard
+
+  Side View - Sensor Mounting:
+  
+  ┌─────────────────────────────────┐
+  │           Camera (25cm)         │
+  │            📷 ↓                 │
+  │  ──────────────────────────     │ ←Sensor bar
+  │  [COLOR][NIR][ULTRA][THERMAL]   │
+  │  =========belt=========         │ ←Belt surface
+  │  [INDUCTIVE sensors below/side] │
+  └─────────────────────────────────┘
