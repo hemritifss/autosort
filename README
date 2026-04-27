@@ -185,8 +185,6 @@
   • Capacitors على كل motor (noise filter)
   • Optocouplers بين high/low power sections
   • Emergency stop يقطع 12V rail كامل
-4.2 STM32 Connections
-text
 
 ═══════════════════════════════════════════════════════
   STM32F411 - MOTOR CONTROLLER WIRING
